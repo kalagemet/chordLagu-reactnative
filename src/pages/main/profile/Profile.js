@@ -85,7 +85,7 @@ export default function Profile({navigation}) {
     }
 
     return (
-        <Container>
+        <View style={{flex:1, backgroundColor:'#fff'}}>
             <Loader loading={loading} />
             <View style={styles.HeaderContainer}>
                 <View style={{flexDirection:'row', justifyContent: 'flex-start', alignItems:'center'}}>
@@ -110,18 +110,18 @@ export default function Profile({navigation}) {
                 {
                     userData.email ?
                     <View>
-                        <Button light style={styles.Button} onPress={toMakeSong}>
-                            <Icon type='FontAwesome' name='edit'/>
+                        <TouchableOpacity light style={styles.Button} onPress={toMakeSong}>
+                            <Icon style={styles.icon} type='FontAwesome' name='edit'/>
                             <Text>Tulis Chord</Text>
-                        </Button>
-                        <Button light style={styles.Button} onPress={toMyChords}>
-                            <Icon type="FontAwesome5" name="guitar"/>
+                        </TouchableOpacity>
+                        <TouchableOpacity light style={styles.Button} onPress={toMyChords}>
+                            <Icon style={styles.icon} type="FontAwesome5" name="guitar"/>
                             <Text>Chord Saya</Text>
-                        </Button>
-                        <Button light style={styles.Button} onPress={alert_}>
-                            <Icon type='FontAwesome' name='sign-out'/>
+                        </TouchableOpacity>
+                        <TouchableOpacity light style={styles.Button} onPress={alert_}>
+                            <Icon style={styles.icon} type='FontAwesome' name='sign-out'/>
                             <Text>Logout</Text>
-                        </Button>
+                        </TouchableOpacity>
                     </View>
                     :
                     <View>
@@ -132,7 +132,7 @@ export default function Profile({navigation}) {
                 }
             </View>
             
-        </Container>
+        </View>
     );
 }
 
@@ -143,21 +143,29 @@ const styles = StyleSheet.create({
         width : '100%',
         height : '100%',
         padding : 20,
-        backgroundColor : '#58595b'
+        backgroundColor : '#000',
+        borderBottomStartRadius : 30,
+        borderBottomEndRadius : 30,
+        elevation: 40,
+        marginBottom : '5%'
     },
     ListContainer : {
         flex : 3,
     },
     Button : {
-        backgroundColor:'#ccc',
-        height:'20%',
-        width:'100%',
+        flexDirection:'row',
+        paddingHorizontal:'3%',
+        marginVertical:'2%',
+        marginHorizontal : '5%',
+        backgroundColor:'#fff',
+        borderRadius : 20,
+        elevation : 10,
+        height:'17%',
+        width:'90%',
         justifyContent:'flex-start',
         alignItems:'center'
     },
-    TextA : {
-        fontSize : 28,
-        textAlign : "center",
-        padding : 20
+    icon : {
+        marginHorizontal:'3%'
     }
 })
