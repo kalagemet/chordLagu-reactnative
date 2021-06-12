@@ -178,8 +178,8 @@ export default function ViewSong({navigation, route}){
 
   const renderDrawer = () => {
     return (
-      <View style={{height:'100%', backgroundColor:'#fff', borderTopStartRadius:20, borderTopEndRadius:20, borderWidth:2, borderBottomWidth:0, borderColor:'#000'}}>
-        <View style={{height:'1.5%', width:'20%', backgroundColor:'#000', borderRadius:5, marginVertical:10, alignSelf:'center'}}></View>
+      <View style={{height:'100%', backgroundColor:'#fff', borderTopStartRadius:20, borderTopEndRadius:20, borderWidth:1, borderBottomWidth:0, borderColor:'#000'}}>
+        <View style={{height:'1.5%', width:'20%', backgroundColor:'#000', borderRadius:5, marginTop:10, alignSelf:'center'}}></View>
         <View style={styles.container}>
           {
               scrollActive ?
@@ -243,7 +243,7 @@ export default function ViewSong({navigation, route}){
         </View>
         <BottomSheet
           ref={sheetRef}
-          snapPoints={['40%', '40%', '10%']}
+          snapPoints={['40%', '40%', '8%']}
           renderContent={renderDrawer}
           initialSnap={2}
           enabledContentTapInteraction={false}

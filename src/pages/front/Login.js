@@ -1,10 +1,11 @@
-import { Body, Button, Container, Form, Icon, Input, Item, Text, View } from 'native-base';
 import React, {useState} from 'react';
-import { Image, StyleSheet, Alert, BackHandler } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin, statusCodes } from 'react-native-google-signin';
 import Loader from '../../components/Loader';
 import * as STORAGE from '../../Storage';
+import Button from '../../components/Button';
+import InputText from '../../components/InputText';
 
 export default function Login({ navigation }) {
     const [email, setEmail] = useState('')
@@ -60,7 +61,9 @@ export default function Login({ navigation }) {
                 .signInWithEmailAndPassword(email, password)
                 .then(() => {
                     setLoading(false)
-                    navigation.navigate('Home')
+                    STORAGE.setLoginStatus('login', () => {
+                        navigation.navigate('Home')
+                    })
                 })
                 .catch(error => {setErrorMessage(error.message), setLoading(false)})
             }
@@ -72,7 +75,7 @@ export default function Login({ navigation }) {
     }
 
     return (
-        <Container style={styles.Container}>
+        <View style={styles.Container}>
             <Loader loading={loading} />
             <View style={styles.HeaderContainer}>
                 
@@ -83,44 +86,28 @@ export default function Login({ navigation }) {
                 <Text style={{ color: 'red', textAlign:'center', padding:10}}>
                 {errorMessage}
                 </Text>}
-                <Form>
-                    <Item regular>
-                    <Input placeholder="Email" onChangeText={email => setEmail(email)}/>
-                    </Item>
-                    <Item regular>
-                    <Input secureTextEntry placeholder="Password" onChangeText={password => setPassword(password)}/>
-                    </Item>
-                </Form>
-                <View style={{paddingTop:20}}>
-                    <Button primary style={{justifyContent:'center', padding:20, width:'100%'}} onPress={handleLogin}>
-                        <Text>Login</Text>
-                    </Button>
-                </View>
-                <View style={{paddingTop:10}}>
-                    <Button bordered style={{justifyContent:'center', width:'100%'}} onPress={toSignup}>
-                        <Text>Daftar</Text>
-                    </Button>
-                </View>
+                <InputText name='Email' onChangeText={(text) => setEmail(text)}/>
+                <InputText secure name='Password' onChangeText={(text) => setPassword(text)} />
+
+                <View style={{margin:'3%'}}/>
+
+                <Button name='Login' onPress={handleLogin}/>
+                <Button name='Daftar' onPress={toSignup}/>
+
                 <View style={{paddingVertical:10, alignItems:'center'}}>
                     <Text>Atau</Text>
                 </View>
-                <View>
-                    <Button light onPress={_signIn}>
-                        <Body style={styles.Button}>
-                        <Icon name='logo-google' style={{paddingHorizontal:10}}/>
-                            <Text>Masuk Dengan Google</Text>
-                        </Body>
-                    </Button>
-                </View>
+
+                <Button name='Masuk Dengan Google' icon='logo-google' onPress={_signIn}/>
+
                 <View style={{paddingVertical:20, alignItems:'center'}}>
                     <Text style={{fontWeight:'bold', color:'grey'}}
                     onPress={skipLogin}>Lewati</Text>
                 </View>
             </View>
 
-        </Container>
+        </View>
     );
-    
 }
 
 const styles = StyleSheet.create({

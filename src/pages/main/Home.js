@@ -34,9 +34,8 @@ export default function Home({navigation}) {
         STORAGE.setUserInfo(user, ()=>console.log('user skipped'))
       }else{
         const { _user } = auth()
-        console.log(_user)
         setCurrentUser(_user)
-        if(currentUser){
+        if(_user){
           STORAGE.setUserInfo(_user, ()=>console.log('user logged in'))
         }
       }

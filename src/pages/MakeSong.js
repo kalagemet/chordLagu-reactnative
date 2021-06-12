@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import { Text, View, StyleSheet, TextInput, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
-import {Button, Toast} from 'native-base';
+import { View, StyleSheet, TextInput, KeyboardAvoidingView, Platform, ScrollView, ToastAndroid } from "react-native";
 import { addSong } from '../api/SongsApi';
 import Loader from '../components/Loader';
 import * as STORAGE from '../Storage';
+import Button from '../components/Button';
 
 export default function MakeSong({navigation}) {
   const [title, setTitle] = useState('')
@@ -19,74 +19,90 @@ export default function MakeSong({navigation}) {
   },[navigation])
 
   const uploadChord = () => {
-    setLoading(true)
-    let song = {
-      artist : artist.toLowerCase(),
-      content : content,
-      created_by : email,
-      favourites : 0,
-      title : title.toLowerCase()
+    if(artist && title && content){
+      setLoading(true)
+      let song = {
+        artist : artist.toLowerCase(),
+        content : content,
+        created_by : email,
+        favourites : 0,
+        title : title.toLowerCase()
+      }
+      addSong(song, (e) => onSongAdded(e))
+    }else {
+      ToastAndroid.showWithGravityAndOffset(
+        "Tidak boleh ada yang kosong",
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50
+      )
     }
-    addSong(song, (e) => onSongAdded(e))
+    
   }
 
   const onSongAdded = (song) => {
     setLoading(false)
-    Toast.show({
-      text: "Berhasil diunggah",
-      buttonText: "Okay",
-      position: 'bottom'
-    })
+    ToastAndroid.showWithGravityAndOffset(
+      "Berhasil Disimpan",
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50
+    )
     navigation.pop();
   }
 
   return (
-      <ScrollView
-      contentContainerStyle={styles.container}
-      keyboardDismissMode="none"
-      >
-      <Loader loading={loading} />
-      <KeyboardAvoidingView>
-          <TextInput
-          style={styles.input}
-          placeholder="Nama Artis"
-          autoFocus={false}
-          autoCorrect={false}
-          autoCapitalize='words'
-          onChangeText={artist => setArtist(artist)}
-          // value={artist}
-          />
+    <>
+      <View style={{maxHeight:'87%'}}>
+        <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardDismissMode="none"
+        >
+          <Loader loading={loading} />
+          <KeyboardAvoidingView>
+              <TextInput
+              style={styles.input}
+              placeholder="Nama Artis"
+              autoFocus={false}
+              autoCorrect={false}
+              autoCapitalize='words'
+              onChangeText={artist => setArtist(artist)}
+              // value={artist}
+              />
 
-          <TextInput
-          style={styles.input}
-          placeholder="Judul Lagu"
-          autoFocus={false}
-          autoCorrect={false}
-          autoCapitalize='words'
-          onChangeText={title => setTitle(title)}
-          // value={title}
-          />
+              <TextInput
+              style={styles.input}
+              placeholder="Judul Lagu"
+              autoFocus={false}
+              autoCorrect={false}
+              autoCapitalize='words'
+              onChangeText={title => setTitle(title)}
+              // value={title}
+              />
 
-          <TextInput
-          textAlignVertical="top"
-          style={styles.content}
-          placeholder={contentPlaceholder}
-          placeholderTextColor="#aaa"
-          multiline = {true}
-          numberOfLines={4}
-          autoFocus={false}
-          autoCorrect={false}
-          autoCapitalize='none'
-          onChangeText={content => setContent(content)}
-          scrollEnabled
-          // value={content}
-          />
-          <View style={{flexDirection:'column', alignItems:'flex-end'}}>
-            <Button primary style={{padding:20, margin:20}}><Text style={{color:'white'}} onPress={uploadChord}> Unggah </Text></Button>
-          </View>
-          
-      </KeyboardAvoidingView>
-      </ScrollView>
+              <TextInput
+              textAlignVertical="top"
+              style={styles.content}
+              placeholder={contentPlaceholder}
+              placeholderTextColor="#aaa"
+              multiline = {true}
+              numberOfLines={4}
+              autoFocus={false}
+              autoCorrect={false}
+              autoCapitalize='none'
+              onChangeText={content => setContent(content)}
+              scrollEnabled
+              // value={content}
+              />
+          </KeyboardAvoidingView>
+        </ScrollView>
+      </View>
+      <View style={{height:'70%'}}>
+      <Button name='Unggah' onPress={uploadChord} />
+      </View>
+    </>
   )
     
 }

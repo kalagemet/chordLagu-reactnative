@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Alert, Image, StyleSheet, TouchableOpacity, Text, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin, statusCodes } from 'react-native-google-signin';
 import Loader from '../../../components/Loader';
 import { getAdStatus } from '../../../api/AdsApi';
 import * as STORAGE from '../../../Storage';
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Button from '../../../components/Button';
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/3882846984';
 export default function Profile({navigation}) {
@@ -111,25 +111,14 @@ export default function Profile({navigation}) {
             <View style={styles.ListContainer}>
                 {
                     userData.email ?
-                    <View>
-                        <TouchableOpacity light style={styles.Button} onPress={toMakeSong}>
-                            <Ionicons style={styles.icon} name='create-outline'/>
-                            <Text>Tulis Chord</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity light style={styles.Button} onPress={toMyChords}>
-                            <Ionicons style={styles.icon} name="file-tray-full-outline"/>
-                            <Text>Chord Saya</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity light style={styles.Button} onPress={alert_}>
-                            <Ionicons style={styles.icon} name='log-out-outline'/>
-                            <Text>Logout</Text>
-                        </TouchableOpacity>
+                    <View style={{flex:1}}>
+                        <Button name='Tulis Chord' onPress={toMakeSong} icon='create-outline'/>
+                        <Button name='Chord Saya' onPress={toMyChords} icon='file-tray-full-outline'/>
+                        <Button name='Logout' onPress={alert_} icon='log-out-outline'/>
                     </View>
                     :
-                    <View>
-                        <TouchableOpacity style={styles.ButtonLogin} onPress={toLogin}>
-                            <Text>Login</Text>
-                        </TouchableOpacity>
+                    <View style={{flex:1}}>
+                        <Button name='Login' onPress={toLogin} />
                     </View>
                 }
             </View>
@@ -162,7 +151,7 @@ const styles = StyleSheet.create({
         backgroundColor : '#fff',
         borderBottomStartRadius : 30,
         borderBottomEndRadius : 30,
-        elevation: 40,
+        elevation: 20,
         marginBottom : '5%',
         borderWidth : 2,
         borderColor : '#000'

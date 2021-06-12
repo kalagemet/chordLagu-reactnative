@@ -1,7 +1,8 @@
-import { Button, Container, Form, Input, Item, Text, View } from 'native-base'
 import React, {useState} from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import auth from '@react-native-firebase/auth';
+import Button from '../../components/Button';
+import InputText from '../../components/InputText';
 
 export default function Signup ({navigation}) {
 
@@ -25,7 +26,7 @@ export default function Signup ({navigation}) {
   }
 
   return (
-      <Container>
+      <View style={{flex:1}}>
         <View style={styles.HeaderContainer}>
           <Text style={styles.TextA}>Daftar</Text>
         </View>
@@ -34,54 +35,24 @@ export default function Signup ({navigation}) {
             <Text style={{ color: 'red', textAlign:'center', padding:10}}>
               {errorMessage}
             </Text>}
-            <Form>
-              <Item regular>
-                <Input
-                  placeholder="Email"
-                  autoCapitalize="none"
-                  onChangeText={email => setEmail(email)}
-                />
-              </Item>
-              <Item regular>
-                <Input
-                  secureTextEntry
-                  placeholder="Password"
-                  autoCapitalize="none"
-                  onChangeText={password => setPassword(password)}
-                />
-              </Item>
-              <Item regular>
-                <Input
-                  secureTextEntry
-                  placeholder="Ulangi Password"
-                  autoCapitalize="none"
-                  onChangeText={passwordVerify => setPasswordVerify(passwordVerify)}
-                />
-              </Item>
-            </Form>
-            <View style={styles.ButtonContainer}>
-              <Button primary onPress={handleSignUp} style={styles.Button}>
-                <Text>Daftar</Text>
-              </Button>
-            </View>
-            <View style={styles.ButtonContainer}>
-              <Button bordered
-                onPress={() => navigation.navigate('Login')}
-                style={styles.Button}
-              >
-                <Text>Sudah Punya Akun? Login</Text>
-              </Button>
-            </View>
+            <InputText name='Email' onChangeText={(text) => setEmail(text)}/>
+            <InputText secure name='Password' onChangeText={(text) => setPassword(text)} />
+            <InputText secure name='Ulangi Password' onChangeText={(text) => setPasswordVerify(text)} />
+
+            <View style={{margin:'3%'}}/>
+
+            <Button name='Daftar' onPress={handleSignUp}/>
+            <Button name='Sudah Punya Akun? Login' onPress={() => navigation.pop()}/>
             
         </View>
-      </Container>
+      </View>
   )
   
 }
 
 const styles = StyleSheet.create({
   HeaderContainer : {
-      flex : 2,
+      flex : 1,
       justifyContent : 'center',
       alignItems : 'center',
       width : '100%',

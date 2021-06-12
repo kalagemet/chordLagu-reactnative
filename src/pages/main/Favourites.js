@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import { getFavourited } from '../../api/SongsApi';
 import SongList from '../../components/SongList';
 import * as STORAGE from '../../Storage';
+import Button from '../../components/Button';
 
 export default function Favourites({navigation}) {
 
@@ -45,9 +46,7 @@ export default function Favourites({navigation}) {
                 :
                 <View style={styles.LoginContainer}>
                     <Text style={styles.TextInfo}>Login untuk melihat daftar favorit</Text>
-                    <TouchableOpacity style={styles.Button} onPress={toLogin}>
-                        <Text>Login</Text>
-                    </TouchableOpacity>
+                    <Button name='Login' onPress={toLogin} />
                 </View>
             }
             
@@ -62,23 +61,13 @@ const styles = StyleSheet.create({
         backgroundColor:'#fff'
     },
     LoginContainer : {
+        height:'70%',
         alignItems : 'center',
-        justifyContent :'center',
-        padding : '5%'
+        justifyContent : 'flex-start'
     },
     TextInfo : {
         color : 'grey',
         marginTop : '5%',
         marginBottom : '5%'
-    },
-    Button : {
-        height:'20%',
-        width:'40%',
-        flexDirection : 'row',
-        alignItems:'center',
-        justifyContent : 'center',
-        backgroundColor:'#fff',
-        elevation: 10,
-        borderRadius: 30
     }
 })

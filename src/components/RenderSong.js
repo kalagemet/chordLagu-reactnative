@@ -4,7 +4,6 @@ import { WebView } from 'react-native-webview';
 import KeepAwake from 'react-native-keep-awake';
 import ChordSheetJS from 'chordsheetjs';
 import TransformSong from './TransformSong';
-import axios from 'axios';
 import Loader from './Loader';
 import chords from '../assets/chords/guitar.json';
 import ChordModal from './ChordModal';
