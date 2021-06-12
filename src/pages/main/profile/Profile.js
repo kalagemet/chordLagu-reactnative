@@ -1,12 +1,12 @@
-import { Button, Container, Icon, Text, View } from 'native-base';
 import React, { useState } from 'react';
-import { Alert, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, Image, StyleSheet, TouchableOpacity, Text, View } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin, statusCodes } from 'react-native-google-signin';
 import Loader from '../../../components/Loader';
 import { getAdStatus } from '../../../api/AdsApi';
 import * as STORAGE from '../../../Storage';
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/3882846984';
 export default function Profile({navigation}) {
@@ -113,15 +113,15 @@ export default function Profile({navigation}) {
                     userData.email ?
                     <View>
                         <TouchableOpacity light style={styles.Button} onPress={toMakeSong}>
-                            <Icon style={styles.icon} type='FontAwesome' name='edit'/>
+                            <Ionicons style={styles.icon} name='create-outline'/>
                             <Text>Tulis Chord</Text>
                         </TouchableOpacity>
                         <TouchableOpacity light style={styles.Button} onPress={toMyChords}>
-                            <Icon style={styles.icon} type="FontAwesome5" name="guitar"/>
+                            <Ionicons style={styles.icon} name="file-tray-full-outline"/>
                             <Text>Chord Saya</Text>
                         </TouchableOpacity>
                         <TouchableOpacity light style={styles.Button} onPress={alert_}>
-                            <Icon style={styles.icon} type='FontAwesome' name='sign-out'/>
+                            <Ionicons style={styles.icon} name='log-out-outline'/>
                             <Text>Logout</Text>
                         </TouchableOpacity>
                     </View>
@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     icon : {
-        marginHorizontal:'3%'
+        marginHorizontal:'3%',
+        fontSize: 25
     }
 })

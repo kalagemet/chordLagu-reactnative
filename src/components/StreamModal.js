@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useRef} from 'react';
 import {
   StyleSheet,
   View,
@@ -11,44 +11,41 @@ import {Icon} from 'native-base';
 import { WebView } from 'react-native-webview';
   
   
-export default class StreamModal extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = { webviewLoaded: false };
+export default function StreamModal({id, closeModalStream}) {
+  const [webviewLoaded, setWebviewLoaded] = useState(false)
+  const webViewRef = useRef();
+
+  const onLoadEnd = () => {
+      setWebviewLoaded(true)
   }
 
-  _onLoadEnd() {
-      this.setState({ webviewLoaded: true });
-  }
-
-  render() {
-    const uri = 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/'+this.props.id+'&show_artwork=false&color=000&show_comments=false&hide_related=true';
-    return (
-      <View style={styles.activityIndicatorWrapper}>
-        {(this.state.webviewLoaded) ? null : 
-          <View style={{width:'90%', alignItems:'center'}}>
-            <ActivityIndicator color='#000' animating={true} size='large' />
-          </View>}
-        <WebView 
-              ref={(ref) => { this.webview = ref; }}
-              style={{ width: '100%', height:'100%', backgroundColor: '#f5f5f5'}}
-              source={{uri: uri}}
-              onNavigationStateChange={(event) => {
-                if (event.url !== uri) {
-                  this.webview.stopLoading();
-                  Linking.openURL(event.url);
-                }
-              }}
-              userAgent="Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
-              startInLoadingState={false}
-              onLoadEnd={this._onLoadEnd.bind(this)}
-        />
-        <TouchableOpacity style={styles.close} onPress={this.props.closeModalStream}>
-            <Icon name="close"/>
-        </TouchableOpacity>
-      </View>
-    )
-  }
+  const uri = 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/'+id+'&show_artwork=false&color=000&show_comments=false&hide_related=true';
+  return (
+    <View style={styles.activityIndicatorWrapper}>
+      {webviewLoaded ? null : 
+        <View style={{width:'90%', alignItems:'center'}}>
+          <ActivityIndicator color='#000' animating={true} size='large' />
+        </View>}
+      <WebView 
+            ref={webViewRef}
+            style={{ width: '100%', height:'100%', backgroundColor: '#f5f5f5'}}
+            source={{uri: uri}}
+            onNavigationStateChange={(event) => {
+              if (event.url !== uri) {
+                webViewRef.current.stopLoading();
+                Linking.openURL(event.url);
+              }
+            }}
+            userAgent="Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
+            startInLoadingState={false}
+            onLoadEnd={onLoadEnd}
+      />
+      <TouchableOpacity style={styles.close} onPress={closeModalStream}>
+          <Icon name="close"/>
+      </TouchableOpacity>
+    </View>
+  )
+  
 
 }
 

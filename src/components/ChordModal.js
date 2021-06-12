@@ -9,65 +9,34 @@ import {
 import {Icon, Text} from 'native-base';
 import ViewChord from './ViewChord';
 
-export default class ChordModal extends React.Component {
-  
-  componentDidMount(){
-
-  }
-
-  listChord() {
-    
-  }
-
-  render() {
-    return (
-      <Modal
-        transparent={true}
-        animationType={'none'}
-        visible={this.props.show}>
-          <View style={styles.modalBackground}>
-          <TouchableWithoutFeedback onPress={this.props.closeModal}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
-            <View style={styles.activityIndicatorWrapper}>
-              {/* <Swiper style={styles.wrapper}>
-                {
-                  this.props.selectedChord &&
-                  this.props.selectedChord.map((data, index) => {
-                    return (
-                      <View style={{flex:1, alignItems:'center'}} key={index} >
-                        <Text style={{marginTop:7}}>{this.props.name}</Text>
-                        <View style={{marginRight:10}}>
-                          <ViewChord 
-                              chord={data.positions}
-                              width={100}
-                              height={120}
-                          />
-                        </View>
-                      </View>
-                    )
-                  })
-                }
-              </Swiper> */}
-              <View style={{flex:1, alignItems:'center'}} >
-                <Text style={{marginTop:7}}>{this.props.name}</Text>
-                <View style={{marginRight:10}}>
-                  <ViewChord 
-                      chord={this.props.selectedChord}
-                      width={100}
-                      height={120}
-                  />
-                </View>
+export default function ChordModal({show, name, selectedChord, closeModal}) {
+  return (
+    <Modal
+      transparent={true}
+      animationType={'none'}
+      visible={show}>
+        <View style={styles.modalBackground}>
+        <TouchableWithoutFeedback onPress={closeModal}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+          <View style={styles.activityIndicatorWrapper}>
+            <View style={{flex:1, alignItems:'center'}} >
+              <Text style={{marginTop:7}}>{name}</Text>
+              <View style={{marginRight:10}}>
+                <ViewChord 
+                    chord={selectedChord}
+                    width={100}
+                    height={120}
+                />
               </View>
             </View>
-            <TouchableOpacity style={styles.close} onPress={this.props.closeModal}>
-                  <Icon name="close"/>
-              </TouchableOpacity>
           </View>
-      </Modal>
-    )
-  }
-
+          <TouchableOpacity style={styles.close} onPress={closeModal}>
+                <Icon name="close"/>
+            </TouchableOpacity>
+        </View>
+    </Modal>
+  )
 }
 
 const styles = StyleSheet.create({

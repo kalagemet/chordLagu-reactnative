@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useRef} from 'react';
 import {View} from 'native-base';
 import { WebView } from 'react-native-webview';
 import KeepAwake from 'react-native-keep-awake';
@@ -9,21 +9,36 @@ import Loader from './Loader';
 import chords from '../assets/chords/guitar.json';
 import ChordModal from './ChordModal';
 import { getSong } from '../api/SongsApi';
+import { getSongContent } from '../api/SongDbApi';
 
-export default class RenderSong extends React.Component {
-    webview = null;
-    state = { 
-      loading : false,
-      songPath: this.props.songPath, 
-      typeAPI: this.props.typeAPI,
-      chord: '',
-      selectedChord : '',
-      showChord : false,
-      artist:'',
-      title:''
-    }
+export default function RenderSong({songPath, typeAPI, jsRun, transpose}) {
+    const [loading, setLoading] = useState(false)
+    const [chord, setChord] = useState('')
+    const [selectedChord, setSelectedChord] = useState('')
+    const [showChord, setShowChord] = useState(false)
+    const [chordName, setChordName] = useState('')
+    const webViewRef = useRef();
 
-    normalize = (chord) => {
+    React.useEffect(()=>{
+      setLoading(true)
+      if(typeAPI == 'localAPI'){
+        console.log('local')
+        getSong(songPath, onSongsReceived)
+      }else {
+        getSongContent(songPath, (data)=>{
+          setChord(getChordPro(data.isi, data.nama_band, data.judul))
+          setLoading(false)
+        })
+      }
+    },[])
+
+    React.useEffect(()=>{
+      setTimeout(() => {
+        webViewRef.current.injectJavaScript(jsRun);
+      }, 100);
+    })
+    
+    const normalize = (chord) => {
       chord.map((data) => {
         data.items.map((data2, index) => {
           data2.lyrics = data2.lyrics.replace(/\[|]/g, '*')
@@ -57,17 +72,17 @@ export default class RenderSong extends React.Component {
       
     }
 
-    getChord = (chordSheet) => {  
+    const getChord = (chordSheet, artist, title) => {  
       let propSong = ''
-      propSong += '{title:'+this.state.title+'}\n';
-      propSong += '{artist:'+this.state.artist+'}\n';
+      propSong += '{title:'+title+'}\n';
+      propSong += '{artist:'+artist+'}\n';
       
       propSong += chordSheet;
       
 
         const parser = new ChordSheetJS.ChordSheetParser();;
         const song = parser.parse(propSong);
-        this.normalize(song.lines)
+        normalize(song.lines)
         
         // const finalSong = parser.parse(normalizedSong)
         
@@ -77,10 +92,10 @@ export default class RenderSong extends React.Component {
         return disp;
     }
 
-    getChordPro = (chordSheet) => {
+    const getChordPro = (chordSheet, title, artist) => {
       let song = ''
-      song += '{title:'+this.state.title+'}\n';
-      song += '{artist:'+this.state.artist+'}\n';
+      song += '{title:'+title+'}\n';
+      song += '{artist:'+artist+'}\n';
       
       song += chordSheet;
 
@@ -105,7 +120,7 @@ export default class RenderSong extends React.Component {
 
       const parser = new ChordSheetJS.ChordSheetParser();;
       const parsedSong = parser.parse(song);
-      this.normalize(parsedSong.lines)
+      normalize(parsedSong.lines)
       
       // const finalSong = parser.parse(normalizedSong)
       
@@ -115,7 +130,7 @@ export default class RenderSong extends React.Component {
       return disp;
     }
 
-    renderHtml(body, styles) {
+    const renderHtml = (body, styles) => {
         return `<html>
           <head><meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0"></head>
           <body>${body}</body>
@@ -123,110 +138,77 @@ export default class RenderSong extends React.Component {
         </html>`
     }
 
-    onSongsReceived = (song) => {
-      var content = song.content.replace(/:x1:/g, '\n');
-      this.setState( prevState => ({
-          artist: prevState.artist = song.artist.toLowerCase()
-          .split(' ')
-          .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-          .join(' '),
-          title : prevState.title = song.title.toLowerCase()
-          .split(' ')
-          .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-          .join(' '),
-        })); 
-      //console.log(content);
-      this.setState({ chord : this.getChord(content) , loading:false});
+    const onSongsReceived = (song) => {
+      console.log(song)
+      let content = song.content.replace(/:x1:/g, '\n');
+      let artist = song.artist.toLowerCase()
+                  .split(' ')
+                  .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+                  .join(' ')
+      let title = song.title.toLowerCase()
+                  .split(' ')
+                  .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+                  .join(' ')
+
+      setChord(getChord(content, artist, title))
+      setLoading(false)
     }
 
-    componentDidMount(){
-      this.setState({
-        loading: true
-      });
-
-      if(this.state.typeAPI == 'localAPI'){
-        getSong(this.state.songPath, this.onSongsReceived)
-        
-      }else{
-        console.log("id : " + this.state.songPath)
-        axios.get('https://app.desalase.id/chord/' + this.state.songPath, {
-          headers: {
-            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-          }
-        })
-        .then(res => {
-            const song = res.data.isi;
-            this.setState({artist: res.data.nama_band, title:res.data.judul});
-            this.setState({chord: this.getChordPro(song) , loading: false });
-        }, (error) => {
-          this.setState({loading: false, list : this.state.songs})
-          Toast.show({
-              text: "Kesalahan Koneksi",
-              buttonText: "Okay"
-            })
-        })
-      }
-    }
-
-    handleMessage(selectedChord) {
+    const handleMessage = (selectedChord) => {
       if (chords[selectedChord.toString()]){
         let chord = chords[selectedChord.toString()][0].positions
         //let kords = chords[selectedChord.toString()]
-        this.setState({ chordName: selectedChord.toString() })
-        this.setState({ selectedChord: chord })
-        this.setState({ showChord : true })
+        setChordName(selectedChord.toString())
+        setSelectedChord(chord)
+        setShowChord(true)
       }
       
     }
 
-    closeChord = () => {
-      this.setState({showChord : false})
+    const closeChord = () => {
+      setShowChord(false)
     }
 
-    render(){
-      setTimeout(() => {
-        this.webref.injectJavaScript(this.props.jsRun);
-      }, 100);
-        return(
-          <View>
-            <TransformSong
-              chordProSong={this.state.chord}
-              transposeDelta={this.props.transpose}
-              showTabs={false}
-              typeAPI = {this.state.typeAPI}
-              //fontSize={fontSize}
-            >
-              {songProps => (
-                <View >
-                  <Loader loading={this.state.loading} />
-                  <ChordModal
-                    show={this.state.showChord}
-                    name={this.state.chordName}
-                    selectedChord={this.state.selectedChord}
-                    closeModal = {this.closeChord}
-                  />
-                  <View style={{ height : '100%' }}>
-                    <WebView 
-                      ref={r => (this.webref = r)}
-                      source={{ html: this.renderHtml(songProps.htmlSong, styles) }}
-                      injectedJavaScript={onClickChordPostMessage}
-                      onMessage = {(event)=> this.handleMessage(event.nativeEvent.data)}
-                      javaScriptEnabled = {true}
-                      automaticallyAdjustContentInsets={false}
-                      style={{margin:0, padding:0}}
-                    />
-                  </View>
-                  
-                  
-                </View>
-              )}
+    return(
+      <View>
+        <TransformSong
+          chordProSong={chord}
+          transposeDelta={transpose}
+          showTabs={false}
+          typeAPI = {typeAPI}
+          //fontSize={fontSize}
+        >
+          {songProps => (
+            <View >
+              <Loader loading={loading} />
+              <ChordModal
+                show={showChord}
+                name={chordName}
+                selectedChord={selectedChord}
+                closeModal = {closeChord}
+              />
+              <View style={{ height : '100%' }}>
+                <WebView 
+                  ref={webViewRef}
+                  source={{ html: renderHtml(songProps.htmlSong, styles) }}
+                  injectedJavaScript={onClickChordPostMessage}
+                  onMessage = {(event)=> handleMessage(event.nativeEvent.data)}
+                  javaScriptEnabled = {true}
+                  automaticallyAdjustContentInsets={false}
+                  style={{margin:0, padding:0}}
+                />
+              </View>
               
-            </TransformSong>
-            <KeepAwake/>
-          </View>
-            
-        )
-    }
+              
+            </View>
+          )}
+          
+        </TransformSong>
+        <KeepAwake/>
+      </View>
+        
+    )
+    
 }
 
 const onClickChordPostMessage = `
