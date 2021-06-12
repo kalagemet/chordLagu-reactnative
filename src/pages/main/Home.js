@@ -31,11 +31,12 @@ export default function Home({navigation}) {
         STORAGE.setUserInfo(user, ()=>console.log('user skipped'))
       }else{
         const { _user } = auth()
+        console.log(_user)
         setCurrentUser(_user)
         if(currentUser){
-          STORAGE.setUserInfo(currentUser, ()=>console.log('user logged in'))
+          STORAGE.setUserInfo(_user, ()=>console.log('user logged in'))
         }
-        STORAGE.getUserInfo((data)=>console.log(data))
+        STORAGE.getUserInfo((data)=>console.log("userInfo => "+data))
       }
     })
   }, [navigation])
@@ -67,9 +68,11 @@ export default function Home({navigation}) {
   return (
     <View style={{flex:1, backgroundColor:'#fff'}}>
       <View style={{alignItems:'center', padding:'3%'}}>
-        <Text style={{fontSize:25}}>Populer</Text>
+        <Text style={{fontSize:20}}>Populer</Text>
       </View>
+      <View style={{height:'40%', width:'100%'}}>
         <SongList songs={flatListItem} onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}/>
+      </View>
       <View>
         {/* { currentUser ?
         <Fab

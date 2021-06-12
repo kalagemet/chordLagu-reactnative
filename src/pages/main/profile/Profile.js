@@ -92,15 +92,15 @@ export default function Profile({navigation}) {
                     { userData.photo ?
                     <View style={{flexDirection:'row', alignItems:'center'}}>
                         <View style={{flex:1, margin:20 }}>
-                            <Image source={{uri: userData.photo}} style={{height: 80, width: 80, borderRadius: 40}}/>
+                            <Image source={{uri: userData.photo}} style={{height: 80, width: 80, borderRadius: 40, borderColor:'#000', borderWidth:2}}/>
                         </View>
                         <View style={{flex:3 }}>
-                            <Text style={{color:'white', fontWeight: 'bold'}}>{userData.name}</Text>
-                            <Text numberOfLines={2} style={{color:'white', fontSize:13 }}>{userData.email}</Text>
+                            <Text style={{color:'#000', fontWeight: 'bold'}}>{userData.name}</Text>
+                            <Text numberOfLines={2} style={{color:'#000', fontSize:13 }}>{userData.email}</Text>
                         </View>
                     </View> :
                     <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-                        <Text numberOfLines={2} style={{color:'white', fontWeight: 'bold', textAlign:'center'}}>{userData.email}</Text>
+                        <Text numberOfLines={2} style={{color:'#000', fontWeight: 'bold', textAlign:'center'}}>{userData.email}</Text>
                     </View>
                     }
                     
@@ -125,7 +125,7 @@ export default function Profile({navigation}) {
                     </View>
                     :
                     <View>
-                        <TouchableOpacity style={styles.Button} onPress={toLogin}>
+                        <TouchableOpacity style={styles.ButtonLogin} onPress={toLogin}>
                             <Text>Login</Text>
                         </TouchableOpacity>
                     </View>
@@ -143,11 +143,13 @@ const styles = StyleSheet.create({
         width : '100%',
         height : '100%',
         padding : 20,
-        backgroundColor : '#000',
+        backgroundColor : '#fff',
         borderBottomStartRadius : 30,
         borderBottomEndRadius : 30,
         elevation: 40,
-        marginBottom : '5%'
+        marginBottom : '5%',
+        borderWidth : 2,
+        borderColor : '#000'
     },
     ListContainer : {
         flex : 3,
@@ -163,6 +165,19 @@ const styles = StyleSheet.create({
         height:'17%',
         width:'90%',
         justifyContent:'flex-start',
+        alignItems:'center'
+    },
+    ButtonLogin : {
+        flexDirection:'row',
+        paddingHorizontal:'3%',
+        marginVertical:'2%',
+        marginHorizontal : '5%',
+        backgroundColor:'#fff',
+        borderRadius : 20,
+        elevation : 10,
+        height:'30%',
+        width:'90%',
+        justifyContent:'center',
         alignItems:'center'
     },
     icon : {

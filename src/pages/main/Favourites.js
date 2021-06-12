@@ -72,11 +72,13 @@ const styles = StyleSheet.create({
         marginBottom : '5%'
     },
     Button : {
-        height:'30%',
-        width:'30%',
+        height:'20%',
+        width:'40%',
         flexDirection : 'row',
         alignItems:'center',
         justifyContent : 'center',
-        backgroundColor:'#ccc'
+        backgroundColor:'#fff',
+        elevation: 10,
+        borderRadius: 30
     }
 })
