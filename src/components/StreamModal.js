@@ -4,7 +4,8 @@ import {
   View,
   TouchableOpacity,
   Linking,
-  Text
+  Text,
+  ActivityIndicator
 } from 'react-native';
 import {Icon} from 'native-base';
 import { WebView } from 'react-native-webview';
@@ -24,7 +25,10 @@ export default class StreamModal extends React.Component {
     const uri = 'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/'+this.props.id+'&show_artwork=false&color=000&show_comments=false&hide_related=true';
     return (
       <View style={styles.activityIndicatorWrapper}>
-        {(this.state.webviewLoaded) ? null : <Text>Loading...</Text>}
+        {(this.state.webviewLoaded) ? null : 
+          <View style={{width:'90%', alignItems:'center'}}>
+            <ActivityIndicator color='#000' animating={true} size='large' />
+          </View>}
         <WebView 
               ref={(ref) => { this.webview = ref; }}
               style={{ width: '100%', height:'100%', backgroundColor: '#f5f5f5'}}
