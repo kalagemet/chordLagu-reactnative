@@ -78,3 +78,45 @@ export async function loadMore(query, currentPage, onReceived) {
         })
     })
 }
+
+export async function getSongsByArtist(id, currentPage, onReceived){
+    axios.get('https://app.desalase.id/lagu', {
+        headers: {
+            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+        },
+        params : {
+            band : id,
+            page: currentPage
+        }
+    })
+    .then(res => {
+        onReceived(res.data)
+    }, (error) => {
+        setLoading(false)
+        Toast.show({
+            text: "Kesalahan Koneksi",
+            buttonText: "Okay"
+            })
+    })
+}
+
+export async function loadMoreByArtist(id, currentPage, onReceived) {
+    await axios.get('https://app.desalase.id/lagu', {
+        headers: {
+            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+        },
+        params : {
+            band : id,
+            page: currentPage + 1
+        }
+    })
+    .then(res => {
+        onReceived(res.data)
+    }, (error) => {
+        setLoading(false)
+        Toast.show({
+            text: "Kesalahan Koneksi",
+            buttonText: "Okay"
+            })
+    })
+}

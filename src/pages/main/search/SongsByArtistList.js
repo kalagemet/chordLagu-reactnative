@@ -1,8 +1,8 @@
-import axios from 'axios';
-import { Text, Container, Content, Header, Toast, Icon, Left, View } from 'native-base';
+import { View } from 'react-native';
 import React, {useState} from 'react';
 import Loader from '../../../components/Loader';
 import SongList from '../../../components/SongList';
+import { getSongsByArtist, loadMoreByArtist } from '../../../api/SongDbApi';
 
 export default function SongsByArtistList({navigation, route}){
 
@@ -13,24 +13,9 @@ export default function SongsByArtistList({navigation, route}){
 
     React.useEffect(()=>{
         setLoading(true)
-        axios.get('https://app.desalase.id/lagu', {
-            headers: {
-                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-            },
-            params : {
-                band : artistId,
-                page: currentPage
-            }
-        })
-        .then(res => {
-            setBandSongs(res.data.row)
-            setCurrentPage(res.data.currentPage)
-        }, (error) => {
-            setLoading(false)
-            Toast.show({
-                text: "Kesalahan Koneksi",
-                buttonText: "Okay"
-              })
+        getSongsByArtist(artistId, currentPage, (data) => {
+            setBandSongs(data.row)
+            setCurrentPage(data.currentPage)
         })
     },[navigation])
 
@@ -44,48 +29,26 @@ export default function SongsByArtistList({navigation, route}){
     }
 
     const handleLoadMore= async()=>{
-        await axios.get('https://app.desalase.id/lagu', {
-            headers: {
-                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-            },
-            params : {
-                band : artistId,
-                page: currentPage + 1
-            }
-        })
-        .then(res => {
+        loadMoreByArtist(artistId, currentPage, (data) => {
             let songs = [...bandSongs];
-            res.data.row.forEach(r => {
+            data.row.forEach(r => {
                 songs.push(r)
             });
             setBandSongs(songs)
-            setCurrentPage(res.data.currentPage)
-            console.log("current : "+ res.data.currentPage + ", total : "+ res.data.totalPages)
-            res.data.currentPage == res.data.totalPages && setLoading(false)
-        }, (error) => {
-            setLoading(false)
-            Toast.show({
-                text: "Kesalahan Koneksi",
-                buttonText: "Okay"
-              })
+            setCurrentPage(data.currentPage)
+            console.log("current : "+ data.currentPage + ", total : "+ data.totalPages)
+            data.currentPage == data.totalPages && setLoading(false)
         })
     }
 
     return (
-        <Container>
+        <View style={{flex:1, backgroundColor:'#fff'}}>
             <Loader
                 loading={bandSongs!=null ? false : true} />
-            <Header style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-                <Icon onPress={()=> navigation.pop()} style={{color:'#fff', flex:1}} type="AntDesign" size={3} name="arrowleft"/>
-                <View style={{color:'#fff', flex:4, alignItems:'center'}}>
-                    <Text style={{color:'#fff'}}>{route.params.name}</Text>
-                </View>
-                <View style={{flex:1}}></View>
-            </Header>
             <View>
                 <SongList songs={bandSongs} onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)} search={true} handleLoadMore={handleLoadMore} loading={loading}/>
             </View>
-        </Container>
+        </View>
     );
     
 }
