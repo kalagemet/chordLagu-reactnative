@@ -1,10 +1,4 @@
 {
-  "name": "ChordLagu",
-  "displayName": "Chord Lagu",
-  "expo": {
-    "name": "ChordLagu",
-    "slug": "ChordLagu",
-    "version": "1.0.1",
-    "assetBundlePatterns": ["**/*"]
-  }
+  "name": "chordlagu",
+  "displayName": "chordlagu"
 }

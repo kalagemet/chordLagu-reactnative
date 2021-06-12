@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "116192262171",
+    "project_id": "chordlaguwta",
+    "storage_bucket": "chordlaguwta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:116192262171:android:19182318420090d299e0be",
+        "android_client_info": {
+          "package_name": "com.chordlagu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "116192262171-0bicangus5cfj7tiidk1qnfb3vfge4sf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chordlagu",
+            "certificate_hash": "a8b5b81aedb4a6bddc25d0d3cc43ee8577b5b9ee"
+          }
+        },
+        {
+          "client_id": "116192262171-41n5buqesimnpd5a5421jsb28l5ap769.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chordlagu",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "116192262171-u2lujr3tked2tgpl71hc99v90d7tki1j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chordlagu",
+            "certificate_hash": "75d21b9117e1c3ef210aff1d731776263205c0e4"
+          }
+        },
+        {
+          "client_id": "116192262171-6ehlf2kdqo4qiq6vn81k1tppdsqls6vi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF_veL3QHekYAceeB3y_oExKE12HcdbJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "116192262171-6ehlf2kdqo4qiq6vn81k1tppdsqls6vi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

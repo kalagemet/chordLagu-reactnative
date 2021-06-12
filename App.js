@@ -1,83 +1,50 @@
-import React from "react";
-import * as eva from "@eva-design/eva";
-import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
-import { EvaIconsPack } from "@ui-kitten/eva-icons";
-import { createStackNavigator } from "@react-navigation/stack";
-import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
-import Tentang from "./src/Tentang/Tentang";
-import AppLayout from "./src/AppLayout";
-import { navigationRef } from "./src/RootNavigation";
-import { SafeAreaView, StatusBar } from "react-native";
-import ChordView from "./src/Home/Chord";
-import Band from "./src/Home/Band";
-import Lagu from "./src/Home/Lagu";
-import CariLagu from "./src/Home/CariLagu";
-import CariBand from "./src/Home/CariBand";
-import { Consumer, Context } from "./src/Context";
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow strict-local
+ */
 
-const Stack = createStackNavigator();
+import React from 'react';
+import type {Node} from 'react';
+import {
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
+import AppContainer from './src/navigator/Navigation';
+import { Root } from 'native-base';
 
-export default function App() {
+const App: () => Node = () => {
   return (
-    <>
-      <SafeAreaView style={{ flex: 1 }}>
-        <IconRegistry icons={EvaIconsPack} />
-        <Context>
-          <Consumer>
-            {({ darkMode }) => (
-              <ApplicationProvider
-                {...eva}
-                theme={darkMode ? eva.dark : eva.light}
-              >
-                <StatusBar
-                  backgroundColor={darkMode ? "rgb(26,33,56)" : "white"}
-                  barStyle={darkMode ? "light-content" : "dark-content"}
-                />
-                <NavigationContainer ref={navigationRef}>
-                  <Stack.Navigator>
-                    <Stack.Screen
-                      options={{ headerShown: false }}
-                      name="App"
-                      component={AppLayout}
-                    />
-                    <Stack.Screen
-                      options={{ headerShown: false }}
-                      name="Tentang"
-                      component={Tentang}
-                    />
-                    <Stack.Screen
-                      options={{ headerShown: false }}
-                      name="chordView"
-                      component={ChordView}
-                    />
-                    <Stack.Screen
-                      options={{ headerShown: false }}
-                      name="band"
-                      component={Band}
-                    />
-                    <Stack.Screen
-                      options={{ headerShown: false }}
-                      name="lagu"
-                      component={Lagu}
-                    />
-                    <Stack.Screen
-                      options={{ headerShown: false }}
-                      name="cariBand"
-                      component={CariBand}
-                    />
-                    <Stack.Screen
-                      options={{ headerShown: false }}
-                      name="cariLagu"
-                      component={CariLagu}
-                    />
-                  </Stack.Navigator>
-                </NavigationContainer>
-              </ApplicationProvider>
-            )}
-          </Consumer>
-        </Context>
-      </SafeAreaView>
-    </>
+    <Root>
+      <AppContainer/>
+    </Root>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  sectionContainer: {
+    marginTop: 32,
+    paddingHorizontal: 24,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  sectionDescription: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '400',
+  },
+  highlight: {
+    fontWeight: '700',
+  },
+});
+
+export default App;
