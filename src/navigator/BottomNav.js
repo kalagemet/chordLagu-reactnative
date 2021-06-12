@@ -1,16 +1,14 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import EditSong from '../pages/EditSong';
 import Favourites from '../pages/main/Favourites';
 import Home from '../pages/main/Home';
-import MakeSong from '../pages/MakeSong';
 import MyChords from '../pages/main/profile/MyChords';
 import Profile from '../pages/main/profile/Profile';
 import Search from '../pages/main/search/Search';
 import Tools from '../pages/main/tools/Tools';
-import ViewSong from '../pages/ViewSong';
 import SongsByArtistList from '../pages/main/search/SongsByArtistList';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator()
 const HomeStack = createStackNavigator()
@@ -22,7 +20,7 @@ const ProfileStack = createStackNavigator()
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator screenOptions={{
-      headerShown: false
+      headerTitle : 'Beranda'
     }}>
       <HomeStack.Screen
         name="Home"
@@ -35,7 +33,7 @@ function HomeStackScreen() {
 function SearchStackScreen() {
   return (
     <SearchStack.Navigator screenOptions={{
-      headerShown: false
+      headerTitle : 'Cari'
     }}>
       <SearchStack.Screen
         name="Search"
@@ -52,7 +50,7 @@ function SearchStackScreen() {
 function FavouritesStackScreen() {
   return (
     <FavouritesStack.Navigator screenOptions={{
-      headerShown: false
+      headerTitle:'Favorit'
     }}>
       <SearchStack.Screen
         name="Favourites"
@@ -65,7 +63,7 @@ function FavouritesStackScreen() {
 function ProfileStackScreen() {
   return (
     <ProfileStack.Navigator screenOptions={{
-      headerShown: false
+      headerTitle: 'Profil'
     }}>
       <ProfileStack.Screen
         name="Profile"
@@ -81,11 +79,46 @@ function ProfileStackScreen() {
 
 export default function BottomNav(){
   return(
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        keyboardHidesTabBar:true, 
+        activeTintColor:'#000', 
+        showLabel:false
+      }}
+      screenOptions={({route}) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if(route.name == "Home") {
+            iconName = focused
+            ? 'home'
+            : 'home-outline'
+          } else if (route.name == "Favourites") {
+            iconName = focused
+            ? 'heart'
+            : 'heart-outline'
+          } else if (route.name == "Search") {
+            iconName = focused
+            ? 'search'
+            : 'search-outline'
+          } else if (route.name == "Tools") {
+            iconName = focused
+            ? 'build'
+            : 'build-outline'
+          }else if (route.name == "Profile") {
+            iconName = focused
+            ? 'person'
+            : 'person-outline'
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        }
+      })}
+    >
         <Tab.Screen name="Home" component={HomeStackScreen} />
         <Tab.Screen name="Favourites" component={FavouritesStackScreen} />
         <Tab.Screen name="Search" component={SearchStackScreen} />
-        <Tab.Screen name="Tools" component={Tools} options={{headerShown:false}}/>
+        <Tab.Screen name="Tools" component={Tools}/>
         <Tab.Screen name="Profile" component={ProfileStackScreen} />
     </Tab.Navigator>
   )
