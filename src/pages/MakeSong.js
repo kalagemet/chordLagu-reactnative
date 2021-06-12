@@ -1,101 +1,94 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Text, View, StyleSheet, TextInput, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import {Button, Toast} from 'native-base';
 import { addSong } from '../api/SongsApi';
 import Loader from '../components/Loader';
+import * as STORAGE from '../Storage';
 
-export default class MakeSong extends React.Component {
-  state = {
-    title :'',
-    artist :'',
-    content :'',
-    loading : false
-  }
+export default function MakeSong({navigation}) {
+  const [title, setTitle] = useState('')
+  const [artist, setArtist] = useState('')
+  const [content, setContent] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('')
 
-  uploadChord = () => {
-    // var splitted = '';
+  React.useEffect(()=>{
+    STORAGE.getUserInfo((value)=>{
+      setEmail(value.email)
+    })
+  },[navigation])
 
-    // this.state.content.split("\n").map(function(item, idx) {
-    //   splitted += item + ':x1:';
-    // });
-    // console.log(splitted)
-
-    this.setState({
-      loading: true
-    });
-    var song = {
-      artist : this.state.artist.toLowerCase(),
-      content : this.state.content,
-      created_by : this.props.user.email,
+  const uploadChord = () => {
+    setLoading(true)
+    let song = {
+      artist : artist.toLowerCase(),
+      content : content,
+      created_by : email,
       favourites : 0,
-      title : this.state.title.toLowerCase()
+      title : title.toLowerCase()
     }
-    //console.log("title : "+this.state.title+" , artist : "+this.state.artist+" , content : "+moddedContent+", user : "+this.props.user.email)
-    addSong(song, (e) => this.onSongAdded(e))
+    addSong(song, (e) => onSongAdded(e))
   }
 
-  onSongAdded = (song) => {
-    this.setState({
-      loading: false
-    });
+  const onSongAdded = (song) => {
+    setLoading(false)
     Toast.show({
       text: "Berhasil diunggah",
       buttonText: "Okay",
       position: 'bottom'
     })
-
-    this.props.navigation.pop();
+    navigation.pop();
   }
-    render() {
-        return (
-            <ScrollView
-            contentContainerStyle={styles.container}
-            keyboardDismissMode="none"
-            >
-            <Loader loading={this.state.loading} />
-            <KeyboardAvoidingView>
-                <TextInput
-                style={styles.input}
-                placeholder="Nama Artis"
-                autoFocus={false}
-                autoCorrect={false}
-                autoCapitalize='words'
-                onChangeText={artist => this.setState({artist})}
-                // value={artist}
-                />
 
-                <TextInput
-                style={styles.input}
-                placeholder="Judul Lagu"
-                autoFocus={false}
-                autoCorrect={false}
-                autoCapitalize='words'
-                onChangeText={title => this.setState({title})}
-                // value={title}
-                />
+  return (
+      <ScrollView
+      contentContainerStyle={styles.container}
+      keyboardDismissMode="none"
+      >
+      <Loader loading={loading} />
+      <KeyboardAvoidingView>
+          <TextInput
+          style={styles.input}
+          placeholder="Nama Artis"
+          autoFocus={false}
+          autoCorrect={false}
+          autoCapitalize='words'
+          onChangeText={artist => setArtist(artist)}
+          // value={artist}
+          />
 
-                <TextInput
-                textAlignVertical="top"
-                style={styles.content}
-                placeholder={contentPlaceholder}
-                placeholderTextColor="#aaa"
-                multiline = {true}
-                numberOfLines={4}
-                autoFocus={false}
-                autoCorrect={false}
-                autoCapitalize='none'
-                onChangeText={content => this.setState({content})}
-                scrollEnabled
-                // value={content}
-                />
-                <View style={{flexDirection:'column', alignItems:'flex-end'}}>
-                  <Button primary style={{padding:20, margin:20}}><Text style={{color:'white'}} onPress={this.uploadChord}> Unggah </Text></Button>
-                </View>
-                
-            </KeyboardAvoidingView>
-            </ScrollView>
-        )
-    }
+          <TextInput
+          style={styles.input}
+          placeholder="Judul Lagu"
+          autoFocus={false}
+          autoCorrect={false}
+          autoCapitalize='words'
+          onChangeText={title => setTitle(title)}
+          // value={title}
+          />
+
+          <TextInput
+          textAlignVertical="top"
+          style={styles.content}
+          placeholder={contentPlaceholder}
+          placeholderTextColor="#aaa"
+          multiline = {true}
+          numberOfLines={4}
+          autoFocus={false}
+          autoCorrect={false}
+          autoCapitalize='none'
+          onChangeText={content => setContent(content)}
+          scrollEnabled
+          // value={content}
+          />
+          <View style={{flexDirection:'column', alignItems:'flex-end'}}>
+            <Button primary style={{padding:20, margin:20}}><Text style={{color:'white'}} onPress={uploadChord}> Unggah </Text></Button>
+          </View>
+          
+      </KeyboardAvoidingView>
+      </ScrollView>
+  )
+    
 }
 
 const contentPlaceholder =

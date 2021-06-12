@@ -26,10 +26,7 @@ export default function SongList({handleLoadMore, songs, search, onPress, loadin
     
         return (
                 songs == null ?
-                    search ?
                     <View></View>
-                    :
-                    <View style={{padding:10, alignItems:'center'}}><Text>Tidak Ada Data</Text></View> 
                 :
                     <FlatList
                         data={songs}

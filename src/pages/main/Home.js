@@ -1,8 +1,7 @@
-import { Container, Fab, Header, Icon, View } from 'native-base';
 import React, {useState} from 'react';
-import { Image } from 'react-native';
+import { Text, View } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import { getTopLikes } from '../../api/SongsApi';
+import { getPopular } from '../../api/SongDbApi';
 import { getAdStatus } from '../../api/AdsApi';
 import SongList from '../../components/SongList';
 import * as STORAGE from '../../Storage';
@@ -20,7 +19,7 @@ export default function Home({navigation}) {
       setShowAds(adStatus.homeBannerAd)
     });
 
-    getTopLikes((songList) => {
+    getPopular((songList) => {
       setFlatlistItem(songList),
       setRefreshing(false)
     });
@@ -43,7 +42,7 @@ export default function Home({navigation}) {
 
   const getListSongs = () => {
     setRefreshing(true)
-    getTopLikes(onSongsReceived);
+    getPopular(onSongsReceived);
   }
 
   const onRefresh = () => {
@@ -66,15 +65,13 @@ export default function Home({navigation}) {
 
   
   return (
-    <Container>
-      <Header>
-        {/* <View style={{justifyContent : 'center'}}>
-          <Image source={require('../../assets/Images/kordgitarBgBw.png')} style={{ height: 30}} resizeMode='contain'/>
-        </View> */}
-      </Header>
+    <View style={{flex:1, backgroundColor:'#fff'}}>
+      <View style={{alignItems:'center', padding:'3%'}}>
+        <Text style={{fontSize:25}}>Populer</Text>
+      </View>
         <SongList songs={flatListItem} onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}/>
       <View>
-        { currentUser ?
+        {/* { currentUser ?
         <Fab
           active={true}
           direction="up"
@@ -85,7 +82,7 @@ export default function Home({navigation}) {
           <Icon name="add" />
         </Fab>
         : <View/>
-        }
+        } */}
       </View>
       {
         showAds ?
@@ -105,7 +102,7 @@ export default function Home({navigation}) {
         :
         <View/>
       }
-    </Container>
+    </View>
   );
     
 }

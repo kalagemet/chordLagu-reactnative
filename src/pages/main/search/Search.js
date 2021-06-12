@@ -1,12 +1,12 @@
-import axios from 'axios';
-import { Button, Container, Content, Header, Icon, Input, Item, Toast, View } from 'native-base';
 import React, {useState} from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TextInput } from 'react-native';
 import { getAllSongs } from '../../../api/SongsApi';
 import Loader from '../../../components/Loader';
 import SongList from '../../../components/SongList';
 import { getAdStatus } from '../../../api/AdsApi';
 import * as STORAGE from '../../../Storage';
+import { searchArtist, searchLagu, loadMore } from '../../../api/SongDbApi';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function Search({navigation}) {
     const [initialLoad, setInitialLoad] = useState(false)
@@ -30,39 +30,16 @@ export default function Search({navigation}) {
 
     const onSongsReceived = async(songList) => {
         let l = [];
-        await axios.get('https://app.desalase.id/band', {
-            headers: {
-                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-            },
-            params : {
-                string : query
-            }
-        })
-        .then(res => {
-            setSongs(res.data.row)
-            l = res.data.row;
+        searchArtist(query, (data) => {
+            setSongs(data)
+            l = data;
             songList.forEach(song => {
                 l.push(song)
             });
-        }, (error) => {
-            setInitialLoad(false)
-            setList(songs)
-            Toast.show({
-                text: "Kesalahan Koneksi",
-                buttonText: "Okay"
-            })
         })
-
-        await axios.get('https://app.desalase.id/cari', {
-            headers: {
-                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-            },
-            params : {
-                string : query
-            }
-        })
-        .then(res => {
-            const songs = res.data.row;
+        
+        searchLagu(query, (data) => {
+            const songs = data.row;
             songs.forEach(song => {
                 l.push(song)
             });
@@ -73,14 +50,7 @@ export default function Search({navigation}) {
             })
             setList(l)
             setInitialLoad(false)
-            res.data.currentPage >= res.data.totalPages && setLoading(false)
-        }, (error) => {
-            setInitialLoad(false)
-            setList(songList)
-            Toast.show({
-                text: "Kesalahan Koneksi",
-                buttonText: "Okay"
-            })
+            data.currentPage >= data.totalPages && setLoading(false)
         })
     }
 
@@ -120,46 +90,31 @@ export default function Search({navigation}) {
     }
 
     const handleLoadMore= async()=>{
-        await axios.get('https://app.desalase.id/cari', {
-            headers: {
-                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-            },
-            params : {
-                string : query,
-                page: currentPage + 1
-            }
-        })
-        .then(res => {
+        loadMore(query, currentPage, (data) => {
             let songs = [...list];
-            res.data.row.forEach(r => {
+            data.row.forEach(r => {
                 songs.push(r)
             });
             setList(songs)
-            setCurrentPage(res.data.currentPage)
+            setCurrentPage(data.currentPage)
             console.log("currentState : "+ currentPage)
-            console.log("current : "+ res.data.currentPage + ", total : "+ res.data.totalPages)
-            res.data.currentPage >= res.data.totalPages && setLoading(false)
-        }, (error) => {
-            setInitialLoad(false)
-            Toast.show({
-                text: "Kesalahan Koneksi",
-                buttonText: "Okay"
-            })
+            console.log("current : "+ data.currentPage + ", total : "+ data.totalPages)
+            data.currentPage >= data.totalPages && setLoading(false)
         })
     }
 
     return (
-    <Container>
-        <Loader
-            loading={initialLoad} />
-        <Header searchBar>
-            <Item rounded>
-                <Input placeholder='Cari Chord' onChangeText={(query) => setQuery(query)} onEndEditing={searchSong}/>
-                <TouchableOpacity onPress={searchSong}>
-                    <Icon name='search' fontSize={29}/>
-                </TouchableOpacity>
-            </Item>
-        </Header>
+    <View style={{flex:1, backgroundColor:'#fff'}}>
+        <Loader loading={initialLoad} />
+        <View style={{flexDirection:'row', elevation:20, margin:'5%', backgroundColor:'#fff', alignItems:'center', borderRadius:30}}>
+            <Ionicons name='search' style={{marginHorizontal:'5%', fontSize:27}} />
+            <TextInput 
+                onEndEditing={searchSong}
+                onChangeText={(text) => setQuery(text) }
+                placeholder='Cari Chord'
+                style={{width:'75%'}}
+            />
+        </View>
         <SongList 
             songs={list} 
             onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)} 
@@ -168,7 +123,7 @@ export default function Search({navigation}) {
             loading={loading}
             search
         />
-    </Container>
+    </View>
     );
     
 }

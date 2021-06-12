@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#ccc',
         height:'20%',
         width:'100%',
-        justifyContent:'center',
+        justifyContent:'flex-start',
         alignItems:'center'
     },
     TextA : {

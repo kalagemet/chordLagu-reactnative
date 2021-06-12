@@ -5,7 +5,6 @@ import KeepAwake from 'react-native-keep-awake';
 import Meter from "../../../components/tuner/meter";
 import Note from "../../../components/tuner/note";
 import TunerContainer from "../../../components/tuner/tunerContainer";
-//import { NavigationEvents } from 'react-navigation';
 
 const tuner = new TunerContainer();
 
@@ -105,11 +104,6 @@ export default class Tuner extends React.Component {
     render() {
         return (
             <View style={style.body}>
-              {/* <NavigationEvents
-                onDidFocus={async() => await this.request_audio_permission() }
-                onWillBlur={() => {tuner.stop()}}
-                onDidBlur={() => tuner.stop()}
-              /> */}
               <Meter cents={this.state.note.cents} />
               <Note {...this.state.note} />
               <Text style={style.frequency}>
@@ -128,7 +122,8 @@ const style = StyleSheet.create({
     body: {
       flex: 1,
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
+      backgroundColor:'#fff'
     },
     frequency: {
       fontSize: 28,

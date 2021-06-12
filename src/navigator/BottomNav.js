@@ -28,14 +28,6 @@ function HomeStackScreen() {
         name="Home"
         component={Home}
       />
-      <HomeStack.Screen
-        name="MakeSong"
-        component={MakeSong}
-      />
-      <HomeStack.Screen
-        name="EditSong"
-        component={EditSong}
-      />
     </HomeStack.Navigator>
   );
 }
@@ -78,10 +70,6 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="Profile"
         component={Profile}
-      />
-      <ProfileStack.Screen
-        name="MakeSong"
-        component={MakeSong}
       />
       <ProfileStack.Screen
         name="MyChords"

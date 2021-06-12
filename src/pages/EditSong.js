@@ -1,118 +1,100 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Text, View, StyleSheet, TextInput, KeyboardAvoidingView, Platform, ScrollView, Button, ToastAndroid } from "react-native";
 import { getSong, updateSong } from '../api/SongsApi';
 import Loader from '../components/Loader';
 
-export default class EditSong extends React.Component {
-  state = {
-    title :'',
-    artist :'',
-    content :'',
-    created_by :'',
-    favourites : 0,
-    loading : false
+export default function EditSong({navigation, route}) {
+  const [title, setTitle] = useState('')
+  const [artist, setArtist] = useState('')
+  const [content, setContent] = useState('')
+  const [createdBy, setCreatedBy] = useState('')
+  const [favourites, setFavourites] = useState(0)
+  const [loading, setLoading] = useState(false)
+
+  React.useEffect(()=>{
+    getSong(route.params.path, onSongsReceived)
+  },[navigation])
+
+  const onSongsReceived = (song) => {
+    let content = song.content.replace(/:x1:/g, '\n');
+    setArtist(song.artist)
+    setTitle(song.title)
+    setCreatedBy(song.created_by)
+    setFavourites(song.favourites)
+    setContent(content)
   }
 
-  componentDidMount() {
-      console.log(this.props.navigation.state.params.path);
-    getSong(this.props.navigation.state.params.path, this.onSongsReceived)
-  }
-
-  onSongsReceived = (song) => {
-    var content = song.content.replace(/:x1:/g, '\n');
-    this.setState( prevState => ({
-        artist: prevState.artist = song.artist,
-        title : prevState.title = song.title,
-        created_by: prevState.created_by = song.created_by,
-        favourites : prevState.favourites = song.favourites,
-      })); 
-    //console.log(content);
-    this.setState({ content });
-  }
-
-  uploadChord = () => {
-    // var splitted = '';
-
-    // this.state.content.split("\n").map(function(item, idx) {
-    //   splitted += item + ':x1:';
-    // });
-    // console.log(splitted)
-
-    this.setState({
-      loading: true
-    });
-    var song = {
-      artist : this.state.artist,
-      content : this.state.content,
-      title : this.state.title,
-      created_by : this.state.created_by,
-      favourites : this.state.favourites
+  const uploadChord = () => {
+    setLoading(true)
+    let song = {
+      artist : artist,
+      content : content,
+      title : title,
+      created_by : createdBy,
+      favourites : favourites
     }
-    //console.log("title : "+this.state.title+" , artist : "+this.state.artist+" , content : "+moddedContent+", user : "+this.props.user.email)
-    updateSong(this.props.navigation.state.params.path, song, (e) => this.onSongUpdated(e))
+    updateSong(route.params.path, song, (e) => onSongUpdated(e))
   }
 
-  onSongUpdated = (song) => {
-    this.setState({
-      loading: false
-    });
+  const onSongUpdated = (song) => {
+    setLoading(false)
     ToastAndroid.show({
       text: "Berhasil diupdate",
       buttonText: "Okay",
       position: 'bottom'
     })
-    this.props.navigation.navigate('Home');
+    navigation.navigate('Home');
   }
-    render() {
-        return (
-            <ScrollView
-            contentContainerStyle={styles.container}
-            keyboardDismissMode="none"
-            >
-            <Loader loading={this.state.loading} />
-            <KeyboardAvoidingView>
-                <TextInput
-                style={styles.input}
-                placeholder="Nama Artis"
-                autoFocus={false}
-                autoCorrect={false}
-                autoCapitalize='words'
-                onChangeText={artist => this.setState({artist})}
-                value={this.state.artist}
-                />
 
-                <TextInput
-                style={styles.input}
-                placeholder="Judul Lagu"
-                autoFocus={false}
-                autoCorrect={false}
-                autoCapitalize='words'
-                onChangeText={title => this.setState({title})}
-                value={this.state.title}
-                />
+  return (
+      <ScrollView
+      contentContainerStyle={styles.container}
+      keyboardDismissMode="none"
+      >
+      <Loader loading={loading} />
+      <KeyboardAvoidingView>
+          <TextInput
+          style={styles.input}
+          placeholder="Nama Artis"
+          autoFocus={false}
+          autoCorrect={false}
+          autoCapitalize='words'
+          onChangeText={artist => setArtist(artist)}
+          value={artist}
+          />
 
-                <TextInput
-                textAlignVertical="top"
-                style={styles.content}
-                placeholder={contentPlaceholder}
-                multiline = {true}
-                numberOfLines={4}
-                placeholderTextColor="#aaa"
-                autoFocus={false}
-                autoCorrect={false}
-                autoCapitalize='none'
-                onChangeText={content => this.setState({content})}
-                value={this.state.content}
-                scrollEnabled
-                />
-                <View style={{flexDirection:'column', alignItems:'flex-end'}}>
-                  <Button primary onPress={this.uploadChord} style={{padding:20, margin:20}} title="Simpan"></Button>
-                </View>
-                
-            </KeyboardAvoidingView>
-            </ScrollView>
-        )
-    }
+          <TextInput
+          style={styles.input}
+          placeholder="Judul Lagu"
+          autoFocus={false}
+          autoCorrect={false}
+          autoCapitalize='words'
+          onChangeText={title => setTitle(title)}
+          value={title}
+          />
+
+          <TextInput
+          textAlignVertical="top"
+          style={styles.content}
+          placeholder={contentPlaceholder}
+          multiline = {true}
+          numberOfLines={4}
+          placeholderTextColor="#aaa"
+          autoFocus={false}
+          autoCorrect={false}
+          autoCapitalize='none'
+          onChangeText={content => setContent(content)}
+          value={content}
+          scrollEnabled
+          />
+          <View style={{flexDirection:'column', alignItems:'flex-end'}}>
+            <Button primary onPress={uploadChord} style={{padding:20, margin:20}} title="Simpan"></Button>
+          </View>
+          
+      </KeyboardAvoidingView>
+      </ScrollView>
+  )
+    
 }
 
 const contentPlaceholder =

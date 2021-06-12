@@ -1,6 +1,5 @@
-import { Container, View, Header, Title } from 'native-base';
 import React, {useState} from 'react';
-import { RefreshControl, ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { getSongs } from '../../../api/SongsApi';
 import SongList from '../../../components/SongList';
 
@@ -24,7 +23,7 @@ export default function MyChords({navigation, route}) {
     }
 
     const toViewSong = (e, typeApi, created_by, title) => {
-        this.props.navigation.navigate('ViewSong', {
+        navigation.navigate('ViewSong', {
             path: e,
             type : typeApi,
             created : created_by,
@@ -34,12 +33,8 @@ export default function MyChords({navigation, route}) {
     }
 
     return (
-        <View>
-        
-            <Header style={{alignItems:'center', justifyContent:'flex-start'}}>
-                <Title>Chord Saya</Title>
-            </Header>
-            <SongList songs={flatListItems} onPress={(e, typeApi, created_by, title) => this.toViewSong(e, typeApi, created_by, title)}/>
+        <View style={{flex:1, backgroundColor:'#fff'}}>
+            <SongList songs={flatListItems} onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}/>
         </View>
     );
     

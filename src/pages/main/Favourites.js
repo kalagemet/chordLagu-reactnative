@@ -1,5 +1,4 @@
-import { Body, Container, Header, Left, Right, Title, Button, View, Text } from 'native-base';
-import { StyleSheet, TouchableOpacity} from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import React, {useState} from 'react';
 import { getFavourited } from '../../api/SongsApi';
 import SongList from '../../components/SongList';
@@ -39,19 +38,7 @@ export default function Favourites({navigation}) {
 
     
     return (
-        <Container>
-        
-        <Header>
-            <Left>
-            <Title>Favorit</Title>
-            </Left>
-            <Body>
-            
-            </Body>
-            <Right />
-        </Header>
-
-        <View>
+        <View style={styles.Container}>
             {
                 email ?
                 <SongList songs={flatListItems} onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}/>
@@ -65,12 +52,15 @@ export default function Favourites({navigation}) {
             }
             
         </View>
-        </Container>
     );
     
 }
 
 const styles = StyleSheet.create({
+    Container : {
+        flex:1,
+        backgroundColor:'#fff'
+    },
     LoginContainer : {
         alignItems : 'center',
         justifyContent :'center',
