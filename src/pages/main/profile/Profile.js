@@ -6,7 +6,9 @@ import { GoogleSignin, statusCodes } from 'react-native-google-signin';
 import Loader from '../../../components/Loader';
 import { getAdStatus } from '../../../api/AdsApi';
 import * as STORAGE from '../../../Storage';
+import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/3882846984';
 export default function Profile({navigation}) {
     const [loading, setLoading] = useState(false)
     const [showAds, setShowAds] = useState(false)
@@ -131,14 +133,28 @@ export default function Profile({navigation}) {
                     </View>
                 }
             </View>
-            
+            {
+                showAds ?
+                <View style={{flex:1}}>
+                <BannerAd
+                    unitId={adUnitId}
+                    size={BannerAdSize.FULL_BANNER}
+                    requestOptions={{
+                    requestNonPersonalizedAdsOnly: true,
+                    }}
+                    onAdFailedToLoad={(error)=>console.log(error)}
+                />
+                </View>
+                :
+                <View/>
+            }
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     HeaderContainer : {
-        flex : 1,
+        flex : 2,
         justifyContent : 'center',
         width : '100%',
         height : '100%',
@@ -152,7 +168,7 @@ const styles = StyleSheet.create({
         borderColor : '#000'
     },
     ListContainer : {
-        flex : 3,
+        flex : 6,
     },
     Button : {
         flexDirection:'row',

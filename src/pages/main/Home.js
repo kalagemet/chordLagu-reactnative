@@ -5,6 +5,9 @@ import { getPopular } from '../../api/SongDbApi';
 import { getAdStatus } from '../../api/AdsApi';
 import SongList from '../../components/SongList';
 import * as STORAGE from '../../Storage';
+import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
+
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/2186621936';
 
 export default function Home({navigation}) {
   const [currentUser, setCurrentUser] = useState(null)
@@ -36,7 +39,6 @@ export default function Home({navigation}) {
         if(currentUser){
           STORAGE.setUserInfo(_user, ()=>console.log('user logged in'))
         }
-        STORAGE.getUserInfo((data)=>console.log("userInfo => "+data))
       }
     })
   }, [navigation])
@@ -67,41 +69,24 @@ export default function Home({navigation}) {
   
   return (
     <View style={{flex:1, backgroundColor:'#fff'}}>
-      <View style={{alignItems:'center', padding:'3%'}}>
+      <View style={{alignItems:'center', flex:1}}>
         <Text style={{fontSize:20}}>Populer</Text>
       </View>
-      <View style={{height:'40%', width:'100%'}}>
+      <View style={{flex:9}}>
         <SongList songs={flatListItem} onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}/>
-      </View>
-      <View>
-        {/* { currentUser ?
-        <Fab
-          active={true}
-          direction="up"
-          containerStyle={{ }}
-          style={{ backgroundColor: '#58595b' }}
-          position="bottomRight"
-          onPress={toMakeSong}>
-          <Icon name="add" />
-        </Fab>
-        : <View/>
-        } */}
       </View>
       {
         showAds ?
-        <Banner
-        unitId={unitId}
-        size={'SMART_BANNER'}
-        request={request.build()}
-        onAdLoaded={() => {
-            console.log('Advert loaded');
-        }}
-        onAdFailedToLoad={(error) => {
-            console.log('Advert fail');
-            console.log(error.code);
-            console.log(error.message);
-        }}
-        />
+        <View style={{flex:1}}>
+          <BannerAd
+            unitId={adUnitId}
+            size={BannerAdSize.FULL_BANNER}
+            requestOptions={{
+              requestNonPersonalizedAdsOnly: true,
+            }}
+            onAdFailedToLoad={(error)=>console.log(error)}
+          />
+        </View>
         :
         <View/>
       }

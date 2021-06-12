@@ -7,6 +7,9 @@ import { getAdStatus } from '../../../api/AdsApi';
 import * as STORAGE from '../../../Storage';
 import { searchArtist, searchLagu, loadMore } from '../../../api/SongDbApi';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
+
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/8408167938';
 
 export default function Search({navigation}) {
     const [initialLoad, setInitialLoad] = useState(false)
@@ -106,7 +109,7 @@ export default function Search({navigation}) {
     return (
     <View style={{flex:1, backgroundColor:'#fff'}}>
         <Loader loading={initialLoad} />
-        <View style={{flexDirection:'row', elevation:20, margin:'5%', backgroundColor:'#fff', alignItems:'center', borderRadius:30}}>
+        <View style={{flex:1, flexDirection:'row', elevation:20, margin:'5%', backgroundColor:'#fff', alignItems:'center', borderRadius:30}}>
             <Ionicons name='search' style={{marginHorizontal:'5%', fontSize:27}} />
             <TextInput 
                 onEndEditing={searchSong}
@@ -115,14 +118,31 @@ export default function Search({navigation}) {
                 style={{width:'75%'}}
             />
         </View>
-        <SongList 
-            songs={list} 
-            onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)} 
-            onArtistPress={(id, name)=> getSongsByArtist(id, name)} 
-            handleLoadMore={()=>handleLoadMore()} 
-            loading={loading}
-            search
-        />
+        <View style={{flex:11}}>
+            <SongList 
+                songs={list} 
+                onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)} 
+                onArtistPress={(id, name)=> getSongsByArtist(id, name)} 
+                handleLoadMore={()=>handleLoadMore()} 
+                loading={loading}
+                search
+            />
+        </View>
+        {
+            showAds ?
+            <View style={{flex:1}}>
+            <BannerAd
+                unitId={adUnitId}
+                size={BannerAdSize.FULL_BANNER}
+                requestOptions={{
+                requestNonPersonalizedAdsOnly: true,
+                }}
+                onAdFailedToLoad={(error)=>console.log(error)}
+            />
+            </View>
+            :
+            <View/>
+        }
     </View>
     );
     
