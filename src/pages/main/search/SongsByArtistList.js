@@ -16,6 +16,8 @@ export default function SongsByArtistList({navigation, route}){
         getSongsByArtist(artistId, currentPage, (data) => {
             setBandSongs(data.row)
             setCurrentPage(data.currentPage)
+        }, () => {
+            setLoading(false)
         })
     },[navigation])
 
@@ -38,6 +40,8 @@ export default function SongsByArtistList({navigation, route}){
             setCurrentPage(data.currentPage)
             console.log("current : "+ data.currentPage + ", total : "+ data.totalPages)
             data.currentPage == data.totalPages && setLoading(false)
+        }, () => {
+            setLoading(false)
         })
     }
 

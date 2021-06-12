@@ -38,7 +38,10 @@ export default function Search({navigation}) {
             l = data;
             songList.forEach(song => {
                 l.push(song)
-            });
+            })
+        }, () => {
+            setInitialLoad(false)
+            setList(songs)
         })
         
         searchLagu(query, (data) => {
@@ -54,6 +57,9 @@ export default function Search({navigation}) {
             setList(l)
             setInitialLoad(false)
             data.currentPage >= data.totalPages && setLoading(false)
+        }, () => {
+            setInitialLoad(false)
+            setList(songs)
         })
     }
 
@@ -103,6 +109,8 @@ export default function Search({navigation}) {
             console.log("currentState : "+ currentPage)
             console.log("current : "+ data.currentPage + ", total : "+ data.totalPages)
             data.currentPage >= data.totalPages && setLoading(false)
+        }, () => {
+            setInitialLoad(false)
         })
     }
 

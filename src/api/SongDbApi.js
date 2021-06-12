@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {Toast} from 'native-base';
 
-export async function searchArtist(query, onReceived) {
+export async function searchArtist(query, onReceived, onError) {
     await axios.get('https://app.desalase.id/band', {
         headers: {
             apa: "79fa2fcaecf5c83c299cd96e2ba44710",
@@ -13,7 +13,7 @@ export async function searchArtist(query, onReceived) {
     .then(res => {
         onReceived(res.data.row)
     }, (error) => {
-        this.setState({initialLoad: false, list : this.state.songs})
+        onError()
         Toast.show({
             text: "Kesalahan Koneksi",
             buttonText: "Okay"
@@ -21,7 +21,7 @@ export async function searchArtist(query, onReceived) {
     })
 }
 
-export async function searchLagu(query, onReceived) {
+export async function searchLagu(query, onReceived, onError) {
     await axios.get('https://app.desalase.id/cari', {
         headers: {
             apa: "79fa2fcaecf5c83c299cd96e2ba44710",
@@ -33,7 +33,7 @@ export async function searchLagu(query, onReceived) {
     .then(res => {
         onReceived(res.data)
     }, (error) => {
-        this.setState({initialLoad: false, list : this.state.songs})
+        onError()
         Toast.show({
             text: "Kesalahan Koneksi",
             buttonText: "Okay"
@@ -50,7 +50,6 @@ export async function getPopular(onReceived) {
     .then(res => {
         onReceived(res.data)
     }, (error) => {
-        this.setState({initialLoad: false, list : this.state.songs})
         Toast.show({
             text: "Kesalahan Koneksi",
             buttonText: "Okay"
@@ -58,7 +57,7 @@ export async function getPopular(onReceived) {
     })
 }
 
-export async function loadMore(query, currentPage, onReceived) {
+export async function loadMore(query, currentPage, onReceived, onError) {
     await axios.get('https://app.desalase.id/cari', {
         headers: {
             apa: "79fa2fcaecf5c83c299cd96e2ba44710",
@@ -71,7 +70,7 @@ export async function loadMore(query, currentPage, onReceived) {
     .then(res => {
         onReceived(res.data)
     }, (error) => {
-        setInitialLoad(false)
+        onError()
         Toast.show({
             text: "Kesalahan Koneksi",
             buttonText: "Okay"
@@ -79,7 +78,7 @@ export async function loadMore(query, currentPage, onReceived) {
     })
 }
 
-export async function getSongsByArtist(id, currentPage, onReceived){
+export async function getSongsByArtist(id, currentPage, onReceived, onError){
     axios.get('https://app.desalase.id/lagu', {
         headers: {
             apa: "79fa2fcaecf5c83c299cd96e2ba44710",
@@ -92,7 +91,7 @@ export async function getSongsByArtist(id, currentPage, onReceived){
     .then(res => {
         onReceived(res.data)
     }, (error) => {
-        setLoading(false)
+        onError()
         Toast.show({
             text: "Kesalahan Koneksi",
             buttonText: "Okay"
@@ -100,7 +99,7 @@ export async function getSongsByArtist(id, currentPage, onReceived){
     })
 }
 
-export async function loadMoreByArtist(id, currentPage, onReceived) {
+export async function loadMoreByArtist(id, currentPage, onReceived, onError) {
     await axios.get('https://app.desalase.id/lagu', {
         headers: {
             apa: "79fa2fcaecf5c83c299cd96e2ba44710",
@@ -113,7 +112,7 @@ export async function loadMoreByArtist(id, currentPage, onReceived) {
     .then(res => {
         onReceived(res.data)
     }, (error) => {
-        setLoading(false)
+        onError()
         Toast.show({
             text: "Kesalahan Koneksi",
             buttonText: "Okay"
@@ -130,7 +129,6 @@ export async function getSongContent(songPath, onReceived){
     .then(res => {
         onReceived(res.data)
     }, (error) => {
-        this.setState({loading: false, list : this.state.songs})
         Toast.show({
             text: "Kesalahan Koneksi",
             buttonText: "Okay"

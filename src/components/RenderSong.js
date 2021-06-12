@@ -22,7 +22,6 @@ export default function RenderSong({songPath, typeAPI, jsRun, transpose}) {
     React.useEffect(()=>{
       setLoading(true)
       if(typeAPI == 'localAPI'){
-        console.log('local')
         getSong(songPath, onSongsReceived)
       }else {
         getSongContent(songPath, (data)=>{
@@ -139,7 +138,6 @@ export default function RenderSong({songPath, typeAPI, jsRun, transpose}) {
     }
 
     const onSongsReceived = (song) => {
-      console.log(song)
       let content = song.content.replace(/:x1:/g, '\n');
       let artist = song.artist.toLowerCase()
                   .split(' ')
