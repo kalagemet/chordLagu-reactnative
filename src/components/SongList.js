@@ -2,7 +2,7 @@ import { Body, Icon, ListItem, Right, Text, View } from 'native-base';
 import React from 'react';
 import { FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 
-export default function SongList({handleLoadMore, songs, search, onPress, loading, onArtistPress}) {
+export default function SongList({handleLoadMore, songs, search, onPress, loading, onArtistPress, refreshing, onRefresh}) {
     const toTitleCase = (str) => {
         return str.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -18,8 +18,9 @@ export default function SongList({handleLoadMore, songs, search, onPress, loadin
          if (!loading) return null;
          return (
            <ActivityIndicator
-                size={'large'}
-                style={{ color: '#000' }}
+                style={{marginVertical:'3%'}}
+                size='small'
+                color='#000'
            />
          );
     };
@@ -29,6 +30,8 @@ export default function SongList({handleLoadMore, songs, search, onPress, loadin
                 <View></View>
             :
                 <FlatList
+                    refreshing={refreshing?refreshing:false}
+                    onRefresh={() => onRefresh && onRefresh()}
                     data={songs}
                     renderItem={({ item }) => {
                         return (

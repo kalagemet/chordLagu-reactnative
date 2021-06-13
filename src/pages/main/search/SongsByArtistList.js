@@ -10,6 +10,7 @@ export default function SongsByArtistList({navigation, route}){
     const [bandSongs, setBandSongs] = useState([])
     const [currentPage, setCurrentPage] = useState(0)
     const artistId = route.params.id
+    const [refreshing, setRefreshing] = useState(false)
 
     React.useEffect(()=>{
         setLoading(true)
@@ -45,12 +46,31 @@ export default function SongsByArtistList({navigation, route}){
         })
     }
 
+    const onRefresh = () => {
+        setRefreshing(true)
+        getSongsByArtist(artistId, currentPage, (data) => {
+            setBandSongs(data.row)
+            setCurrentPage(data.currentPage)
+            setRefreshing(false)
+        }, () => {
+            setRefreshing(false)
+        })
+    }
+
     return (
         <View style={{flex:1, backgroundColor:'#fff'}}>
             <Loader
                 loading={bandSongs!=null ? false : true} />
             <View>
-                <SongList songs={bandSongs} onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)} search={true} handleLoadMore={handleLoadMore} loading={loading}/>
+                <SongList 
+                    songs={bandSongs} 
+                    onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)} 
+                    search={true} 
+                    handleLoadMore={handleLoadMore} 
+                    loading={loading}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />
             </View>
         </View>
     );

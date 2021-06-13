@@ -32,9 +32,19 @@ export default function MyChords({navigation, route}) {
         });
     }
 
+    const onRefresh = () => {
+        setRefreshing(true)
+        getListSongs()
+    }
+
     return (
         <View style={{flex:1, backgroundColor:'#fff'}}>
-            <SongList songs={flatListItems} onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}/>
+            <SongList 
+                songs={flatListItems} 
+                onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+            />
         </View>
     );
     

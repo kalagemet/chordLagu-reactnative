@@ -18,9 +18,9 @@ export default function Search({navigation}) {
     const [loading, setLoading] = useState(false)
     const [list, setList] = useState(null)
     const [showAds, setShowAds] = useState(false)
-    const [bandSongs, setBandSongs] = useState(null)
     const [currentPage, setCurrentPage] = useState(0)
     const [email, setEmail] = useState('')
+    const [refreshing, setRefreshing] = useState(false)
 
     React.useEffect(async ()=>{
         STORAGE.getUserInfo((data)=>{
@@ -42,6 +42,7 @@ export default function Search({navigation}) {
         }, () => {
             setInitialLoad(false)
             setList(songs)
+            setRefreshing(false)
         })
         
         searchLagu(query, (data) => {
@@ -57,9 +58,11 @@ export default function Search({navigation}) {
             setList(l)
             setInitialLoad(false)
             data.currentPage >= data.totalPages && setLoading(false)
+            setRefreshing(false)
         }, () => {
             setInitialLoad(false)
             setList(songs)
+            setRefreshing(false)
         })
     }
 
@@ -114,6 +117,11 @@ export default function Search({navigation}) {
         })
     }
 
+    const onRefresh = () => {
+        setRefreshing(true)
+        searchSong()
+    }
+
     return (
     <View style={{flex:1, backgroundColor:'#fff'}}>
         <Loader loading={initialLoad} />
@@ -134,6 +142,8 @@ export default function Search({navigation}) {
                 handleLoadMore={()=>handleLoadMore()} 
                 loading={loading}
                 search
+                refreshing={refreshing}
+                onRefresh={onRefresh}
             />
         </View>
         {

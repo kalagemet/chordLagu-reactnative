@@ -44,7 +44,10 @@ export default function Home({navigation}) {
 
   const getListSongs = () => {
     setRefreshing(true)
-    getPopular(onSongsReceived);
+    getPopular((songList) => {
+      setFlatlistItem(songList),
+      setRefreshing(false)
+    });
   }
 
   const onRefresh = () => {
@@ -72,7 +75,12 @@ export default function Home({navigation}) {
         <Text style={{fontSize:20}}>Populer</Text>
       </View>
       <View style={{flex:9}}>
-        <SongList songs={flatListItem} onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}/>
+        <SongList 
+          songs={flatListItem} 
+          onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
       </View>
       {
         showAds ?
