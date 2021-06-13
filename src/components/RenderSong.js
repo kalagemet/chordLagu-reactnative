@@ -9,6 +9,7 @@ import chords from '../assets/chords/guitar.json';
 import ChordModal from './ChordModal';
 import { getSong } from '../api/SongsApi';
 import { getSongContent } from '../api/SongDbApi';
+import * as STORAGE from '../Storage';
 
 export default function RenderSong({songPath, typeAPI, jsRun, transpose}) {
     const [loading, setLoading] = useState(false)
@@ -22,6 +23,11 @@ export default function RenderSong({songPath, typeAPI, jsRun, transpose}) {
       setLoading(true)
       if(typeAPI == 'localAPI'){
         getSong(songPath, onSongsReceived)
+      }else if(typeAPI == 'downloaded'){
+        STORAGE.getSavedSong(songPath, (data) => {
+          setChord(getChordPro(data.isi, data.nama_band, data.judul))
+          setLoading(false)
+        })
       }else {
         getSongContent(songPath, (data)=>{
           setChord(getChordPro(data.isi, data.nama_band, data.judul))

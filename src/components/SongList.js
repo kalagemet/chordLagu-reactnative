@@ -38,7 +38,7 @@ export default function SongList({handleLoadMore, songs, search, onPress, loadin
                         <View>
                             {
                                 (item.title || item.judul) ?
-                                <TouchableOpacity style={styles.item} onPress={() => onPress(item.id, item.judul ? 'chordPro' : 'localAPI', item.created_by ? item.created_by : 'api', item.title ? item.title +' '+ item.artist : item.judul +' '+ item.nama_band)}>
+                                <TouchableOpacity style={styles.item} onPress={() => onPress(item.id, item.downloaded ? 'downloaded' : item.judul ? 'desalase' : 'localAPI', item.created_by ? item.created_by : 'api', item.title ? item.title +' '+ item.artist : item.judul +' '+ item.nama_band)}>
                                     <View style={{flex:4}}>
                                         <Text>{item.title ? toTitleCase(item.title) : item.judul}</Text>
                                         <Text style={{color:'grey'}} numberOfLines={1}>{item.artist ? toTitleCase(item.artist) : item.nama_band }</Text>

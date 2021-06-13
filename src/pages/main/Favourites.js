@@ -10,8 +10,10 @@ export default function Favourites({navigation}) {
     const [flatListItems, setFlatListItems] = useState(null)
     const [email, setEmail] = useState('')
     const [refreshing, setRefreshing] = useState(false)
-    
-    React.useEffect(()=>{
+    const [isFinishGetFav, setIsFinishGetFav] = useState(false)
+    const [list, setList] = useState([])
+
+    React.useEffect(() => {
         STORAGE.getUserInfo((data)=>{
             if(data){
                 setEmail(data.email)
@@ -19,10 +21,16 @@ export default function Favourites({navigation}) {
                 getFavourited(data.email, onFavouriteLoaded)
             }
         })
-    },[navigation])
+    }, [navigation])
+
+    React.useEffect(()=> {
+        STORAGE.getSavedList((data)=>{
+            setFlatListItems([...list, ...data])
+        })
+    },[list])
 
     const onFavouriteLoaded = (songList) => {
-        setFlatListItems(songList)
+        setList(songList)
         setRefreshing(false)
     }
 
@@ -47,21 +55,21 @@ export default function Favourites({navigation}) {
     
     return (
         <View style={styles.Container}>
-            {
-                email ?
-                <SongList 
+            <SongList 
                     songs={flatListItems} 
                     onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}
                     refreshing={refreshing}
                     onRefresh={onRefresh}
                 />
+            {/* {
+                email ?
+                
                 :
                 <View style={styles.LoginContainer}>
                     <Text style={styles.TextInfo}>Login untuk melihat daftar favorit</Text>
                     <Button name='Login' onPress={toLogin} />
                 </View>
-            }
-            
+            } */}
         </View>
     );
     

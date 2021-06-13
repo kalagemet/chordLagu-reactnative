@@ -9,6 +9,8 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import StreamModal from '../components/StreamModal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
+import { getSongContent } from '../api/SongDbApi';
+import * as STORAGE from '../Storage';
 
 export default function ViewSong({navigation, route}){
 
@@ -36,6 +38,8 @@ export default function ViewSong({navigation, route}){
         console.log("fav : " +fav)
         setFavourited(fav)
       })
+    }else if(typeAPI == 'downloaded'){
+      setFavourited(true)
     }
     getStreamsBySearch(title, (streamsList) => {
       setStreamsList(streamsList)
@@ -125,7 +129,7 @@ export default function ViewSong({navigation, route}){
         songId : songPath
       }
       addToFavourite(favourite, onFavouriteComplete)
-    }      
+    }
   }
 
   const onRemovedFavourite = () => {
@@ -201,6 +205,37 @@ export default function ViewSong({navigation, route}){
     setShowStream(false)
   }
 
+  const onClickDownload = () => {
+    setLoading(true)
+    if(favourited){
+      STORAGE.deleteSaved(songPath, ()=>{
+        setFavourited(false)
+        setLoading(false)
+        ToastAndroid.showWithGravityAndOffset(
+          "Berhasil Dihapus dari Favorit",
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50
+        )
+      })
+    }else{
+      getSongContent(songPath, (data)=>{
+        STORAGE.saveSong(data, ()=>{
+          setFavourited(true)
+          setLoading(false)
+          ToastAndroid.showWithGravityAndOffset(
+            "Berhasil Disimpan di Favorit",
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50
+          )
+        })
+      })
+    }
+  }
+
   const renderDrawer = () => {
     return (
       <View style={{height:'100%', backgroundColor:'#fff', borderTopStartRadius:20, borderTopEndRadius:20, borderWidth:1, borderBottomWidth:0, borderColor:'#000'}}>
@@ -236,6 +271,7 @@ export default function ViewSong({navigation, route}){
               :
               <View style={{flexDirection:'row', justifyContent:'flex-end', flex:1}}>
                 {(typeAPI == 'localAPI' && user != 'anonim' ) && <Ionicons name="heart" style={{fontSize : 30, marginHorizontal : 10, color : favourited?'red':'#000', marginRight:10}} onPress={onClickFavourite}/>}
+                { (typeAPI == 'desalase' || typeAPI == 'downloaded')  && <Ionicons name="heart" style={{fontSize : 30, marginHorizontal : 10, color : favourited?'red':'#000', marginRight:10}} onPress={onClickDownload}/>}
               </View>
             }
         </View>
