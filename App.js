@@ -18,13 +18,10 @@ import {
   View,
 } from 'react-native';
 import AppContainer from './src/navigator/Navigation';
-import { Root } from 'native-base';
 
 const App: () => Node = () => {
   return (
-    <Root>
-      <AppContainer/>
-    </Root>
+    <AppContainer/>
   );
 };
 

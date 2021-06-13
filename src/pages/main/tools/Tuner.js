@@ -1,6 +1,5 @@
-import { Text } from 'native-base';
 import React from 'react';
-import { Alert, PermissionsAndroid, StyleSheet, View, AppState } from "react-native";
+import { Alert, PermissionsAndroid, StyleSheet, View, Text } from "react-native";
 import KeepAwake from 'react-native-keep-awake';
 import Meter from "../../../components/tuner/meter";
 import Note from "../../../components/tuner/note";

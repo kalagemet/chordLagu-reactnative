@@ -1,5 +1,5 @@
 import React, {useState, useRef} from 'react';
-import {View} from 'native-base';
+import {View} from 'react-native';
 import { WebView } from 'react-native-webview';
 import KeepAwake from 'react-native-keep-awake';
 import ChordSheetJS from 'chordsheetjs';

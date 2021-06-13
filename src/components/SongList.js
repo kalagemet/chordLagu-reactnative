@@ -1,6 +1,6 @@
-import { Body, Icon, ListItem, Right, Text, View } from 'native-base';
 import React from 'react';
-import { FlatList, ActivityIndicator, RefreshControl } from 'react-native';
+import { FlatList, ActivityIndicator, Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function SongList({handleLoadMore, songs, search, onPress, loading, onArtistPress, refreshing, onRefresh}) {
     const toTitleCase = (str) => {
@@ -26,67 +26,75 @@ export default function SongList({handleLoadMore, songs, search, onPress, loadin
     };
     
     return (
-            songs == null ?
-                <View></View>
-            :
-                <FlatList
-                    refreshing={refreshing?refreshing:false}
-                    onRefresh={() => onRefresh && onRefresh()}
-                    data={songs}
-                    renderItem={({ item }) => {
-                        return (
-                            <View>
-                                {
-                                    (item.title || item.judul) ?
-                                    <ListItem onPress={() => onPress(item.id, item.judul ? 'chordPro' : 'localAPI', item.created_by ? item.created_by : 'api', item.title ? item.title +' '+ item.artist : item.judul +' '+ item.nama_band)}>
-                                        <Body>
-                                            <Text>{item.title ? toTitleCase(item.title) : item.judul}</Text>
-                                            <Text note numberOfLines={1}>{item.artist ? toTitleCase(item.artist) : item.nama_band }</Text>
-                                                {
-                                                    item.created_by &&
-                                                    <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center' }}>
-                                                    <Icon type="FontAwesome" name="edit" style={{ fontSize: 10, marginHorizontal: 3 }} color='#ccc' />
-                                                    <Text numberOfLines={1} style={{ fontSize: 10, color: "grey" }}>{item.created_by ? item.created_by.slice(0,item.created_by.indexOf('@')):'OpenChordAPI' }</Text>
-                                                    </View>
-                                                }
-                                        </Body>
-                                        {
-                                            item.judul ?
-                                                <Right style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                                </Right>
-                                                :
-                                                <Right style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                                    <Icon type="FontAwesome" name="heart" />
-                                                    <Text style={{ color: '#ccc', paddingHorizontal: 10, fontSize: 10 }}>{item.likes ? item.likes.length : 0} suka</Text>
-                                                </Right>
+        songs == null ?
+            <View></View>
+        :
+            <FlatList
+                refreshing={refreshing?refreshing:false}
+                onRefresh={() => onRefresh && onRefresh()}
+                data={songs}
+                renderItem={({ item }) => {
+                    return (
+                        <View>
+                            {
+                                (item.title || item.judul) ?
+                                <TouchableOpacity style={styles.item} onPress={() => onPress(item.id, item.judul ? 'chordPro' : 'localAPI', item.created_by ? item.created_by : 'api', item.title ? item.title +' '+ item.artist : item.judul +' '+ item.nama_band)}>
+                                    <View style={{flex:4}}>
+                                        <Text>{item.title ? toTitleCase(item.title) : item.judul}</Text>
+                                        <Text note numberOfLines={1}>{item.artist ? toTitleCase(item.artist) : item.nama_band }</Text>
+                                            {
+                                                item.created_by &&
+                                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                <Ionicons name="create-outline" style={{ fontSize: 12, marginRight: 3 }} color='#ccc' />
+                                                <Text numberOfLines={1} style={{ fontSize: 10, color: "#ccc" }}>{item.created_by ? item.created_by.slice(0,item.created_by.indexOf('@')):'OpenChordAPI' }</Text>
+                                                </View>
+                                            }
+                                    </View>
+                                    {
+                                        item.judul ?
+                                            <View/>
+                                            :
+                                            <View style={{ flex:1, flexDirection: 'column', alignItems : 'flex-end', justifyContent:'center'}}>
+                                                <Ionicons color='#ccc' size={30} name="heart" />
+                                                <Text style={{ color: '#ccc', fontSize: 10 }}>{item.likes ? item.likes.length : 0} suka</Text>
+                                            </View>
 
-                                        }
+                                    }
 
-                                    </ListItem>
-                                    :
-                                    <ListItem onPress={() => onArtistPress(item.id, item.nama)}>
-                                        <Body style={{flexDirection:'row'}}>
-                                            <Icon type="Ionicons" name="md-people" style={{color: '#ccc'}} />
-                                            <Text numberOfLines={1}>{item.nama}</Text>
-                                        </Body>
-                                        <Right style={{ flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center' }}>
-                                            <Icon type="AntDesign" name="arrowright" />
-                                        </Right>
-                                    </ListItem>
-                                }
-                            </View>
-                        )
-                    }}
-                    keyExtractor={songs => songs.key ? songs.key.toString() : songs.id.toString()}
-                    ListFooterComponent={renderFooter}
-                    onEndReachedThreshold={0.4}
-                    onEndReached={() => {
-                        if(loading){
-                            loadMore()
-                        }                                
-                    }}
-                />
+                                </TouchableOpacity>
+                                :
+                                <TouchableOpacity style={styles.item} onPress={() => onArtistPress(item.id, item.nama)}>
+                                    <View style={{flex:4, flexDirection:'row', alignItems:'center'}}>
+                                        <Ionicons name="people" size={30} style={{color: '#ccc', marginRight:'5%'}} />
+                                        <Text numberOfLines={1}>{item.nama}</Text>
+                                    </View>
+                                    <View style={{flex:1, alignItems:'flex-end'}}>
+                                        <Ionicons size={30} color='#ccc' name="arrow-forward" />
+                                    </View>
+                                    
+                                </TouchableOpacity>
+                            }
+                        </View>
+                    )
+                }}
+                keyExtractor={songs => songs.key ? songs.key.toString() : songs.id.toString()}
+                ListFooterComponent={renderFooter}
+                onEndReachedThreshold={0.4}
+                onEndReached={() => {
+                    if(loading){
+                        loadMore()
+                    }                                
+                }}
+            />
             
     )
     
 }
+
+const styles = StyleSheet.create({
+    item : {
+        flexDirection : 'row',
+        paddingHorizontal : '5%',
+        paddingVertical : '3%'
+    }
+})

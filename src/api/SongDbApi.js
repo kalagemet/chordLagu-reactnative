@@ -1,5 +1,15 @@
 import axios from 'axios';
-import {Toast} from 'native-base';
+import {ToastAndroid} from 'react-native'
+
+const toastError = () => {
+    ToastAndroid.showWithGravityAndOffset(
+        "Terjadi kesalahan saat mengambil data",
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50
+    )
+}
 
 export async function searchArtist(query, onReceived, onError) {
     await axios.get('https://app.desalase.id/band', {
@@ -14,10 +24,7 @@ export async function searchArtist(query, onReceived, onError) {
         onReceived(res.data.row)
     }, (error) => {
         onError()
-        Toast.show({
-            text: "Kesalahan Koneksi",
-            buttonText: "Okay"
-            })
+        toastError()
     })
 }
 
@@ -34,14 +41,11 @@ export async function searchLagu(query, onReceived, onError) {
         onReceived(res.data)
     }, (error) => {
         onError()
-        Toast.show({
-            text: "Kesalahan Koneksi",
-            buttonText: "Okay"
-            })
+        toastError()
     })
 }
 
-export async function getPopular(onReceived) {
+export async function getPopular(onReceived, onError) {
     await axios.get('https://app.desalase.id/populer', {
         headers: {
             apa: "79fa2fcaecf5c83c299cd96e2ba44710",
@@ -50,10 +54,8 @@ export async function getPopular(onReceived) {
     .then(res => {
         onReceived(res.data)
     }, (error) => {
-        Toast.show({
-            text: "Kesalahan Koneksi",
-            buttonText: "Okay"
-            })
+        onError()
+        toastError()
     })
 }
 
@@ -71,10 +73,7 @@ export async function loadMore(query, currentPage, onReceived, onError) {
         onReceived(res.data)
     }, (error) => {
         onError()
-        Toast.show({
-            text: "Kesalahan Koneksi",
-            buttonText: "Okay"
-        })
+        toastError()
     })
 }
 
@@ -92,10 +91,7 @@ export async function getSongsByArtist(id, currentPage, onReceived, onError){
         onReceived(res.data)
     }, (error) => {
         onError()
-        Toast.show({
-            text: "Kesalahan Koneksi",
-            buttonText: "Okay"
-            })
+        toastError()
     })
 }
 
@@ -113,10 +109,7 @@ export async function loadMoreByArtist(id, currentPage, onReceived, onError) {
         onReceived(res.data)
     }, (error) => {
         onError()
-        Toast.show({
-            text: "Kesalahan Koneksi",
-            buttonText: "Okay"
-            })
+        toastError()
     })
 }
 
@@ -129,9 +122,6 @@ export async function getSongContent(songPath, onReceived){
     .then(res => {
         onReceived(res.data)
     }, (error) => {
-        Toast.show({
-            text: "Kesalahan Koneksi",
-            buttonText: "Okay"
-        })
+        toastError()
     })
 }

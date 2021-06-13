@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import { Container, Text, Icon, View, Toast } from 'native-base';
-import { StyleSheet, Button, Alert, ScrollView} from 'react-native';
+import { StyleSheet, Alert, ToastAndroid, Text, View } from 'react-native';
 import RenderSong from '../components/RenderSong';
 import Slider from '@react-native-community/slider';
 import { deleteSong, addToFavourite, removeFavourite, isFavourited } from '../api/SongsApi';
@@ -8,6 +7,7 @@ import {getStreamsBySearch} from '../api/StreamsApi';
 import StreamList from '../components/StreamList';
 import BottomSheet from 'reanimated-bottom-sheet';
 import StreamModal from '../components/StreamModal';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function ViewSong({navigation, route}){
 
@@ -110,21 +110,25 @@ export default function ViewSong({navigation, route}){
   }
 
   const onRemovedFavourite = () => {
-    Toast.show({
-      text: "Dihapus dari Favorit",
-      buttonText: "Okay",
-      position: "top"
-    })
+    ToastAndroid.showWithGravityAndOffset(
+      "Dihapus dari Favorit",
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50
+    )
     setFavourited(false)
     setLoading(false)
   }
 
   const onFavouriteComplete= () => {
-    Toast.show({
-      text: "Disimpan di Favorit",
-      buttonText: "Okay",
-      position: "top"
-    })
+    ToastAndroid.showWithGravityAndOffset(
+      "Disimpan di Favorit",
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50
+    )
     setFavourited(true)
     setLoading(false)
   }
@@ -159,11 +163,13 @@ export default function ViewSong({navigation, route}){
 
   const onCompleteDelete = () => {
     setLoading(false)
-    Toast.show({
-      text: "Berhasil dihapus",
-      buttonText: "Okay",
-      position: 'bottom'
-    })
+    ToastAndroid.showWithGravityAndOffset(
+      "Berhasil Dihapus",
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50
+    )
     navigation.pop();
   }
 
@@ -183,8 +189,8 @@ export default function ViewSong({navigation, route}){
         <View style={styles.container}>
           {
               scrollActive ?
-              <Icon name="pause" onPress={stop}/> :
-              <Icon name="play" onPress={start}/>
+              <Ionicons size={25} name="pause" onPress={stop}/> :
+              <Ionicons size={25}  name="play" onPress={start}/>
           }
           <Slider
               style={{ flex: 1, marginHorizontal: 20}}
@@ -197,20 +203,20 @@ export default function ViewSong({navigation, route}){
         </View>
         <View style={styles.tool}>
             <View style={{flex:1, flexDirection:'row', marginHorizontal:'5%'}}>
-              <Icon style={{color:'#ccc', backgroundColor:'#000', borderRadius:3}} onPress={transposeDown} type="AntDesign" size={3} name="minus"/>
+              <Ionicons size={30}  style={{color:'#ccc', backgroundColor:'#000', borderRadius:3}} onPress={transposeDown} name="remove"/>
               <Text style={{fontSize:11, alignSelf:'center', marginHorizontal:'3%' }}>Nada: {(transpose+12) >=0 ? `+${transpose+12}` : transpose+12}</Text>
-              <Icon style={{color:'#ccc', backgroundColor:'#000', borderRadius:3}} onPress={transposeUp} type="AntDesign" size={3} name="plus"/>
+              <Ionicons size={30}  style={{color:'#ccc', backgroundColor:'#000', borderRadius:3}} onPress={transposeUp} name="add"/>
             </View>
             {
               user == created_by ?
               <View style={{flexDirection:'row', flex:1, justifyContent:'flex-end'}}>
-                <Icon name="heart" style={{fontSize : 27, marginHorizontal : 10, color : favourited?'red':'#000'}} onPress={onClickFavourite}/>
-                <Icon name="edit" type="MaterialIcons" style={{fontSize : 27, marginHorizontal : 10, color : '#000'}} onPress={toEditSong}/> 
-                <Icon name="trash" style={{fontSize : 27, marginHorizontal : 10, color : '#000', justifyContent:'flex-end'}} onPress={onDeleteSong}/> 
+                <Ionicons name="heart" style={{fontSize : 30, marginHorizontal : 10, color : favourited?'red':'#000'}} onPress={onClickFavourite}/>
+                <Ionicons name="create" style={{fontSize : 30, marginHorizontal : 10, color : '#000'}} onPress={toEditSong}/> 
+                <Ionicons name="trash" style={{fontSize : 30, marginHorizontal : 10, color : '#000', justifyContent:'flex-end'}} onPress={onDeleteSong}/> 
               </View>
               :
               <View style={{flexDirection:'row', justifyContent:'flex-end', flex:1}}>
-                {(typeAPI == 'localAPI' && user != 'anonim' ) && <Icon name="heart" style={{fontSize : 32, marginHorizontal : 10, color : favourited?'red':'#ccc', marginRight:10}} onPress={onClickFavourite}/>}
+                {(typeAPI == 'localAPI' && user != 'anonim' ) && <Ionicons name="heart" style={{fontSize : 30, marginHorizontal : 10, color : favourited?'red':'#000', marginRight:10}} onPress={onClickFavourite}/>}
               </View>
             }
         </View>
@@ -231,7 +237,7 @@ export default function ViewSong({navigation, route}){
   }
 
   return (
-    <Container>
+    <View style={{flex:1}}>
         <View style={{height:'91%'}}>
             <RenderSong 
               openSideMenu={openSideMenu} 
@@ -248,7 +254,7 @@ export default function ViewSong({navigation, route}){
           initialSnap={2}
           enabledContentTapInteraction={false}
       />
-    </Container>
+    </View>
   );
     
 }

@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback
 } from 'react-native';
-import {Icon, Text} from 'native-base';
+import {Text} from 'react-native';
 import ViewChord from './ViewChord';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function ChordModal({show, name, selectedChord, closeModal}) {
   return (
@@ -32,7 +33,7 @@ export default function ChordModal({show, name, selectedChord, closeModal}) {
             </View>
           </View>
           <TouchableOpacity style={styles.close} onPress={closeModal}>
-                <Icon name="close"/>
+                <Ionicons name="close-outline" size={30}/>
             </TouchableOpacity>
         </View>
     </Modal>

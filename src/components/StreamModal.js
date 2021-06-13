@@ -7,7 +7,7 @@ import {
   Text,
   ActivityIndicator
 } from 'react-native';
-import {Icon} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { WebView } from 'react-native-webview';
   
   
@@ -41,7 +41,7 @@ export default function StreamModal({id, closeModalStream}) {
             onLoadEnd={onLoadEnd}
       />
       <TouchableOpacity style={styles.close} onPress={closeModalStream}>
-          <Icon name="close"/>
+          <Ionicons size={35} name="close"/>
       </TouchableOpacity>
     </View>
   )

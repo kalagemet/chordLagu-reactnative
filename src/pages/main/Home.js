@@ -25,7 +25,7 @@ export default function Home({navigation}) {
     getPopular((songList) => {
       setFlatlistItem(songList),
       setRefreshing(false)
-    });
+    }, ()=> setRefreshing(false));
 
     STORAGE.getLoginStatus((value)=>{
       if(value == 'skip'){
@@ -47,7 +47,7 @@ export default function Home({navigation}) {
     getPopular((songList) => {
       setFlatlistItem(songList),
       setRefreshing(false)
-    });
+    }, ()=> setRefreshing(false));
   }
 
   const onRefresh = () => {

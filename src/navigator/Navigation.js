@@ -19,8 +19,8 @@ function AppContainer() {
         <Stack.Screen name="Loading" component={Loading} options={{headerShown: false}} />
         <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
         <Stack.Screen name="Signup" component={Signup} options={{headerShown: false}}/>
-        <Stack.Screen name="Home" component={BottomNav} options={{headerShown: false, headerTitle:'ChordLagu'}}/>
-        <Stack.Screen name="ViewSong" component={ViewSong} />
+        <Stack.Screen name="Home" component={BottomNav} options={{headerShown: false}}/>
+        <Stack.Screen name="ViewSong" component={ViewSong} options={{headerTitle:'ChordLagu'}} />
         <Stack.Screen name="EditSong" component={EditSong} />
         <Stack.Screen name="MakeSong" component={MakeSong} />
       </Stack.Navigator>

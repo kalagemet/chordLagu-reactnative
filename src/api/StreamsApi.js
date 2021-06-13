@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Toast} from 'native-base';
+import {ToastAndroid} from 'react-native'
 import firestore from '@react-native-firebase/firestore';
 
 export async function getStreamsBySearch(search, streamsRetreived) {
@@ -26,10 +26,13 @@ export async function getStreamsBySearch(search, streamsRetreived) {
         streamsRetreived(res.data);
         songList = res.data;
     }, (error) => {
-        Toast.show({
-            text: "Kesalahan Koneksi",
-            buttonText: "Okay"
-            })
+        ToastAndroid.showWithGravityAndOffset(
+            "Terjadi kesalahan saat mengambil data",
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50
+        )
     })
     
 }
