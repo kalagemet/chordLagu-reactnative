@@ -13,6 +13,7 @@ export default function SongsByArtistList({navigation, route}){
     const [refreshing, setRefreshing] = useState(false)
 
     React.useEffect(()=>{
+        console.log(artistId)
         setLoading(true)
         getSongsByArtist(artistId, currentPage, (data) => {
             setBandSongs(data.row)

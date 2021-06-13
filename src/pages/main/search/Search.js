@@ -67,6 +67,8 @@ export default function Search({navigation}) {
     }
 
     const searchSong = () => {
+        setCurrentPage(0)
+        setList(null)
         if(query!=''){
             setCurrentPage(0)
             setInitialLoad(true)
