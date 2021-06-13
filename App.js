@@ -9,17 +9,17 @@
 import React from 'react';
 import type {Node} from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
-  View,
 } from 'react-native';
 import AppContainer from './src/navigator/Navigation';
+import SplashScreen from  "react-native-splash-screen";
 
 const App: () => Node = () => {
+
+  React.useEffect(() => {
+    SplashScreen.hide();
+  });
+
   return (
     <AppContainer/>
   );

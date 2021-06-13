@@ -29,7 +29,6 @@ export default function Login({ navigation }) {
                 showPlayServicesUpdateDialog: true,
             });
             const user = await GoogleSignin.signIn()
-            STORAGE.setUserInfo(user.user, ()=>console.log('user info saved'))
             const credential = auth.GoogleAuthProvider.credential(user.idToken, user.accessToken)
             // login with credential
             const firebaseUserCredential = await auth().signInWithCredential(credential)
@@ -78,7 +77,7 @@ export default function Login({ navigation }) {
         <View style={styles.Container}>
             <Loader loading={loading} />
             <View style={styles.HeaderContainer}>
-                
+                <Image source={require('../../assets/Images/chordlagu.png')} style={{width: 80, height: 80}} resizeMode='contain'/>
                 <Text style={styles.TextA}>Chord Lagu</Text> 
             </View>
             <View style={styles.FormContainer}>

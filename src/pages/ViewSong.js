@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Alert, ToastAndroid, Text, View } from 'react-native';
+import { StyleSheet, Alert, ToastAndroid, Text, View, BackHandler } from 'react-native';
 import RenderSong from '../components/RenderSong';
 import Slider from '@react-native-community/slider';
 import { deleteSong, addToFavourite, removeFavourite, isFavourited } from '../api/SongsApi';
@@ -8,6 +8,7 @@ import StreamList from '../components/StreamList';
 import BottomSheet from 'reanimated-bottom-sheet';
 import StreamModal from '../components/StreamModal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function ViewSong({navigation, route}){
 
@@ -40,6 +41,24 @@ export default function ViewSong({navigation, route}){
       setStreamsList(streamsList)
     })
   },[navigation])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        if (showStream) {
+          closeStream()
+          return true;
+        } else {
+          return false;
+        }
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [showStream, closeStream])
+  );
 
   const openSideMenu = () => { setIsSideMenuOpen(!isSideMenuOpen) }
 
@@ -237,7 +256,7 @@ export default function ViewSong({navigation, route}){
   }
 
   return (
-    <View style={{flex:1}}>
+    <View style={{flex:1, backgroundColor:'#fff'}}>
         <View style={{height:'91%'}}>
             <RenderSong 
               openSideMenu={openSideMenu} 
