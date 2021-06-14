@@ -59,7 +59,7 @@ export default function Home({navigation}) {
       path: e,
       type : typeApi,
       created : created_by,
-      user : currentUser ? currentUser.email : 'anonim',
+      user : currentUser ? currentUser.email : '',
       title : title
     })      
   }

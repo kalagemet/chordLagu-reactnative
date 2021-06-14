@@ -1,4 +1,5 @@
 import React from 'react';
+import {Alert} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import Favourites from '../pages/main/Favourites';
@@ -50,7 +51,15 @@ function SearchStackScreen() {
 function FavouritesStackScreen() {
   return (
     <FavouritesStack.Navigator screenOptions={{
-      headerTitle:'Favorit'
+      headerTitle:'Favorit',
+      headerRight: () => (
+        <Ionicons
+          size={30}
+          name="information-circle-outline"
+          onPress={() => Alert.alert('Favorit',  'Chord favorit dapat diakses secara offline')}
+          color="#000"
+        />
+      ),
     }}>
       <SearchStack.Screen
         name="Favourites"

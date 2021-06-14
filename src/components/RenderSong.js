@@ -11,7 +11,7 @@ import { getSong } from '../api/SongsApi';
 import { getSongContent } from '../api/SongDbApi';
 import * as STORAGE from '../Storage';
 
-export default function RenderSong({songPath, typeAPI, jsRun, transpose}) {
+export default function RenderSong({navigation, songPath, typeAPI, jsRun, transpose}) {
     const [loading, setLoading] = useState(false)
     const [chord, setChord] = useState('')
     const [selectedChord, setSelectedChord] = useState('')
@@ -32,14 +32,15 @@ export default function RenderSong({songPath, typeAPI, jsRun, transpose}) {
         getSongContent(songPath, (data)=>{
           setChord(getChordPro(data.isi, data.nama_band, data.judul))
           setLoading(false)
+        }, ()=>{
+          navigation.pop()
+          setLoading(false)
         })
       }
     },[])
 
     React.useEffect(()=>{
-      setTimeout(() => {
-        webViewRef.current.injectJavaScript(jsRun);
-      }, 100);
+      webViewRef.current.injectJavaScript(jsRun);
     })
     
     const normalize = (chord) => {

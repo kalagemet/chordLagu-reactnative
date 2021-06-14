@@ -113,7 +113,7 @@ export async function loadMoreByArtist(id, currentPage, onReceived, onError) {
     })
 }
 
-export async function getSongContent(songPath, onReceived){
+export async function getSongContent(songPath, onReceived, onError){
     axios.get('https://app.desalase.id/chord/' + songPath, {
         headers: {
         apa: "79fa2fcaecf5c83c299cd96e2ba44710",
@@ -122,6 +122,7 @@ export async function getSongContent(songPath, onReceived){
     .then(res => {
         onReceived(res.data)
     }, (error) => {
+        onError()
         toastError()
     })
 }
