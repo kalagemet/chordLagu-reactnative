@@ -23,7 +23,6 @@ export default function Profile({navigation}) {
 
         STORAGE.getUserInfo((data)=>{
             data && setUserData(data)
-            console.log(data)
         })
     },[navigation])
 
@@ -91,20 +90,20 @@ export default function Profile({navigation}) {
     return (
         <View style={{flex:1}}>
             <Loader loading={loading} />
-            <View style={styles.HeaderContainer}>
+            <View style={{...styles.HeaderContainer, backgroundColor:colors.card, borderColor:colors.text}}>
                 <View style={{flexDirection:'row', justifyContent: 'flex-start', alignItems:'center'}}>
                     { userData.photoURL ?
                     <View style={{flexDirection:'row', alignItems:'center'}}>
                         <View style={{flex:1, margin:20 }}>
-                            <Image source={{uri: userData.photoURL}} style={{height: 80, width: 80, borderRadius: 40, borderColor:'#000', borderWidth:2}}/>
+                            <Image source={{uri: userData.photoURL}} style={{height: 80, width: 80, borderRadius: 40, borderColor:colors.text, borderWidth:2}}/>
                         </View>
                         <View style={{flex:3 }}>
-                            <Text style={{color:'#000', fontWeight: 'bold'}}>{userData.displayName}</Text>
-                            <Text numberOfLines={2} style={{color:'#000', fontSize:13 }}>{userData.email}</Text>
+                            <Text style={{color:colors.text, fontWeight: 'bold'}}>{userData.displayName}</Text>
+                            <Text numberOfLines={2} style={{color:colors.text, fontSize:13 }}>{userData.email}</Text>
                         </View>
                     </View> :
                     <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-                        <Text numberOfLines={2} style={{color:'#000', fontWeight: 'bold', textAlign:'center'}}>{userData.email}</Text>
+                        <Text numberOfLines={2} style={{color:colors.text, fontWeight: 'bold', textAlign:'center'}}>{userData.email}</Text>
                     </View>
                     }
                     
@@ -150,13 +149,10 @@ const styles = StyleSheet.create({
         width : '100%',
         height : '100%',
         padding : 20,
-        backgroundColor : '#fff',
         borderBottomStartRadius : 30,
         borderBottomEndRadius : 30,
-        elevation: 20,
         marginBottom : '5%',
-        borderWidth : 2,
-        borderColor : '#000'
+        borderWidth : 1
     },
     ListContainer : {
         flex : 6,

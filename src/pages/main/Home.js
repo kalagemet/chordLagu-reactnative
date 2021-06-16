@@ -6,10 +6,12 @@ import { getAdStatus } from '../../api/AdsApi';
 import SongList from '../../components/SongList';
 import * as STORAGE from '../../Storage';
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
+import { useTheme } from '@react-navigation/native';
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/2186621936';
 
 export default function Home({navigation}) {
+  const { colors } = useTheme();
   const [currentUser, setCurrentUser] = useState(null)
   const [flatListItem, setFlatlistItem] = useState([])
   const [refreshing, setRefreshing] = useState(false)
@@ -70,9 +72,9 @@ export default function Home({navigation}) {
 
   
   return (
-    <View style={{flex:1, backgroundColor:'#fff'}}>
-      <View style={{alignItems:'center', flex:1}}>
-        <Text style={{fontSize:20}}>Populer</Text>
+    <View style={{flex:1}}>
+      <View style={{alignItems:'center', flex:1, padding:'5%'}}>
+        <Text style={{fontSize:20, color:colors.text}}>Populer</Text>
       </View>
       <View style={{flex:9}}>
         <SongList 

@@ -1,14 +1,15 @@
 import React from 'react';
 import {
   StyleSheet,
-  TextInput,
-  Text
+  TextInput
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '@react-navigation/native';
 
 function InputText({name, onChangeText, secure}){
+  const { colors } = useTheme();
+
   return (
-    <TextInput style={styles.Input} placeholder={name} onChangeText={(text) => {onChangeText(text)}} secureTextEntry={secure?true:false} />
+    <TextInput placeholderTextColor={colors.text} style={{...styles.Input, backgroundColor:colors.card, color:colors.text}} placeholder={name} onChangeText={(text) => {onChangeText(text)}} secureTextEntry={secure?true:false} />
   )
 }
 
@@ -17,7 +18,6 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         paddingHorizontal:'3%',
         marginHorizontal : '5%',
-        backgroundColor:'#fff',
         marginBottom:'1%',
         height:'11%',
         elevation:5,

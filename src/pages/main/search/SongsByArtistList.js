@@ -71,7 +71,7 @@ export default function SongsByArtistList({ navigation, route }) {
     }
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <View style={{ flex: 1}}>
             <Loader
                 loading={bandSongs != null ? false : true} />
             <View>

@@ -35,7 +35,7 @@ export default function EditSong({navigation, route}) {
         created_by : createdBy,
         favourites : favourites
       }
-      updateSong(route.params.path, song, (e) => onSongUpdated(e))
+      updateSong(route.params.path, song, () => navigation.navigate('Home'))
     }else {
       ToastAndroid.showWithGravityAndOffset(
         "Tidak boleh ada yang kosong",
@@ -47,7 +47,7 @@ export default function EditSong({navigation, route}) {
     }
   }
 
-  const onSongUpdated = (song) => {
+  const onSongUpdated = () => {
     setLoading(false)
     ToastAndroid.show({
       text: "Berhasil diupdate",

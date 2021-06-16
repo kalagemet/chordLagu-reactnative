@@ -137,7 +137,7 @@ export default function Search({ navigation }) {
     }
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <View style={{ flex: 1 }}>
             <Loader loading={initialLoad} />
             <View style={{ flex: 1, flexDirection: 'row', elevation: 20, margin: '5%', backgroundColor: '#fff', alignItems: 'center', borderRadius: 30 }}>
                 <Ionicons name='search' style={{ marginHorizontal: '5%', fontSize: 27 }} />

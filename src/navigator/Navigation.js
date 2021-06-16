@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import BottomNav from './BottomNav';
 import Login from '../pages/front/Login';
 import Signup from '../pages/front/Signup';
@@ -8,16 +8,45 @@ import EditSong from '../pages/EditSong';
 import MakeSong from '../pages/MakeSong';
 import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { PreferencesContext } from '../Settings';
+import { PreferencesContext, getTheme, setTheme } from '../Settings';
 
 const Stack = createStackNavigator();
 
 function AppContainer() {
   const [isThemeDark, setIsThemeDark] = React.useState(false);
 
-  let theme = isThemeDark ? DarkTheme : DefaultTheme;
+  React.useEffect(()=>{
+    getTheme((value)=>{
+      value == 'dark' ? setIsThemeDark(true) : setIsThemeDark(false)
+    })
+  },[])
+
+  const MyDefaultTheme = {
+    ...DefaultTheme,
+    colors: {
+      primary: '#30475E',
+      background: '#FFF',
+      card: '#FFF',
+      text: '#000',
+      notification: 'blue'
+    },
+  };
+
+  const MyDarkTheme = {
+    ...DarkTheme,
+    colors: {
+      primary: '#DDDDDD',
+      background: '#393E46',
+      card: '#222831',
+      text: '#FFF',
+      notification: '#F05454'
+    },
+  };
+
+  let theme = isThemeDark ? MyDarkTheme : MyDefaultTheme;
 
   const toggleTheme = React.useCallback(() => {
+    setTheme(isThemeDark ? 'default' : 'dark', ()=>console.log('theme changed'))
     return setIsThemeDark(!isThemeDark);
   }, [isThemeDark]);
 

@@ -5,12 +5,15 @@ import {
   Text
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '@react-navigation/native';
 
 function Button({name, icon, onPress}){
+  const { colors } = useTheme();
+  
   return (
-    <TouchableOpacity style={styles.Button} onPress={()=>onPress()}>
-        {icon && <Ionicons name={icon} style={styles.Icon}/>}
-        <Text>{name}</Text>
+    <TouchableOpacity style={{...styles.Button, backgroundColor:colors.card}} onPress={()=>onPress()}>
+        {icon && <Ionicons name={icon} style={{...styles.Icon, color:colors.text}}/>}
+        <Text style={{color:colors.text}}>{name}</Text>
     </TouchableOpacity>
   )
 }
@@ -21,7 +24,6 @@ const styles = StyleSheet.create({
         paddingHorizontal:'3%',
         marginVertical:'2%',
         marginHorizontal : '5%',
-        backgroundColor:'#fff',
         borderRadius : 20,
         elevation : 5,
         height:'11%',

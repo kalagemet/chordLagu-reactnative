@@ -88,8 +88,7 @@ export default function Favourites({ navigation }) {
 
 const styles = StyleSheet.create({
     Container: {
-        flex: 1,
-        backgroundColor: '#fff'
+        flex: 1
     },
     LoginContainer: {
         height: '70%',

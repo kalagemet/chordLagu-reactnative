@@ -38,7 +38,7 @@ export default function MyChords({navigation, route}) {
     }
 
     return (
-        <View style={{flex:1, backgroundColor:'#fff'}}>
+        <View style={{flex:1}}>
             <SongList 
                 songs={flatListItems} 
                 onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}

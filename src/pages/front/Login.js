@@ -6,8 +6,10 @@ import Loader from '../../components/Loader';
 import * as STORAGE from '../../Storage';
 import Button from '../../components/Button';
 import InputText from '../../components/InputText';
+import { useTheme } from '@react-navigation/native';
 
 export default function Login({ navigation }) {
+    const { colors } = useTheme();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState(null)
@@ -78,7 +80,7 @@ export default function Login({ navigation }) {
             <Loader loading={loading} />
             <View style={styles.HeaderContainer}>
                 <Image source={require('../../assets/Images/chordlagu.png')} style={{width: 80, height: 80}} resizeMode='contain'/>
-                <Text style={styles.TextA}>Chord Lagu</Text> 
+                <Text style={{...styles.TextA, color:colors.text}}>Chord Lagu</Text> 
             </View>
             <View style={styles.FormContainer}>
                 {errorMessage &&

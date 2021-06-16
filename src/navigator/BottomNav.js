@@ -50,6 +50,7 @@ function SearchStackScreen() {
 }
 
 function FavouritesStackScreen() {
+  const { isThemeDark } = React.useContext(PreferencesContext);
   return (
     <FavouritesStack.Navigator screenOptions={{
       headerTitle:'Favorit',
@@ -59,7 +60,7 @@ function FavouritesStackScreen() {
           size={30}
           name="information-circle-outline"
           onPress={() => Alert.alert('Favorit',  'Chord favorit dapat diakses secara offline')}
-          color="#000"
+          color={isThemeDark ? '#FFF' : '#000'}
         />
       ),
     }}>
@@ -99,6 +100,7 @@ function ProfileStackScreen() {
 }
 
 export default function BottomNav(){
+  const { isThemeDark } = React.useContext(PreferencesContext);
   return(
     <Tab.Navigator
       tabBarOptions={{
@@ -132,11 +134,11 @@ export default function BottomNav(){
             : 'person-outline'
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName} size={size} color={isThemeDark ? '#FFF' : '#000'} />;
         }
       })}
     >
-        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Home" component={HomeStackScreen} />
         <Tab.Screen name="Favourites" component={FavouritesStackScreen} />
         <Tab.Screen name="Search" component={SearchStackScreen} />
         <Tab.Screen name="Tools" component={Tools}/>

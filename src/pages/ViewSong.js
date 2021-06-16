@@ -11,9 +11,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
 import { getSongContent } from '../api/SongDbApi';
 import * as STORAGE from '../Storage';
+import { useTheme } from '@react-navigation/native';
 
 export default function ViewSong({ navigation, route }) {
-
+  const { colors } = useTheme();
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
   const [transpose, setTranspose] = useState(-12)
   const [scrollActive, setScrollActive] = useState(false)
@@ -230,40 +231,42 @@ export default function ViewSong({ navigation, route }) {
 
   const renderDrawer = () => {
     return (
-      <View style={{ height: '100%', backgroundColor: '#fff', borderTopStartRadius: 20, borderTopEndRadius: 20, borderWidth: 1, borderBottomWidth: 0, borderColor: '#000' }}>
-        <View style={{ height: '1.5%', width: '20%', backgroundColor: '#000', borderRadius: 5, marginTop: 10, alignSelf: 'center' }}></View>
+      <View style={{ height: '100%', backgroundColor:colors.background, borderTopStartRadius: 20, borderTopEndRadius: 20, borderWidth: 1, borderBottomWidth: 0, borderColor: colors.text }}>
+        <View style={{ height: '1.5%', width: '20%', backgroundColor: colors.text, borderRadius: 5, marginTop: 10, alignSelf: 'center' }}></View>
         <View style={styles.container}>
           {
             scrollActive ?
-              <Ionicons size={25} name="pause" onPress={stop} /> :
-              <Ionicons size={25} name="play" onPress={start} />
+              <Ionicons color={colors.text} size={25} name="pause" onPress={stop} /> :
+              <Ionicons color={colors.text} size={25} name="play" onPress={start} />
           }
           <Slider
-            style={{ flex: 1, marginHorizontal: 20 }}
+            thumbTintColor={colors.notification}
+            minimumTrackTintColor={colors.notification}
+            style={{ flex: 1, marginHorizontal: 20}}
             value={sliderValue}
             onValueChange={(sliderValue) => handelSliderChange(sliderValue)}
             minimumValue={0}
             maximumValue={1}
           />
-          <Text>{sliderValue.toFixed(2)} x</Text>
+          <Text style={{color:colors.text}}>{sliderValue.toFixed(2)} x</Text>
         </View>
         <View style={styles.tool}>
           <View style={{ flex: 1, flexDirection: 'row', marginHorizontal: '5%' }}>
-            <Ionicons size={30} style={{ color: '#ccc', backgroundColor: '#000', borderRadius: 3 }} onPress={transposeDown} name="remove" />
-            <Text style={{ fontSize: 11, alignSelf: 'center', marginHorizontal: '3%' }}>Nada: {(transpose + 12) >= 0 ? `+${transpose + 12}` : transpose + 12}</Text>
-            <Ionicons size={30} style={{ color: '#ccc', backgroundColor: '#000', borderRadius: 3 }} onPress={transposeUp} name="add" />
+            <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={transposeDown} name="remove" />
+            <Text style={{ fontSize: 11, alignSelf: 'center', marginHorizontal: '3%', color:colors.text }}>Nada: {(transpose + 12) >= 0 ? `+${transpose + 12}` : transpose + 12}</Text>
+            <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={transposeUp} name="add" />
           </View>
           {
             user == created_by ?
               <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
-                <Ionicons name="heart" style={{ fontSize: 30, marginHorizontal: 10, color: favourited ? 'red' : '#000' }} onPress={onClickFavourite} />
+                <Ionicons name="heart" style={{ fontSize: 30, marginHorizontal: 10, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickFavourite} />
                 <Ionicons name="create" style={{ fontSize: 30, marginHorizontal: 10, color: '#000' }} onPress={() => navigation.navigate('EditSong', { path: songPath })} />
                 <Ionicons name="trash" style={{ fontSize: 30, marginHorizontal: 10, color: '#000', justifyContent: 'flex-end' }} onPress={onDeleteSong} />
               </View>
               :
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}>
-                {(typeAPI == 'localAPI' && user != '') && <Ionicons name="heart" style={{ fontSize: 30, marginHorizontal: 10, color: favourited ? 'red' : '#000', marginRight: 10 }} onPress={onClickFavourite} />}
-                {(typeAPI == 'desalase' || typeAPI == 'downloaded') && <Ionicons name="heart" style={{ fontSize: 30, marginHorizontal: 10, color: favourited ? 'red' : '#000', marginRight: 10 }} onPress={onClickDownload} />}
+                {(typeAPI == 'localAPI' && user != '') && <Ionicons name="heart" style={{ fontSize: 30, marginHorizontal: 10, color: favourited ? '#F05454' : '#ccc', marginRight: 10 }} onPress={onClickFavourite} />}
+                {(typeAPI == 'desalase' || typeAPI == 'downloaded') && <Ionicons name="heart" style={{ fontSize: 30, marginHorizontal: 10, color: favourited ? '#F05454' : '#ccc', marginRight: 10 }} onPress={onClickDownload} />}
               </View>
           }
         </View>
@@ -284,7 +287,7 @@ export default function ViewSong({ navigation, route }) {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <View style={{ flex: 1}}>
       <View style={{ height: '91%' }}>
         <RenderSong
           navigation={navigation}

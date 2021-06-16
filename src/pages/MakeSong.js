@@ -4,8 +4,10 @@ import { addSong } from '../api/SongsApi';
 import Loader from '../components/Loader';
 import * as STORAGE from '../Storage';
 import Button from '../components/Button';
+import { useTheme } from '@react-navigation/native';
 
 export default function MakeSong({navigation}) {
+  const { colors } = useTheme();
   const [title, setTitle] = useState('')
   const [artist, setArtist] = useState('')
   const [content, setContent] = useState('')
@@ -63,7 +65,8 @@ export default function MakeSong({navigation}) {
           <Loader loading={loading} />
           <KeyboardAvoidingView>
               <TextInput
-              style={styles.input}
+              style={{...styles.input, color:colors.text}}
+              placeholderTextColor={colors.text}
               placeholder="Nama Artis"
               autoFocus={false}
               autoCorrect={false}
@@ -73,7 +76,8 @@ export default function MakeSong({navigation}) {
               />
 
               <TextInput
-              style={styles.input}
+              style={{...styles.input, color:colors.text}}
+              placeholderTextColor={colors.text}
               placeholder="Judul Lagu"
               autoFocus={false}
               autoCorrect={false}
@@ -116,22 +120,6 @@ const styles = StyleSheet.create({
     container: {
       padding: 10
     },
-    tabsContainer: {
-      flexDirection: 'row'
-    },
-    tabActive: {
-      borderTopRightRadius: 3,
-      borderTopLeftRadius: 3,
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      backgroundColor: '#eee'
-    },
-    tabInactive: {
-      flex: 1,
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      backgroundColor: '#fff'
-    },
     input: {
       fontSize: 16,
       borderBottomWidth: 1,
@@ -146,14 +134,5 @@ const styles = StyleSheet.create({
       backgroundColor: '#eee',
       borderBottomLeftRadius: 3,
       borderBottomRightRadius: 3,
-    },
-    sideMenuContainer: {
-      backgroundColor: '#eee',
-      flex: 1
-    },
-    toolbarContainer: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#ccc'
     }
   })

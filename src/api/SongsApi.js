@@ -123,7 +123,7 @@ export function updateSong(songId, song, updateComplete) {
   firestore()
     .collection('songs')
     .doc(songId).update(song)
-    .then(() => updateComplete(song))
+    .then(() => updateComplete())
     .catch((error) => console.log(error));
 }
 
@@ -139,10 +139,10 @@ export function deleteSong(songId, deleteComplete) {
 
 export function addToFavourite(favourite, favouriteComplete) {
   var likes = [];
-  var song = getSong(favourite.songId, (data) => {this.store(data)})
+  var song = getSong(favourite.songId, (data) => {store(data)})
   const increment = firestore.FieldValue.increment(1);
 
-  store = (data) => {
+  const store = (data) => {
     //console.log(data.likes); 
     if(data.likes){
       likes = data.likes;
@@ -183,10 +183,10 @@ export async function isFavourited(songId, user, isSongFavourited) {
 export function removeFavourite(userId, songId, favRemoveComplete) {
 
   var likes = [];
-  var song = getSong(songId, (data) => {this.store(data)})
+  var song = getSong(songId, (data) => {store(data)})
   const decrement = firestore.FieldValue.increment(-1);
 
-  store = (data) => {
+  const store = (data) => {
     //console.log(data.likes); 
     likes = data.likes;
     const index = likes.indexOf(userId);

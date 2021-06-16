@@ -10,8 +10,10 @@ import ChordModal from './ChordModal';
 import { getSong } from '../api/SongsApi';
 import { getSongContent } from '../api/SongDbApi';
 import * as STORAGE from '../Storage';
+import { useTheme } from '@react-navigation/native';
 
 export default function RenderSong({navigation, songPath, typeAPI, jsRun, transpose}) {
+    const { colors } = useTheme();
     const [loading, setLoading] = useState(false)
     const [chord, setChord] = useState('')
     const [selectedChord, setSelectedChord] = useState('')
@@ -77,7 +79,7 @@ export default function RenderSong({navigation, songPath, typeAPI, jsRun, transp
       
     }
 
-    const getChord = (chordSheet, artist, title) => {  
+    const getChord = (chordSheet, artist, title) => {
       let propSong = ''
       propSong += '{title:'+title+'}\n';
       propSong += '{artist:'+artist+'}\n';
@@ -139,7 +141,91 @@ export default function RenderSong({navigation, songPath, typeAPI, jsRun, transp
         return `<html>
           <head><meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0"></head>
           <body>${body}</body>
-          <style>${styles}</style>
+          <style>
+            body {
+              font-family: monospace;
+              -webkit-touch-callout: none;
+              -webkit-user-select: none;
+              -khtml-user-select: none;
+                -moz-user-select: none;
+                  -ms-user-select: none;
+                      user-select: none;
+            }
+            .title {
+              font-size: 20px
+            }
+            .artist {
+              font-weight: bold;
+              cursor: pointer;
+            }
+            .chord:hover {
+              color: ${colors.notification}
+            }
+            .line {
+              margin: 0;
+              padding: 0;
+              position: relative;
+              margin-bottom: 0px;
+              font-size: 14px;
+              font-family: monospace;
+              white-space: pre-wrap;
+              margin-right: 10px;
+              color: ${colors.text};
+            }
+            .line-size-14 { font-size: 14px; }
+            .line-size-15 { font-size: 15px; }
+            .line-size-16 { font-size: 16px; }
+            .line-size-17 { font-size: 17px; }
+            .line-size-18 { font-size: 18px; }
+            .line-size-19 { font-size: 19px; }
+            .line-size-20 { font-size: 20px; }
+            .line-size-21 { font-size: 21px; }
+            .line-size-22 { font-size: 22px; }
+            .line-size-23 { font-size: 23px; }
+            .line-size-24 { font-size: 24px; }
+            .chord {
+              color: ${colors.notification};
+              position: relative;
+              display: inline-block;
+              padding-top: 20px;
+              width: 0px;
+              top: -17px;
+            
+            }
+            
+            .chord-inline {
+              position: inherit;
+              display: inline-block;
+              padding-top: 0px;
+              width: auto;
+              top: auto;
+            }
+            .chord-size-14 { top: -14px; }
+            .chord-size-15 { top: -15px; }
+            .chord-size-16 { top: -16px; }
+            .chord-size-17 { top: -17px; }
+            .chord-size-18 { top: -18px; }
+            .chord-size-19 { top: -19px; }
+            .chord-size-20 { top: -20px; }
+            .chord-size-21 { top: -21px; }
+            .chord-size-22 { top: -22px; }
+            .chord-size-23 { top: -23px; }
+            .chord-size-24 { top: -24px; }
+            .chord:active {
+              color: ${colors.notification};
+            }
+            .word {
+              display: inline-block;
+            }
+            .tab {
+            }
+            .tab-line {
+              max-width: 4px;
+              display: inline-block;
+              word-wrap: break-word;
+              padding-bottom: 20px;
+            }
+          </style>
         </html>`
     }
 
@@ -199,7 +285,7 @@ export default function RenderSong({navigation, songPath, typeAPI, jsRun, transp
                   onMessage = {(event)=> handleMessage(event.nativeEvent.data)}
                   javaScriptEnabled = {true}
                   automaticallyAdjustContentInsets={false}
-                  style={{margin:0, padding:0}}
+                  style={{margin:0, padding:0, backgroundColor:colors.background}}
                 />
               </View>
               
@@ -235,86 +321,5 @@ true;
 `
 
 const styles = `
-body {
-  font-family: monospace;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-   -khtml-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-}
-.title {
-  font-size: 20px
-}
-.artist {
-  font-weight: bold;
-  cursor: pointer;
-}
-.chord:hover {
-  color: blue;
-}
-.line {
-  margin: 0;
-  padding: 0;
-  position: relative;
-  margin-bottom: 0px;
-  font-size: 14px;
-  font-family: monospace;
-  white-space: pre-wrap;
-  margin-right: 10px;
-}
-.line-size-14 { font-size: 14px; }
-.line-size-15 { font-size: 15px; }
-.line-size-16 { font-size: 16px; }
-.line-size-17 { font-size: 17px; }
-.line-size-18 { font-size: 18px; }
-.line-size-19 { font-size: 19px; }
-.line-size-20 { font-size: 20px; }
-.line-size-21 { font-size: 21px; }
-.line-size-22 { font-size: 22px; }
-.line-size-23 { font-size: 23px; }
-.line-size-24 { font-size: 24px; }
-.chord {
-  color: blue;
-  position: relative;
-  display: inline-block;
-  padding-top: 20px;
-  width: 0px;
-  top: -17px;
 
-}
-
-.chord-inline {
-  position: inherit;
-  display: inline-block;
-  padding-top: 0px;
-  width: auto;
-  top: auto;
-}
-.chord-size-14 { top: -14px; }
-.chord-size-15 { top: -15px; }
-.chord-size-16 { top: -16px; }
-.chord-size-17 { top: -17px; }
-.chord-size-18 { top: -18px; }
-.chord-size-19 { top: -19px; }
-.chord-size-20 { top: -20px; }
-.chord-size-21 { top: -21px; }
-.chord-size-22 { top: -22px; }
-.chord-size-23 { top: -23px; }
-.chord-size-24 { top: -24px; }
-.chord:active {
-  color: blue;
-}
-.word {
-  display: inline-block;
-}
-.tab {
-}
-.tab-line {
-  max-width: 4px;
-  display: inline-block;
-  word-wrap: break-word;
-  padding-bottom: 20px;
-}
 `
