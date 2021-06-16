@@ -2,11 +2,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 export const getLoginStatus = async(onReceived) => {
     let loginStatus = await AsyncStorage.getItem('@login')
-    onReceived(loginStatus)
+    let isTrue = (loginStatus === 'true')
+    onReceived(isTrue)
 }
 
 export const setLoginStatus = async(value, onSaved) => {
-    await AsyncStorage.setItem('@login', value)
+    let string = value.toString()
+    await AsyncStorage.setItem('@login', string)
     .then(()=>{
         onSaved()
     })

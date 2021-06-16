@@ -14,10 +14,12 @@ export default function Login({ navigation }) {
     const [loading, setLoading] = useState(false)
 
     const skipLogin = async () => {
-        STORAGE.setLoginStatus('skip', () => {
+        STORAGE.setLoginStatus('false', () => {
             navigation.navigate('Home')
         })
-        STORAGE.setUserInfo(null)
+        STORAGE.setUserInfo(null, ()=>{
+            console.log('skip pressed')
+        })
     }
 
     const _signIn = async () => {
@@ -32,7 +34,7 @@ export default function Login({ navigation }) {
             const credential = auth.GoogleAuthProvider.credential(user.idToken, user.accessToken)
             // login with credential
             const firebaseUserCredential = await auth().signInWithCredential(credential)
-            STORAGE.setLoginStatus('login', () => {
+            STORAGE.setLoginStatus('true', () => {
                 navigation.navigate('Home')
             })
         } catch (error) {
@@ -51,22 +53,20 @@ export default function Login({ navigation }) {
     };
 
     const handleLogin = () => {
-        STORAGE.setLoginStatus('login', () => {
-            if(email=='' || password==''){
-                setErrorMessage('Email dan password tidak boleh kosong')
-            }else{
-                setLoading(true)
-                auth()
-                .signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    setLoading(false)
-                    STORAGE.setLoginStatus('login', () => {
-                        navigation.navigate('Home')
-                    })
+        if(email=='' || password==''){
+            setErrorMessage('Email dan password tidak boleh kosong')
+        }else{
+            setLoading(true)
+            auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(() => {
+                setLoading(false)
+                STORAGE.setLoginStatus('true', () => {
+                    navigation.navigate('Home')
                 })
-                .catch(error => {setErrorMessage(error.message), setLoading(false)})
-            }
-        })
+            })
+            .catch(error => {setErrorMessage(error.message), setLoading(false)})
+        }
     }
 
     const toSignup = () => {

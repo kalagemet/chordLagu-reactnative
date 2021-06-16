@@ -28,7 +28,7 @@ export default function Home({navigation}) {
     }, ()=> setRefreshing(false));
 
     STORAGE.getLoginStatus((value)=>{
-      if(value == 'skip'){
+      if(!value){
         const user = null
         setCurrentUser(user)
         STORAGE.setUserInfo(user, ()=>console.log('user skipped'))

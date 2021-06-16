@@ -7,9 +7,11 @@ import { getAdStatus } from '../../../api/AdsApi';
 import * as STORAGE from '../../../Storage';
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 import Button from '../../../components/Button';
+import { useTheme } from '@react-navigation/native';
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/3882846984';
 export default function Profile({navigation}) {
+    const { colors } = useTheme();
     const [loading, setLoading] = useState(false)
     const [showAds, setShowAds] = useState(false)
     const [userData, setUserData] = useState([])
@@ -87,17 +89,17 @@ export default function Profile({navigation}) {
     }
 
     return (
-        <View style={{flex:1, backgroundColor:'#fff'}}>
+        <View style={{flex:1}}>
             <Loader loading={loading} />
             <View style={styles.HeaderContainer}>
                 <View style={{flexDirection:'row', justifyContent: 'flex-start', alignItems:'center'}}>
-                    { userData.photo ?
+                    { userData.photoURL ?
                     <View style={{flexDirection:'row', alignItems:'center'}}>
                         <View style={{flex:1, margin:20 }}>
-                            <Image source={{uri: userData.photo}} style={{height: 80, width: 80, borderRadius: 40, borderColor:'#000', borderWidth:2}}/>
+                            <Image source={{uri: userData.photoURL}} style={{height: 80, width: 80, borderRadius: 40, borderColor:'#000', borderWidth:2}}/>
                         </View>
                         <View style={{flex:3 }}>
-                            <Text style={{color:'#000', fontWeight: 'bold'}}>{userData.name}</Text>
+                            <Text style={{color:'#000', fontWeight: 'bold'}}>{userData.displayName}</Text>
                             <Text numberOfLines={2} style={{color:'#000', fontSize:13 }}>{userData.email}</Text>
                         </View>
                     </View> :

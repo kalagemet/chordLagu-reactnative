@@ -10,6 +10,7 @@ import Search from '../pages/main/search/Search';
 import Tools from '../pages/main/tools/Tools';
 import SongsByArtistList from '../pages/main/search/SongsByArtistList';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { PreferencesContext } from '../Settings';
 
 const Tab = createBottomTabNavigator()
 const HomeStack = createStackNavigator()
@@ -52,6 +53,7 @@ function FavouritesStackScreen() {
   return (
     <FavouritesStack.Navigator screenOptions={{
       headerTitle:'Favorit',
+      headerRightContainerStyle:{flex:1, paddingHorizontal:'5%', width:'50%'},
       headerRight: () => (
         <Ionicons
           size={30}
@@ -70,9 +72,19 @@ function FavouritesStackScreen() {
 }
 
 function ProfileStackScreen() {
+  const { toggleTheme, isThemeDark } = React.useContext(PreferencesContext);
+
   return (
     <ProfileStack.Navigator screenOptions={{
-      headerTitle: 'Profil'
+      headerTitle: 'Profil',
+      headerRight: () => (
+        <Ionicons
+          size={30}
+          name={isThemeDark ? 'moon' : 'sunny'}
+          onPress={() => toggleTheme()}
+          color={isThemeDark ? '#fff' : '#000'}
+        />
+      )
     }}>
       <ProfileStack.Screen
         name="Profile"
@@ -124,7 +136,7 @@ export default function BottomNav(){
         }
       })}
     >
-        <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="Favourites" component={FavouritesStackScreen} />
         <Tab.Screen name="Search" component={SearchStackScreen} />
         <Tab.Screen name="Tools" component={Tools}/>

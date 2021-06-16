@@ -21,15 +21,12 @@ function Loading({ navigation }) {
 
       auth().onAuthStateChanged(user => {
         if(user){
-          navigation.reset({routes:[{name:'Home'}]})
+          STORAGE.setLoginStatus('true', () => {
+            navigation.reset({routes:[{name:'Home'}]})
+          })
         }else{
-          STORAGE.getLoginStatus((value)=>{
-            if(value == 'skip'){
-              navigation.reset({routes:[{name:'Home'}]})
-            }
-            else {
-              navigation.reset({routes:[{name:'Login'}]})
-            }
+          STORAGE.setLoginStatus('false', () => {
+            navigation.reset({routes:[{name:'Home'}]})
           })
         }
       })
