@@ -18,7 +18,7 @@ export default function StreamList({streams, onPress}) {
                         renderItem={({ item }) => {
                             return (
                                 item.title &&
-                                <TouchableOpacity style={{flexDirection:'row', padding:'5%'}} onPress={() => onPress(item.id)}>
+                                <TouchableOpacity style={{flexDirection:'row', paddingHorizontal:'5%', paddingVertical:'2%'}} onPress={() => onPress(item.id)}>
                                     <View style={{flexDirection:'row', flex:3}}>
                                         <Image style={{height:'100%', width:'20%'}} source={{ uri: item.artwork_url ? item.artwork_url : item.user.avatar_url }} />
                                         <View style={{marginLeft:10, justifyContent:'center', width:'80%'}}>

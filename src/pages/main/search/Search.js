@@ -8,10 +8,12 @@ import * as STORAGE from '../../../Storage';
 import { searchArtist, searchLagu, loadMore } from '../../../api/SongDbApi';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
+import { useTheme } from '@react-navigation/native';
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/8408167938';
 
 export default function Search({ navigation }) {
+    const { colors } = useTheme();
     const [initialLoad, setInitialLoad] = useState(false)
     const [songs, setSongs] = useState(null)
     const [query, setQuery] = useState('')
@@ -139,13 +141,14 @@ export default function Search({ navigation }) {
     return (
         <View style={{ flex: 1 }}>
             <Loader loading={initialLoad} />
-            <View style={{ flex: 1, flexDirection: 'row', elevation: 20, margin: '5%', backgroundColor: '#fff', alignItems: 'center', borderRadius: 30 }}>
-                <Ionicons name='search' style={{ marginHorizontal: '5%', fontSize: 27 }} />
+            <View style={{ flex: 1, flexDirection: 'row', elevation: 20, margin: '5%', backgroundColor:colors.card, alignItems: 'center', borderRadius: 30 }}>
+                <Ionicons name='search' color={colors.text} style={{ marginHorizontal: '5%', fontSize: 27 }} />
                 <TextInput
+                    placeholderTextColor={colors.text}
                     onEndEditing={searchSong}
                     onChangeText={(text) => setQuery(text)}
                     placeholder='Cari Chord'
-                    style={{ width: '75%' }}
+                    style={{ width: '75%', color:colors.text }}
                 />
             </View>
             <View style={{ flex: 11 }}>

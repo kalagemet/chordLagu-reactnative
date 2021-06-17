@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Image, StyleSheet, Text, View } from 'react-native';
-import auth from '@react-native-firebase/auth';
-import { GoogleSignin, statusCodes } from 'react-native-google-signin';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import Loader from '../../../components/Loader';
 import { getAdStatus } from '../../../api/AdsApi';
 import * as STORAGE from '../../../Storage';
@@ -26,61 +24,10 @@ export default function Profile({navigation}) {
         })
     },[navigation])
 
-    const alert_ = () => {
-        Alert.alert(
-            'Logout',
-            'Keluar Dari Akun',
-            [
-            {
-                text: 'Batal',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-            },
-              {text: 'Ya', onPress: signOut},
-            ],
-            {cancelable: false},
-        );
-    }
-
-    const signOut = async () => {
-        setLoading(true)
-        try {
-          await GoogleSignin.revokeAccess();
-          await GoogleSignin.signOut();
-            auth()
-            .signOut()
-            .then(() => {
-                setLoading(false)
-                navigation.reset({routes:[{name:'Login'}]})
-            })
-            .catch(function() {
-            // An error happened.
-          });
-        } catch (error) {
-          if (error.code === statusCodes.SIGN_IN_REQUIRED) {
-              auth()
-              .signOut()
-              .then(() => {
-                setLoading(false)
-                navigation.reset({routes:[{name:'Login'}]})
-                })
-              .catch(function() {
-              // An error happened.
-            });
-          } else {
-            // some other error
-          }
-        }
-    };
-
     const toMakeSong = () => {
         navigation.navigate("MakeSong")
     }
-
-    const toLogin = () => {
-        navigation.navigate("Login")
-    }
-
+    
     const toMyChords = () => {
         navigation.navigate('MyChords', {
             user : userData.email ? userData.email : ''
@@ -115,11 +62,10 @@ export default function Profile({navigation}) {
                     <View style={{flex:1}}>
                         <Button name='Tulis Chord' onPress={toMakeSong} icon='create-outline'/>
                         <Button name='Chord Saya' onPress={toMyChords} icon='file-tray-full-outline'/>
-                        <Button name='Logout' onPress={alert_} icon='log-out-outline'/>
                     </View>
                     :
                     <View style={{flex:1}}>
-                        <Button name='Login' onPress={toLogin} />
+                        <Button name='Login' onPress={()=>navigation.navigate("Login")} icon='log-in-outline' />
                     </View>
                 }
             </View>

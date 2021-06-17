@@ -9,6 +9,7 @@ import Profile from '../pages/main/profile/Profile';
 import Search from '../pages/main/search/Search';
 import Tools from '../pages/main/tools/Tools';
 import SongsByArtistList from '../pages/main/search/SongsByArtistList';
+import Setting from '../pages/main/profile/Setting';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { PreferencesContext } from '../Settings';
 
@@ -73,20 +74,21 @@ function FavouritesStackScreen() {
 }
 
 function ProfileStackScreen() {
-  const { toggleTheme, isThemeDark } = React.useContext(PreferencesContext);
-
+  const { isThemeDark } = React.useContext(PreferencesContext);
   return (
-    <ProfileStack.Navigator screenOptions={{
-      headerTitle: 'Profil',
+    <ProfileStack.Navigator screenOptions={({route, navigation}) => ({
+      headerTitle: route.name != 'Setting' ? 'Profil' : 'Settings',
+      headerRightContainerStyle:{flex:1, paddingHorizontal:'5%', width:'50%'},
       headerRight: () => (
+        route.name != 'Setting' &&
         <Ionicons
-          size={30}
-          name={isThemeDark ? 'moon' : 'sunny'}
-          onPress={() => toggleTheme()}
-          color={isThemeDark ? '#fff' : '#000'}
+          size={25}
+          name="settings-outline"
+          onPress={() => navigation.navigate('Setting') }
+          color={isThemeDark ? '#FFF' : '#000'}
         />
-      )
-    }}>
+      ),
+    })}>
       <ProfileStack.Screen
         name="Profile"
         component={Profile}
@@ -94,6 +96,10 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="MyChords"
         component={MyChords}
+      />
+      <ProfileStack.Screen
+        name="Setting"
+        component={Setting}
       />
     </ProfileStack.Navigator>
   );
