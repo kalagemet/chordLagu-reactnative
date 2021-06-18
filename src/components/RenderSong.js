@@ -49,7 +49,8 @@ export default function RenderSong({navigation, songPath, typeAPI, jsRun, transp
     const normalize = (chord) => {
       chord.map((data) => {
         data.items.map((data2, index) => {
-          data2.lyrics = data2.lyrics.replace(/\[|]/g, '*')
+          data2.lyrics = data2.lyrics.replace(/\[/g, '(')
+          data2.lyrics = data2.lyrics.replace(/\]/g, ')')
           data2.chords = data2.chords.trim()
           if ( data2.chords == ''){
             if ( data2.lyrics.search('{title:') != -1 || data2.lyrics.search('{artist:') != -1){
@@ -67,12 +68,13 @@ export default function RenderSong({navigation, songPath, typeAPI, jsRun, transp
                 }
               });
               data2.lyrics=temp;
-              if(data2.lyrics.charAt(data2.lyrics.length-1) == ' '){
-                data2.lyrics='{comment:'+data2.lyrics+'} '
-              }else{
-                data2.lyrics='{comment:'+data2.lyrics+'}'
-              }
-              
+              if(data2.lyrics){
+                if(data2.lyrics.charAt(data2.lyrics.length-1) == ' '){
+                  data2.lyrics='{comment:'+data2.lyrics+'} '
+                }else{
+                  data2.lyrics='{comment:'+data2.lyrics+'}'
+                }
+              }              
             }
           }
         })
@@ -123,18 +125,16 @@ export default function RenderSong({navigation, songPath, typeAPI, jsRun, transp
       song = song.replace(/:x3:/g, '\n\n\n')
       song = song.replace(/:x2:/g, '\n\n')
       song = song.replace(/:x1:/g, '\n')
-      
-      console.log(song)
 
       const parser = new ChordSheetJS.ChordSheetParser()
       const parsedSong = parser.parse(song)
-      // normalize(parsedSong.lines)
-      
+      normalize(parsedSong.lines)
       // const finalSong = parser.parse(normalizedSong)
       
       const formatter = new ChordSheetJS.ChordProFormatter();
       const disp = formatter.format(parsedSong);
-      
+      console.log(disp)
+
       return disp;
     }
 
