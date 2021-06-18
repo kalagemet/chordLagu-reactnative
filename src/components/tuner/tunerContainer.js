@@ -48,9 +48,6 @@ export default class TunerContainer {
         }else{
           note = 64
         }
-        // else{
-        //   note = this.getNote(frequency);
-        // }
         
         this.onNoteDetected({
           name: this.noteStrings[note % 12],

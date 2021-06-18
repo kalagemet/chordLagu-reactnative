@@ -1,15 +1,14 @@
 import React, { PureComponent } from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
+import { useTheme } from '@react-navigation/native';
 
-export default class Note extends PureComponent {
-  render() {
-    return (
-      <View style={style.note}>
-        <Text style={style.name}>{this.props.name[0]}</Text>
-        <Text style={style.sharp}>{this.props.name[1]}</Text>
-      </View>
-    );
-  }
+export default function Note({name}){
+  const { colors } = useTheme();
+  return (
+    <View style={style.note}>
+      <Text style={[style.name, {color:colors.text}]}>{name[0]}</Text>
+    </View>
+  );
 }
 
 const style = StyleSheet.create({
@@ -21,12 +20,10 @@ const style = StyleSheet.create({
   name: {
     fontSize: 128,
     fontWeight: "600",
-    color: "gray",
     flexDirection: "row"
   },
   sharp: {
     fontSize: 32,
-    color: "gray",
     position: "absolute",
     right: 0,
     top: 32,

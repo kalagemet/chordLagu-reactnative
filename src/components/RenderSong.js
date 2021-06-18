@@ -22,6 +22,7 @@ export default function RenderSong({navigation, songPath, typeAPI, jsRun, transp
     const webViewRef = useRef();
 
     React.useEffect(()=>{
+      console.log(songPath)
       setLoading(true)
       if(typeAPI == 'localAPI'){
         getSong(songPath, onSongsReceived)
@@ -123,11 +124,11 @@ export default function RenderSong({navigation, songPath, typeAPI, jsRun, transp
       song = song.replace(/:x2:/g, '\n\n')
       song = song.replace(/:x1:/g, '\n')
       
+      console.log(song)
 
-
-      const parser = new ChordSheetJS.ChordSheetParser();;
-      const parsedSong = parser.parse(song);
-      normalize(parsedSong.lines)
+      const parser = new ChordSheetJS.ChordSheetParser()
+      const parsedSong = parser.parse(song)
+      // normalize(parsedSong.lines)
       
       // const finalSong = parser.parse(normalizedSong)
       
