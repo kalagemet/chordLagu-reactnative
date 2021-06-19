@@ -3,8 +3,10 @@ import { View, StyleSheet, TextInput, KeyboardAvoidingView, Platform, ScrollView
 import { getSong, updateSong } from '../api/SongsApi';
 import Loader from '../components/Loader';
 import Button from '../components/Button';
+import { useTheme } from '@react-navigation/native';
 
 export default function EditSong({navigation, route}) {
+  const { colors } = useTheme();
   const [title, setTitle] = useState('')
   const [artist, setArtist] = useState('')
   const [content, setContent] = useState('')
@@ -67,7 +69,8 @@ export default function EditSong({navigation, route}) {
           <Loader loading={loading} />
           <KeyboardAvoidingView>
               <TextInput
-              style={styles.input}
+              style={{...styles.input, color:colors.text}}
+              placeholderTextColor={colors.text}
               placeholder="Nama Artis"
               autoFocus={false}
               autoCorrect={false}
@@ -77,7 +80,8 @@ export default function EditSong({navigation, route}) {
               />
 
               <TextInput
-              style={styles.input}
+              style={{...styles.input, color:colors.text}}
+              placeholderTextColor={colors.text}
               placeholder="Judul Lagu"
               autoFocus={false}
               autoCorrect={false}

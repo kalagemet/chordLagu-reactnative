@@ -14,7 +14,7 @@ export default function Tuner({navigation}){
   const [note, setNote] = useState({
     name: "E",
     octave: 2,
-    frequency: 82
+    frequency: 82.41
   })
 
   React.useEffect(()=>{

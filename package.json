@@ -12,6 +12,7 @@
     "buildRelease": "npx react-native run-android --variant=release"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^3",
     "@react-native-community/async-storage": "^1.7.1",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/slider": "^3.0.3",

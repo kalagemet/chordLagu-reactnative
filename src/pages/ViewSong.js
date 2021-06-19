@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { StyleSheet, Alert, ToastAndroid, Text, View, BackHandler } from 'react-native';
 import RenderSong from '../components/RenderSong';
 import Slider from '@react-native-community/slider';
 import { deleteSong, addToFavourite, removeFavourite, isFavourited } from '../api/SongsApi';
 import { getStreamsBySearch } from '../api/StreamsApi';
 import StreamList from '../components/StreamList';
-import BottomSheet from 'reanimated-bottom-sheet';
+import BottomSheet from '@gorhom/bottom-sheet';
 import StreamModal from '../components/StreamModal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
@@ -30,8 +30,12 @@ export default function ViewSong({ navigation, route }) {
   const created_by = route.params.created
   const user = route.params.user
   const title = route.params.title
-  const sheetRef = React.useRef(null);
+  // ref
+  const bottomSheetRef = useRef(null);
 
+  // variables
+  const snapPoints = useMemo(() => ['5%', '35%'], []);
+  
   React.useEffect(() => {
     console.log("created BY : " + created_by)
     if (typeAPI == 'localAPI' && user != '') {
@@ -229,11 +233,24 @@ export default function ViewSong({ navigation, route }) {
     }
   }
 
+  const drawerHandler = () => {
+    return(
+      <View style={{
+        backgroundColor:colors.background, 
+        height:30, 
+        borderTopStartRadius:15, 
+        borderTopEndRadius:15, 
+        justifyContent:'center'
+      }}>
+        <View style={{ height: '20%', width: '20%', backgroundColor:colors.text, borderRadius: 5, alignSelf: 'center' }}></View>
+      </View>
+    )
+  }
+
   const renderDrawer = () => {
     return (
-      <View style={{ height: '100%', backgroundColor:colors.background, borderTopStartRadius: 20, borderTopEndRadius: 20, borderWidth: 1, borderBottomWidth: 0, borderColor: colors.text }}>
-        <View style={{ height: '1.5%', width: '20%', backgroundColor: colors.text, borderRadius: 5, marginTop: 10, alignSelf: 'center' }}></View>
-        <View style={styles.container}>
+      <View style={{...styles.bottomSheetContainer, backgroundColor:colors.background}}>
+        <View style={styles.scroll}>
           {
             scrollActive ?
               <Ionicons color={colors.text} size={25} name="pause" onPress={stop} /> :
@@ -251,7 +268,7 @@ export default function ViewSong({ navigation, route }) {
           <Text style={{color:colors.text}}>{sliderValue.toFixed(2)} x</Text>
         </View>
         <View style={styles.tool}>
-          <View style={{ flex: 1, flexDirection: 'row', marginHorizontal: '5%' }}>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
             <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={transposeDown} name="remove" />
             <Text style={{ fontSize: 11, alignSelf: 'center', marginHorizontal: '3%', color:colors.text }}>Nada: {(transpose + 12) >= 0 ? `+${transpose + 12}` : transpose + 12}</Text>
             <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={transposeUp} name="add" />
@@ -260,17 +277,17 @@ export default function ViewSong({ navigation, route }) {
             user == created_by ?
               <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
                 <Ionicons name="heart" style={{ fontSize: 30, marginHorizontal: 10, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickFavourite} />
-                <Ionicons name="create" style={{ fontSize: 30, marginHorizontal: 10, color: '#000' }} onPress={() => navigation.navigate('EditSong', { path: songPath })} />
-                <Ionicons name="trash" style={{ fontSize: 30, marginHorizontal: 10, color: '#000', justifyContent: 'flex-end' }} onPress={onDeleteSong} />
+                <Ionicons name="create" style={{ fontSize: 30, marginHorizontal: 10, color: colors.primary }} onPress={() => navigation.navigate('EditSong', { path: songPath })} />
+                <Ionicons name="trash" style={{ fontSize: 30, marginHorizontal: 10, color: colors.primary, justifyContent: 'flex-end' }} onPress={onDeleteSong} />
               </View>
               :
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}>
-                {(typeAPI == 'localAPI' && user != '') && <Ionicons name="heart" style={{ fontSize: 30, marginHorizontal: 10, color: favourited ? '#F05454' : '#ccc', marginRight: 10 }} onPress={onClickFavourite} />}
-                {(typeAPI == 'desalase' || typeAPI == 'downloaded') && <Ionicons name="heart" style={{ fontSize: 30, marginHorizontal: 10, color: favourited ? '#F05454' : '#ccc', marginRight: 10 }} onPress={onClickDownload} />}
+                {(typeAPI == 'localAPI' && user != '') && <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickFavourite} />}
+                {(typeAPI == 'desalase' || typeAPI == 'downloaded') && <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickDownload} />}
               </View>
           }
         </View>
-        <View style={{ height: '50%' }}>
+        <View style={{ height: '60%' }}>
           {
             showStream ?
               <StreamModal
@@ -299,11 +316,19 @@ export default function ViewSong({ navigation, route }) {
         />
       </View>
       <BottomSheet
-        ref={sheetRef}
-        snapPoints={['40%', '40%', '8%']}
-        renderContent={renderDrawer}
-        initialSnap={2}
-        enabledContentTapInteraction={false}
+        ref={bottomSheetRef}
+        index={0}
+        snapPoints={snapPoints}
+        enableContentPanningGesture={false}
+        children={renderDrawer}
+        handleComponent={drawerHandler}
+        style={{
+          elevation: 50,
+          borderColor:colors.text,
+          borderWidth:2,
+          borderTopStartRadius:17,
+          borderTopEndRadius:17
+        }}
       />
     </View>
   );
@@ -311,17 +336,19 @@ export default function ViewSong({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  bottomSheetContainer: {
+    flex:1,
+    justifyContent:'space-between'
+  },
+  scroll: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: '7%',
-    paddingHorizontal: '5%'
+    marginHorizontal:'5%',
+    marginVertical:'2%'
   },
   tool: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: '5%'
+    paddingHorizontal:'5%'
   }
 })
