@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal:'5%',
-    marginVertical:'2%'
+    marginBottom:'2%'
   },
   tool: {
     flexDirection: 'row',

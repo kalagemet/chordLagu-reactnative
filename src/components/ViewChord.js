@@ -8,7 +8,8 @@ const ViewChord = (props) => {
     height = 120,
     showTuning = false,
     tuning = ['E', 'A', 'D', 'G', 'B', 'E'],
-    chord
+    chord,
+    color
   } = props
   if (chord == null || chord == undefined || chord.length <= 0) {
     chord = ['x', 'x', 'x', 'x', 'x', 'x']
@@ -54,7 +55,7 @@ const ViewChord = (props) => {
   let fretWidth = 1
   let stringWidth = 1
 
-  let defaultColor = '#666'
+  let defaultColor = color
   let strokeWidth = 1
 
   let stringSpacing = (chartWidth / numStrings);
