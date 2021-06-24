@@ -24,24 +24,12 @@ export default function SongsByArtistList({ navigation, route }) {
         })
     }, [navigation])
 
-    const toViewSong = (e, typeApi, created_by, title) => {
-        STORAGE.getSavedSong(e, (item) => {
-            if (item && item.id == e) {
-                navigation.navigate('ViewSong', {
-                    path: e,
-                    type: 'downloaded',
-                    created: created_by,
-                    title: title
-                });
-            } else {
-                navigation.navigate('ViewSong', {
-                    path: e,
-                    type: typeApi,
-                    created: created_by,
-                    title: title
-                });
-            }
-        })
+    const toViewSong = (e, created_by, title) => {
+        navigation.navigate('ViewSong', {
+            path: e,
+            created: created_by,
+            title: title
+        });
     }
 
     const handleLoadMore = async () => {
@@ -77,7 +65,7 @@ export default function SongsByArtistList({ navigation, route }) {
             <View>
                 <SongList
                     songs={bandSongs}
-                    onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}
+                    onPress={(e, created_by, title) => toViewSong(e, created_by, title)}
                     search={true}
                     handleLoadMore={handleLoadMore}
                     loading={loading}

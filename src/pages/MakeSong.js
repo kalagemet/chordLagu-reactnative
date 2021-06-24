@@ -5,6 +5,8 @@ import Loader from '../components/Loader';
 import * as STORAGE from '../Storage';
 import Button from '../components/Button';
 import { useTheme } from '@react-navigation/native';
+import * as API from '../api/SongDbApi';
+import { encode, getAbjad } from '../utils/encode';
 
 export default function MakeSong({navigation}) {
   const { colors } = useTheme();
@@ -24,13 +26,13 @@ export default function MakeSong({navigation}) {
     if(artist && title && content){
       setLoading(true)
       let song = {
-        artist : artist.toLowerCase(),
-        content : content,
+        artist : artist,
+        content : encode(content),
         created_by : email,
-        favourites : 0,
-        title : title.toLowerCase()
+        abjad : getAbjad(artist),
+        title : title
       }
-      addSong(song, (e) => onSongAdded(e))
+      API.postSong(song, onSongAdded, ()=>setLoading(false))
     }else {
       ToastAndroid.showWithGravityAndOffset(
         "Tidak boleh ada yang kosong",
@@ -40,10 +42,10 @@ export default function MakeSong({navigation}) {
         50
       )
     }
-    
   }
 
-  const onSongAdded = (song) => {
+  const onSongAdded = (msg) => {
+    console.log(msg)
     setLoading(false)
     ToastAndroid.showWithGravityAndOffset(
       "Berhasil Disimpan",
@@ -127,7 +129,6 @@ const styles = StyleSheet.create({
       marginBottom: 5
     },
     content: {
-      fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
       flex: 1,
       minHeight: 200,
       padding: 10,

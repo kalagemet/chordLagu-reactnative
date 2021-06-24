@@ -1,8 +1,7 @@
 import React, { useState, useRef, useMemo } from 'react';
 import { StyleSheet, Alert, ToastAndroid, Text, View, BackHandler } from 'react-native';
-import RenderSong from '../components/RenderSong';
 import Slider from '@react-native-community/slider';
-import { deleteSong, addToFavourite, removeFavourite, isFavourited } from '../api/SongsApi';
+import { deleteSong, addToFavourite, removeFavourite, isFavourited, getSong } from '../api/SongsApi';
 import { getStreamsBySearch } from '../api/StreamsApi';
 import StreamList from '../components/StreamList';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -12,11 +11,16 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getSongContent } from '../api/SongDbApi';
 import * as STORAGE from '../Storage';
 import { useTheme } from '@react-navigation/native';
+import { WebView } from 'react-native-webview';
+import { decode } from '../utils/decode';
+import chords from '../assets/chords/guitar.json';
+import ChordModal from '../components/ChordModal';
+import { capoDown, capoUp } from '../utils/capo';
+import Loader from '../components/Loader';
 
 export default function ViewSong({ navigation, route }) {
   const { colors } = useTheme();
-  const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
-  const [transpose, setTranspose] = useState(-12)
+  const [transpose, setTranspose] = useState(0)
   const [scrollActive, setScrollActive] = useState(false)
   const [sliderValue, setSliderValue] = useState(0.5)
   const [jsRun, setJsRun] = useState(``)
@@ -25,31 +29,32 @@ export default function ViewSong({ navigation, route }) {
   const [streamsList, setStreamsList] = useState([])
   const [showStream, setShowStream] = useState(false)
   const [streamId, setStreamId] = useState('')
+  const [content, setContent] = useState('')
+  const [chordName, setChordName] = useState('')
+  const [showChord, setShowChord] = useState(false)
+  const [selectedChord, setSelectedChord] = useState('')
+  const [fontSize, setFontSize] = useState(15)
   const songPath = route.params.path
-  const typeAPI = route.params.type
   const created_by = route.params.created
   const user = route.params.user
   const title = route.params.title
-  // ref
   const bottomSheetRef = useRef(null);
-
-  // variables
   const snapPoints = useMemo(() => ['5%', '35%'], []);
+  const webViewRef = useRef();
   
   React.useEffect(() => {
     console.log("created BY : " + created_by)
-    if (typeAPI == 'localAPI' && user != '') {
-      isFavourited(songPath, user, (fav) => {
-        console.log("fav : " + fav)
-        setFavourited(fav)
-      })
-    } else if (typeAPI == 'downloaded') {
-      setFavourited(true)
-    }
+    setLoading(true)
+    getContent()
+    checkIfDownloaded()
     getStreamsBySearch(title, (streamsList) => {
       setStreamsList(streamsList)
     })
   }, [navigation])
+
+  React.useEffect(()=>{
+    !loading && webViewRef.current.injectJavaScript(jsRun);
+  })
 
   useFocusEffect(
     React.useCallback(() => {
@@ -69,18 +74,29 @@ export default function ViewSong({ navigation, route }) {
     }, [showStream, closeStream])
   );
 
-  const openSideMenu = () => { setIsSideMenuOpen(!isSideMenuOpen) }
+  const checkIfDownloaded = () => {
+    STORAGE.getSavedSong(songPath, (item) => {
+      if (item && item.id == songPath) {
+        setFavourited(true)
+      }
+    })
+  }
+
+  const getContent = () => {
+    getSongContent(songPath, (data)=>{
+      setContent(decode(data.isi))
+      setLoading(false)
+    })
+  }
 
   const transposeUp = () => {
-    if (transpose < 0) {
-      setTranspose(transpose + 1)
-    }
+    setContent(capoUp(content))
+    setTranspose(transpose+1)
   }
 
   const transposeDown = () => {
-    if (transpose > -24) {
-      setTranspose(transpose - 1)
-    }
+    setContent(capoDown(content))
+    setTranspose(transpose-1)
   }
 
   const handelSliderChange = (value) => {
@@ -122,43 +138,14 @@ export default function ViewSong({ navigation, route }) {
     `)
   }
 
-
-  const onClickFavourite = () => {
-    setLoading(true)
-
-    if (favourited) {
-      removeFavourite(user, songPath, onRemovedFavourite)
-    } else {
-      let favourite = {
-        user: user,
-        songId: songPath
-      }
-      addToFavourite(favourite, onFavouriteComplete)
-    }
-  }
-
-  const onRemovedFavourite = () => {
+  const showToast = (message) => {
     ToastAndroid.showWithGravityAndOffset(
-      "Dihapus dari Favorit",
+      message,
       ToastAndroid.LONG,
       ToastAndroid.BOTTOM,
       25,
       50
     )
-    setFavourited(false)
-    setLoading(false)
-  }
-
-  const onFavouriteComplete = () => {
-    ToastAndroid.showWithGravityAndOffset(
-      "Disimpan di Favorit",
-      ToastAndroid.LONG,
-      ToastAndroid.BOTTOM,
-      25,
-      50
-    )
-    setFavourited(true)
-    setLoading(false)
   }
 
   const onDeleteSong = () => {
@@ -182,13 +169,7 @@ export default function ViewSong({ navigation, route }) {
     setLoading(true)
     deleteSong(songPath, () => {
       setLoading(false)
-      ToastAndroid.showWithGravityAndOffset(
-        "Berhasil Dihapus",
-        ToastAndroid.LONG,
-        ToastAndroid.BOTTOM,
-        25,
-        50
-      )
+      showToast("Berhasil Dihapus")
       navigation.pop();
     })
   }
@@ -208,29 +189,27 @@ export default function ViewSong({ navigation, route }) {
       STORAGE.deleteSaved(songPath, () => {
         setFavourited(false)
         setLoading(false)
-        ToastAndroid.showWithGravityAndOffset(
-          "Berhasil Dihapus dari Favorit",
-          ToastAndroid.LONG,
-          ToastAndroid.BOTTOM,
-          25,
-          50
-        )
+        showToast("Berhasil Dihapus dari Favorit")
       })
     } else {
       getSongContent(songPath, (data) => {
         STORAGE.saveSong(data, () => {
           setFavourited(true)
           setLoading(false)
-          ToastAndroid.showWithGravityAndOffset(
-            "Berhasil Disimpan di Favorit",
-            ToastAndroid.LONG,
-            ToastAndroid.BOTTOM,
-            25,
-            50
-          )
+          showToast("Berhasil Disimpan di Favorit")
         })
       })
     }
+  }
+
+  const handleMessage = (selectedChord) => {
+    if (chords[selectedChord.toString()]){
+      let chord = chords[selectedChord.toString()][0].positions
+      setChordName(selectedChord.toString())
+      setSelectedChord(chord)
+      setShowChord(true)
+    }
+    
   }
 
   const drawerHandler = () => {
@@ -253,8 +232,8 @@ export default function ViewSong({ navigation, route }) {
         <View style={styles.scroll}>
           {
             scrollActive ?
-              <Ionicons color={colors.text} size={25} name="pause" onPress={stop} /> :
-              <Ionicons color={colors.text} size={25} name="play" onPress={start} />
+              <Ionicons color={colors.primary} size={25} name="pause" onPress={stop} /> :
+              <Ionicons color={colors.primary} size={25} name="play" onPress={start} />
           }
           <Slider
             thumbTintColor={colors.notification}
@@ -265,25 +244,27 @@ export default function ViewSong({ navigation, route }) {
             minimumValue={0}
             maximumValue={1}
           />
-          <Text style={{color:colors.text}}>{sliderValue.toFixed(2)} x</Text>
+          <Text style={{color:colors.primary}}>{sliderValue.toFixed(2)} x</Text>
         </View>
         <View style={styles.tool}>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={transposeDown} name="remove" />
-            <Text style={{ fontSize: 11, alignSelf: 'center', marginHorizontal: '3%', color:colors.text }}>Nada: {(transpose + 12) >= 0 ? `+${transpose + 12}` : transpose + 12}</Text>
+            <Text style={{ fontSize: 11, alignSelf: 'center', marginHorizontal: '3%', color:colors.text }}>Nada: {transpose>0 ? '+'+transpose: transpose==0 ? transpose: '-'+transpose}</Text>
             <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={transposeUp} name="add" />
+            <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3, marginLeft:'5%'}} onPress={()=>setFontSize(fontSize-1)} name="remove" />
+            <Ionicons size={20} style={{ color: colors.text, alignSelf: 'center', marginHorizontal: '3%'}} name="text-outline" />
+            <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={()=>setFontSize(fontSize+1)} name="add" />
           </View>
           {
             user == created_by ?
               <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
-                <Ionicons name="heart" style={{ fontSize: 30, marginHorizontal: 10, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickFavourite} />
+                <Ionicons name="heart" style={{ fontSize: 30, marginHorizontal: 10, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickDownload} />
                 <Ionicons name="create" style={{ fontSize: 30, marginHorizontal: 10, color: colors.primary }} onPress={() => navigation.navigate('EditSong', { path: songPath })} />
                 <Ionicons name="trash" style={{ fontSize: 30, marginHorizontal: 10, color: colors.primary, justifyContent: 'flex-end' }} onPress={onDeleteSong} />
               </View>
               :
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}>
-                {(typeAPI == 'localAPI' && user != '') && <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickFavourite} />}
-                {(typeAPI == 'desalase' || typeAPI == 'downloaded') && <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickDownload} />}
+                <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickDownload} />
               </View>
           }
         </View>
@@ -304,15 +285,42 @@ export default function ViewSong({ navigation, route }) {
   }
 
   return (
+    loading ?
+    <Loader loading={true} />
+    :
     <View style={{ flex: 1}}>
+      <ChordModal
+        show={showChord}
+        name={chordName}
+        selectedChord={selectedChord}
+        closeModal = {()=>setShowChord(false)}
+      />
       <View style={{ height: '91%' }}>
-        <RenderSong
-          navigation={navigation}
-          openSideMenu={openSideMenu}
-          songPath={songPath}
-          typeAPI={typeAPI}
-          transpose={transpose}
-          jsRun={jsRun}
+        <WebView 
+          ref={webViewRef}
+          source={{ html: 
+            `<html>
+              <head>
+                <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
+                ${title}
+              </head>
+              <body>${content}</body>
+              <style> 
+                body {
+                  color:${colors.text};
+                  font-size: ${fontSize}px;
+                }
+                .chord {
+                  color:${colors.notification};
+                }
+              </style>
+            </html>` 
+          }}
+          injectedJavaScript={onClickChordPostMessage}
+          onMessage = {(event)=> handleMessage(event.nativeEvent.data)}
+          javaScriptEnabled = {true}
+          style={{margin:0, padding:0, backgroundColor:colors.background}}
+          scalesPageToFit={false}
         />
       </View>
       <BottomSheet
@@ -334,7 +342,25 @@ export default function ViewSong({ navigation, route }) {
   );
 
 }
+const onClickChordPostMessage = `
+(
+  function() {
+    function onClickChord (chord) {
+      return function () {
+        window.ReactNativeWebView.postMessage(chord)
+      }
+    }
+    var anchors = document.getElementsByClassName('chord');
+    for(var i = 0; i < anchors.length; i++) {
+        var anchor = anchors[i];
+        var chord = anchor.innerText || anchor.textContent;
+        anchor.onclick = onClickChord(chord)
+    }
+  }
+)();
 
+true;
+`
 const styles = StyleSheet.create({
   bottomSheetContainer: {
     flex:1,

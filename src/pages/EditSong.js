@@ -4,26 +4,25 @@ import { getSong, updateSong } from '../api/SongsApi';
 import Loader from '../components/Loader';
 import Button from '../components/Button';
 import { useTheme } from '@react-navigation/native';
+import * as API from '../api/SongDbApi';
+import { getAbjad } from '../utils/encode';
+import { decodeToPlainText } from '../utils/decode';
 
 export default function EditSong({navigation, route}) {
   const { colors } = useTheme();
   const [title, setTitle] = useState('')
   const [artist, setArtist] = useState('')
   const [content, setContent] = useState('')
-  const [createdBy, setCreatedBy] = useState('')
-  const [favourites, setFavourites] = useState(0)
   const [loading, setLoading] = useState(false)
 
   React.useEffect(()=>{
-    getSong(route.params.path, onSongsReceived)
+    API.getSongContent(route.params.path, onSongsReceived)
   },[navigation])
 
   const onSongsReceived = (song) => {
-    let content = song.content.replace(/:x1:/g, '\n');
-    setArtist(song.artist)
-    setTitle(song.title)
-    setCreatedBy(song.created_by)
-    setFavourites(song.favourites)
+    let content = decodeToPlainText(song.isi)
+    setArtist(song.nama_band)
+    setTitle(song.judul)
     setContent(content)
   }
 
@@ -31,13 +30,22 @@ export default function EditSong({navigation, route}) {
     if(artist && title && content){
       setLoading(true)
       let song = {
-        artist : artist,
-        content : content,
-        title : title,
-        created_by : createdBy,
-        favourites : favourites
+        id : route.params.path,
+        nama_band : artist,
+        chord : content,
+        judul : title,
+        abjad : getAbjad(artist)
       }
-      updateSong(route.params.path, song, () => navigation.navigate('Home'))
+      API.updateChord(song, () => {
+        ToastAndroid.showWithGravityAndOffset(
+          "Berhasil Mengupdate Chord",
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50
+        )
+        navigation.navigate('Home')
+      }, ()=> setLoading(false))
     }else {
       ToastAndroid.showWithGravityAndOffset(
         "Tidak boleh ada yang kosong",
@@ -147,7 +155,6 @@ const styles = StyleSheet.create({
       marginBottom: 5
     },
     content: {
-      fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
       flex: 1,
       minHeight: 200,
       padding: 10,

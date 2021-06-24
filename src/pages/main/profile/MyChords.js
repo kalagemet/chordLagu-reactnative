@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { View } from 'react-native';
-import { getSongs } from '../../../api/SongsApi';
 import SongList from '../../../components/SongList';
+import * as API from '../../../api/SongDbApi';
 
 export default function MyChords({navigation, route}) {
     const [flatListItems, setFlatListItems] = useState([])
@@ -14,18 +14,17 @@ export default function MyChords({navigation, route}) {
 
     const getListSongs = () => {
         setRefreshing(true)
-        getSongs(userEmail, onSongsReceived);
+        API.getMyChords(userEmail, onSongsReceived, ()=>console.log('error'))
     }
 
     const onSongsReceived = (songList) => {
-      setFlatListItems(songList)
+      setFlatListItems(songList.row)
       setRefreshing(false)
     }
 
-    const toViewSong = (e, typeApi, created_by, title) => {
+    const toViewSong = (e, created_by, title) => {
         navigation.navigate('ViewSong', {
             path: e,
-            type : typeApi,
             created : created_by,
             user : userEmail,
             title : title
@@ -41,7 +40,7 @@ export default function MyChords({navigation, route}) {
         <View style={{flex:1}}>
             <SongList 
                 songs={flatListItems} 
-                onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}
+                onPress={(e,created_by, title) => toViewSong(e, created_by, title)}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
             />

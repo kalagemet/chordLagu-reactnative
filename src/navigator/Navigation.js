@@ -1,4 +1,5 @@
 import React from 'react';
+import { Appearance } from 'react-native';
 import BottomNav from './BottomNav';
 import Login from '../pages/front/Login';
 import Signup from '../pages/front/Signup';
@@ -11,13 +12,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { PreferencesContext, getTheme, setTheme } from '../Settings';
 
 const Stack = createStackNavigator();
+const colorScheme = Appearance.getColorScheme();
 
 function AppContainer() {
   const [isThemeDark, setIsThemeDark] = React.useState(false);
 
   React.useEffect(()=>{
     getTheme((value)=>{
-      value == 'dark' ? setIsThemeDark(true) : setIsThemeDark(false)
+      value == 'dark' ? setIsThemeDark(true) : colorScheme == 'dark' ? setIsThemeDark(true) : setIsThemeDark(false)
     })
   },[])
 

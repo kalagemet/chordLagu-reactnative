@@ -41,29 +41,11 @@ export default function SongList({handleLoadMore, songs, search, onPress, loadin
                         <View>
                             {
                                 (item.title || item.judul) ? //List lagu
-                                <TouchableOpacity style={styles.item} onPress={() => onPress(item.id, item.downloaded ? 'downloaded' : item.judul ? 'desalase' : 'localAPI', item.created_by ? item.created_by : 'api', item.title ? item.title +' '+ item.artist : item.judul +' '+ item.nama_band)}>
+                                <TouchableOpacity style={styles.item} onPress={() => onPress(item.id, item.created_by, item.judul +' '+ item.nama_band)}>
                                     <View style={{flex:4}}>
                                         <Text style={{color:colors.text}}>{item.title ? toTitleCase(item.title) : item.judul}</Text>
                                         <Text style={{color:colors.primary}} numberOfLines={1}>{item.artist ? toTitleCase(item.artist) : item.nama_band }</Text>
-                                            {
-                                                item.created_by && //lagu dari firebase
-                                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                                <Ionicons name="create-outline" style={{ fontSize: 12, marginRight: 3 }} color='#ccc' />
-                                                <Text numberOfLines={1} style={{ fontSize: 10, color: "#ccc" }}>{item.created_by ? item.created_by.slice(0,item.created_by.indexOf('@')):'desalase' }</Text>
-                                                </View>
-                                            }
                                     </View>
-                                    {
-                                        item.judul ?
-                                            <View/>
-                                            : //lagu dari firebase
-                                            <View style={{ flex:1, flexDirection: 'column', alignItems : 'flex-end', justifyContent:'center'}}>
-                                                <Ionicons color='#ccc' size={30} name="heart" />
-                                                <Text style={{ color: '#ccc', fontSize: 10 }}>{item.likes ? item.likes.length : 0} suka</Text>
-                                            </View>
-
-                                    }
-
                                 </TouchableOpacity>
                                 : //list band
                                 <TouchableOpacity style={styles.item} onPress={() => onArtistPress(item.id, item.nama)}>

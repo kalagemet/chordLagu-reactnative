@@ -56,10 +56,9 @@ export default function Home({navigation}) {
     getListSongs()
   }
 
-  const toViewSong = (e, typeApi, created_by, title) => {
+  const toViewSong = (e, created_by, title) => {
     navigation.navigate('ViewSong', {
       path: e,
-      type : typeApi,
       created : created_by,
       user : currentUser ? currentUser.email : '',
       title : title
@@ -79,7 +78,7 @@ export default function Home({navigation}) {
       <View style={{flex:9}}>
         <SongList 
           songs={flatListItem} 
-          onPress={(e, typeApi, created_by, title) => toViewSong(e, typeApi, created_by, title)}
+          onPress={(e, created_by, title) => toViewSong(e, created_by, title)}
           refreshing={refreshing}
           onRefresh={onRefresh}
         />
