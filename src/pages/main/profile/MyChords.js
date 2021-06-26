@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import SongList from '../../../components/SongList';
 import * as API from '../../../api/SongDbApi';
 
@@ -36,12 +36,17 @@ export default function MyChords({navigation, route}) {
 
     return (
         <View style={{flex:1}}>
-            <SongList 
-                songs={flatListItems} 
-                onPress={(id) => toViewSong(id)}
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-            />
+            {
+                flatListItems.totalItems > 0 ?
+                <SongList
+                    songs={flatListItems}
+                    onPress={(id) => toViewSong(id)}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />      
+                :
+                <Text style={{alignSelf:'center', marginTop:'10%'}}>Tidak Ada Chord</Text>
+            }
         </View>
     );
     

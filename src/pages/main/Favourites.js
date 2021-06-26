@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import React, { useState } from 'react';
 import SongList from '../../components/SongList';
 import * as STORAGE from '../../Storage';
@@ -40,12 +40,17 @@ export default function Favourites({ navigation }) {
 
     return (
         <View style={styles.Container}>
-            <SongList
-                songs={flatListItems}
-                onPress={(id) => toViewSong(id)}
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-            />
+            {
+                flatListItems ?
+                <SongList
+                    songs={flatListItems}
+                    onPress={(id) => toViewSong(id)}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />      
+                :
+                <Text style={{alignSelf:'center', marginTop:'10%'}}>Tidak Ada Chord Favorit</Text>
+            }
         </View>
     );
 

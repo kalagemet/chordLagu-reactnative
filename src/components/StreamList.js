@@ -11,8 +11,8 @@ export default function StreamList({streams, onPress}) {
     return (
         <View>
             {
-                stream == null ?
-                    <View></View> :
+                streams.total_results == 0 ?
+                    <Text style={{alignSelf:'center', marginTop:'10%'}}>Audio Tidak Tersedia</Text> :
                     <FlatList
                         data={stream}
                         renderItem={({ item }) => {
