@@ -35,6 +35,7 @@ const setSavedList = async(data) => {
             id: data.id,
             judul: data.judul,
             nama_band: data.nama_band,
+            created_by: data.created_by,
             downloaded: true
         },
     ]
@@ -75,4 +76,12 @@ export const deleteSaved = async (id, onDeleted)=> {
     .then(
         onDeleted()
     )
+}
+
+export const updateSaved = async (data, onUpdated) => {
+    deleteSaved(data.id, () => {
+        saveSong(data, ()=>{
+            onUpdated()
+        })
+    })
 }

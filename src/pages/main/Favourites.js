@@ -23,12 +23,10 @@ export default function Favourites({ navigation }) {
         return unsubscribe;
     }, [navigation])
 
-    const toViewSong = (e, created_by, title) => {
+    const toViewSong = (id) => {
         navigation.navigate('ViewSong', {
-            path: e,
-            created: created_by,
-            user: email,
-            title: title
+            id: id,
+            user: email
         });
     }
 
@@ -44,7 +42,7 @@ export default function Favourites({ navigation }) {
         <View style={styles.Container}>
             <SongList
                 songs={flatListItems}
-                onPress={(e, created_by, title) => toViewSong(e, created_by, title)}
+                onPress={(id) => toViewSong(id)}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
             />

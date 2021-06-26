@@ -1,14 +1,14 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { StyleSheet, Alert, ToastAndroid, Text, View, BackHandler } from 'react-native';
+import { StyleSheet, Alert, ToastAndroid, Text, View, BackHandler, ScrollView, Dimensions } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { deleteSong, addToFavourite, removeFavourite, isFavourited, getSong } from '../api/SongsApi';
 import { getStreamsBySearch } from '../api/StreamsApi';
 import StreamList from '../components/StreamList';
 import BottomSheet from '@gorhom/bottom-sheet';
 import StreamModal from '../components/StreamModal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import { useFocusEffect } from '@react-navigation/native';
-import { getSongContent } from '../api/SongDbApi';
+import * as API from '../api/SongDbApi';
 import * as STORAGE from '../Storage';
 import { useTheme } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
@@ -34,21 +34,21 @@ export default function ViewSong({ navigation, route }) {
   const [showChord, setShowChord] = useState(false)
   const [selectedChord, setSelectedChord] = useState('')
   const [fontSize, setFontSize] = useState(15)
-  const songPath = route.params.path
-  const created_by = route.params.created
+  const [data, setData] = useState([])
+  const [chordTerkait, setChordTekait] = useState([])
+  const id = route.params.id
   const user = route.params.user
-  const title = route.params.title
   const bottomSheetRef = useRef(null);
   const snapPoints = useMemo(() => ['5%', '35%'], []);
   const webViewRef = useRef();
   
   React.useEffect(() => {
-    console.log("created BY : " + created_by)
     setLoading(true)
-    getContent()
-    checkIfDownloaded()
-    getStreamsBySearch(title, (streamsList) => {
-      setStreamsList(streamsList)
+    getChordContent(id)
+    API.getTerkait(id, (data)=>{
+      setChordTekait(data)
+    }, ()=>{
+      console.log('gagal mendapatkan chord terkait')
     })
   }, [navigation])
 
@@ -74,19 +74,41 @@ export default function ViewSong({ navigation, route }) {
     }, [showStream, closeStream])
   );
 
-  const checkIfDownloaded = () => {
-    STORAGE.getSavedSong(songPath, (item) => {
-      if (item && item.id == songPath) {
+  const getChordContent = (id) => {
+    STORAGE.getSavedSong(id, (item) => {
+      if (item && item.id == id) {
+        let chordData = {
+          judul : item.judul,
+          nama_band : item.nama_band,
+          created_by : item.created_by
+        }
+        setData(chordData)
         setFavourited(true)
+        setContent(decode(item.isi))
+        getStreamsBySearch(item.judul+' '+item.nama_band, (streamsList) => {
+          setStreamsList(streamsList)
+        })
+        setLoading(false)
+      } else {
+        API.getSongContent(id, (data)=>{
+          let chordData = {
+            judul : data.judul,
+            nama_band : data.nama_band,
+            created_by : data.created_by
+          }
+          setData(chordData)
+          setContent(decode(data.isi))
+          getStreamsBySearch(data.judul+' '+data.nama_band, (streamsList) => {
+            setStreamsList(streamsList)
+          })
+          setLoading(false)
+        },()=>{
+          setLoading(false)
+          navigation.pop()
+        })
       }
     })
-  }
-
-  const getContent = () => {
-    getSongContent(songPath, (data)=>{
-      setContent(decode(data.isi))
-      setLoading(false)
-    })
+    
   }
 
   const transposeUp = () => {
@@ -167,7 +189,7 @@ export default function ViewSong({ navigation, route }) {
 
   const _delete = () => {
     setLoading(true)
-    deleteSong(songPath, () => {
+    API.deleteChord(id, ()=> {
       setLoading(false)
       showToast("Berhasil Dihapus")
       navigation.pop();
@@ -186,13 +208,13 @@ export default function ViewSong({ navigation, route }) {
   const onClickDownload = () => {
     setLoading(true)
     if (favourited) {
-      STORAGE.deleteSaved(songPath, () => {
+      STORAGE.deleteSaved(id, () => {
         setFavourited(false)
         setLoading(false)
         showToast("Berhasil Dihapus dari Favorit")
       })
     } else {
-      getSongContent(songPath, (data) => {
+      API.getSongContent(id, (data) => {
         STORAGE.saveSong(data, () => {
           setFavourited(true)
           setLoading(false)
@@ -209,7 +231,19 @@ export default function ViewSong({ navigation, route }) {
       setSelectedChord(chord)
       setShowChord(true)
     }
-    
+  }
+
+  const listTerkait = () => {
+    return(
+      chordTerkait.forEach((item) => {
+        <TouchableOpacity style={styles.item} onPress={() => getChordContent(item.id)}>
+          <View style={{flex:4}}>
+            <Text style={{color:colors.text}}>{item.judul}</Text>
+            <Text style={{color:colors.primary}} numberOfLines={1}>{item.nama_band }</Text>
+          </View>
+        </TouchableOpacity>
+      })
+    )
   }
 
   const drawerHandler = () => {
@@ -247,23 +281,24 @@ export default function ViewSong({ navigation, route }) {
           <Text style={{color:colors.primary}}>{sliderValue.toFixed(2)} x</Text>
         </View>
         <View style={styles.tool}>
-          <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent:'space-between' }}>
+            <Feather size={30} style={{ padding:'2%', color: colors.card, backgroundColor: colors.primary, borderRadius: 3, marginHorizontal:'5%'}} onPress={()=>setFontSize(fontSize-1)} name="zoom-out" />
+            <Feather size={30} style={{ padding:'2%', color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={()=>setFontSize(fontSize+1)} name="zoom-in" />
+          </View>
+          <View style={{ flex: 2, flexDirection: 'row', justifyContent:'space-between', paddingHorizontal:'5%' }}>
             <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={transposeDown} name="remove" />
-            <Text style={{ fontSize: 11, alignSelf: 'center', marginHorizontal: '3%', color:colors.text }}>Nada: {transpose>0 ? '+'+transpose: transpose==0 ? transpose: '-'+transpose}</Text>
+            <Text style={{ fontSize: 11, alignSelf: 'center', marginHorizontal: '3%', color:colors.text }}>Nada: {transpose>0 ? '+'+transpose: transpose}</Text>
             <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={transposeUp} name="add" />
-            <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3, marginLeft:'5%'}} onPress={()=>setFontSize(fontSize-1)} name="remove" />
-            <Ionicons size={20} style={{ color: colors.text, alignSelf: 'center', marginHorizontal: '3%'}} name="text-outline" />
-            <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={()=>setFontSize(fontSize+1)} name="add" />
           </View>
           {
-            user == created_by ?
-              <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-end' }}>
-                <Ionicons name="heart" style={{ fontSize: 30, marginHorizontal: 10, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickDownload} />
-                <Ionicons name="create" style={{ fontSize: 30, marginHorizontal: 10, color: colors.primary }} onPress={() => navigation.navigate('EditSong', { path: songPath })} />
-                <Ionicons name="trash" style={{ fontSize: 30, marginHorizontal: 10, color: colors.primary, justifyContent: 'flex-end' }} onPress={onDeleteSong} />
+            user == data.created_by ?
+              <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'space-between' }}>
+                <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickDownload} />
+                <Ionicons name="create" style={{ fontSize: 30, color: colors.primary }} onPress={() => navigation.navigate('EditSong', { path: id })} />
+                <Ionicons name="trash" style={{ fontSize: 30, color: colors.primary, justifyContent: 'flex-end' }} onPress={onDeleteSong} />
               </View>
               :
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 2 }}>
                 <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickDownload} />
               </View>
           }
@@ -295,16 +330,19 @@ export default function ViewSong({ navigation, route }) {
         selectedChord={selectedChord}
         closeModal = {()=>setShowChord(false)}
       />
-      <View style={{ height: '91%' }}>
+      <View style={{height : '91%'}}>
         <WebView 
           ref={webViewRef}
           source={{ html: 
             `<html>
               <head>
                 <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
-                ${title}
+                <h2>${data.judul}</h2>
+                <h3>${data.nama_band}</h3>
               </head>
-              <body>${content}</body>
+              <body>
+                ${content}
+              </body>
               <style> 
                 body {
                   color:${colors.text};
@@ -320,7 +358,7 @@ export default function ViewSong({ navigation, route }) {
           onMessage = {(event)=> handleMessage(event.nativeEvent.data)}
           javaScriptEnabled = {true}
           style={{margin:0, padding:0, backgroundColor:colors.background}}
-          scalesPageToFit={false}
+          scalesPageToFit={true}
         />
       </View>
       <BottomSheet
@@ -376,5 +414,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal:'5%'
-  }
+  },
+  item : {
+    flexDirection : 'row',
+    paddingHorizontal : '5%',
+    paddingVertical : '3%'
+}
 })

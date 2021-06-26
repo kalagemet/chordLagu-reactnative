@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
-import { View, StyleSheet, TextInput, KeyboardAvoidingView, Platform, ScrollView, ToastAndroid } from "react-native";
-import { getSong, updateSong } from '../api/SongsApi';
+import { View, StyleSheet, TextInput, KeyboardAvoidingView, ScrollView, ToastAndroid } from "react-native";
 import Loader from '../components/Loader';
 import Button from '../components/Button';
 import { useTheme } from '@react-navigation/native';
 import * as API from '../api/SongDbApi';
-import { getAbjad } from '../utils/encode';
+import { getAbjad, encode } from '../utils/encode';
 import { decodeToPlainText } from '../utils/decode';
+import * as STORAGE from '../Storage';
 
 export default function EditSong({navigation, route}) {
   const { colors } = useTheme();
@@ -14,8 +14,11 @@ export default function EditSong({navigation, route}) {
   const [artist, setArtist] = useState('')
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(false)
+  const [createdBy, setCreatedBy] = useState('')
+  const [isSaved, setIsSaved] = useState(false)
 
   React.useEffect(()=>{
+    checkIfDownloaded()
     API.getSongContent(route.params.path, onSongsReceived)
   },[navigation])
 
@@ -24,6 +27,17 @@ export default function EditSong({navigation, route}) {
     setArtist(song.nama_band)
     setTitle(song.judul)
     setContent(content)
+    setCreatedBy(song.created_by)
+  }
+
+  const checkIfDownloaded = () => {
+    STORAGE.getSavedSong(route.params.path, (item) => {
+      if (item && item.id == route.params.path) {
+        setIsSaved(true)
+      } else {
+        setIsSaved(false)
+      }
+    })
   }
 
   const uploadChord = () => {
@@ -32,11 +46,20 @@ export default function EditSong({navigation, route}) {
       let song = {
         id : route.params.path,
         nama_band : artist,
-        chord : content,
+        chord : encode(content),
         judul : title,
         abjad : getAbjad(artist)
       }
+      let update = {
+        id : route.params.path,
+        nama_band : artist,
+        isi : encode(content),
+        judul : title,
+        abjad : getAbjad(artist),
+        created_by : createdBy
+      }
       API.updateChord(song, () => {
+        isSaved && STORAGE.updateSaved(update, () => {console.log('download updated')})
         ToastAndroid.showWithGravityAndOffset(
           "Berhasil Mengupdate Chord",
           ToastAndroid.LONG,

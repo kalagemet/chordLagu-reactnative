@@ -24,11 +24,9 @@ export default function SongsByArtistList({ navigation, route }) {
         })
     }, [navigation])
 
-    const toViewSong = (e, created_by, title) => {
+    const toViewSong = (id) => {
         navigation.navigate('ViewSong', {
-            path: e,
-            created: created_by,
-            title: title
+            id: id
         });
     }
 
@@ -65,7 +63,7 @@ export default function SongsByArtistList({ navigation, route }) {
             <View>
                 <SongList
                     songs={bandSongs}
-                    onPress={(e, created_by, title) => toViewSong(e, created_by, title)}
+                    onPress={(id) => toViewSong(id)}
                     search={true}
                     handleLoadMore={handleLoadMore}
                     loading={loading}

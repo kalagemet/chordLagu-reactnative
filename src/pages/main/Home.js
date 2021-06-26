@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Text, View } from 'react-native';
+import { StatusBar, Text, View } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { getPopular } from '../../api/SongDbApi';
 import { getAdStatus } from '../../api/AdsApi';
@@ -56,13 +56,11 @@ export default function Home({navigation}) {
     getListSongs()
   }
 
-  const toViewSong = (e, created_by, title) => {
+  const toViewSong = (id) => {
     navigation.navigate('ViewSong', {
-      path: e,
-      created : created_by,
-      user : currentUser ? currentUser.email : '',
-      title : title
-    })      
+      id : id,
+      user : currentUser ? currentUser.email : ''
+    })
   }
 
   const toMakeSong = () => {
@@ -72,13 +70,17 @@ export default function Home({navigation}) {
   
   return (
     <View style={{flex:1}}>
+      <StatusBar
+        animated={true}
+        backgroundColor={colors.card}
+        barStyle={colors.text == '#FFF' ? 'light-content' : 'dark-content'}/>
       <View style={{alignItems:'center', flex:1, padding:'5%'}}>
         <Text style={{fontSize:20, color:colors.text}}>Populer</Text>
       </View>
       <View style={{flex:9}}>
         <SongList 
           songs={flatListItem} 
-          onPress={(e, created_by, title) => toViewSong(e, created_by, title)}
+          onPress={(id) => toViewSong(id)}
           refreshing={refreshing}
           onRefresh={onRefresh}
         />

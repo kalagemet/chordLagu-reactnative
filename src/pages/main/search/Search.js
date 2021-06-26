@@ -70,12 +70,10 @@ export default function Search({ navigation }) {
         }
     }
 
-    const toViewSong = (e, created_by, title) => {
+    const toViewSong = (id) => {
         navigation.navigate('ViewSong', {
-            path: e,
-            created: created_by,
-            user: email,
-            title: title
+            id: id,
+            user: email
         });
     }
 
@@ -123,7 +121,7 @@ export default function Search({ navigation }) {
             <View style={{ flex: 11 }}>
                 <SongList
                     songs={list}
-                    onPress={(e, created_by, title) => toViewSong(e, created_by, title)}
+                    onPress={(id) => toViewSong(id)}
                     onArtistPress={(id, name) => getSongsByArtist(id, name)}
                     handleLoadMore={() => handleLoadMore()}
                     loading={loading}

@@ -127,6 +127,20 @@ export async function getSongContent(songPath, onReceived, onError){
     })
 }
 
+export async function getTerkait(songPath, onReceived, onError){
+    axios.get('https://app.desalase.id/terkait/' + songPath, {
+        headers: {
+        apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+        }
+    })
+    .then(res => {
+        onReceived(res.data)
+    }, (error) => {
+        onError()
+        toastError()
+    })
+}
+
 function getQueryString(data = {}) {
     return Object.entries(data)
       .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
@@ -187,7 +201,7 @@ export async function deleteChord(id, onSuccess, onError){
         apa: "79fa2fcaecf5c83c299cd96e2ba44710",
         'Content-Type': "application/x-www-form-urlencoded"
     };
-    axios.post('https://app.desalase.id/destroy', getQueryString(song), { headers })
+    axios.delete('https://app.desalase.id/destroy', getQueryString(song), { headers })
     .then(res => {
         if (res.data.error){
             ToastAndroid.showWithGravityAndOffset(
@@ -216,7 +230,7 @@ export async function updateChord(data, onSuccess, onError){
         apa: "79fa2fcaecf5c83c299cd96e2ba44710",
         'Content-Type': "application/x-www-form-urlencoded"
     };
-    axios.post('https://app.desalase.id/update', getQueryString(song), { headers })
+    axios.put('https://app.desalase.id/update', getQueryString(song), { headers })
     .then(res => {
         onSuccess()
     }, (error) => {

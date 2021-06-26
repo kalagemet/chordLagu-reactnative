@@ -41,7 +41,7 @@ export default function SongList({handleLoadMore, songs, search, onPress, loadin
                         <View>
                             {
                                 (item.title || item.judul) ? //List lagu
-                                <TouchableOpacity style={styles.item} onPress={() => onPress(item.id, item.created_by, item.judul +' '+ item.nama_band)}>
+                                <TouchableOpacity style={styles.item} onPress={() => onPress(item.id)}>
                                     <View style={{flex:4}}>
                                         <Text style={{color:colors.text}}>{item.title ? toTitleCase(item.title) : item.judul}</Text>
                                         <Text style={{color:colors.primary}} numberOfLines={1}>{item.artist ? toTitleCase(item.artist) : item.nama_band }</Text>
@@ -62,7 +62,7 @@ export default function SongList({handleLoadMore, songs, search, onPress, loadin
                         </View>
                     )
                 }}
-                keyExtractor={songs => songs.key ? songs.key.toString() : songs.id.toString()}
+                keyExtractor={songs => songs.id.toString()}
                 ListFooterComponent={renderFooter}
                 onEndReachedThreshold={0.4}
                 onEndReached={() => {

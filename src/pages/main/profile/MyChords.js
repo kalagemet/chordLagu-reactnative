@@ -22,12 +22,10 @@ export default function MyChords({navigation, route}) {
       setRefreshing(false)
     }
 
-    const toViewSong = (e, created_by, title) => {
+    const toViewSong = (id) => {
         navigation.navigate('ViewSong', {
-            path: e,
-            created : created_by,
-            user : userEmail,
-            title : title
+            id: id,
+            user : userEmail
         });
     }
 
@@ -40,7 +38,7 @@ export default function MyChords({navigation, route}) {
         <View style={{flex:1}}>
             <SongList 
                 songs={flatListItems} 
-                onPress={(e,created_by, title) => toViewSong(e, created_by, title)}
+                onPress={(id) => toViewSong(id)}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
             />
