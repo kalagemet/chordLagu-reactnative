@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { StyleSheet, Alert, ToastAndroid, Text, View, BackHandler, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, Alert, ToastAndroid, Text, View, BackHandler, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { getStreamsBySearch } from '../api/StreamsApi';
 import StreamList from '../components/StreamList';
@@ -43,6 +43,7 @@ export default function ViewSong({ navigation, route }) {
   const webViewRef = useRef();
   
   React.useEffect(() => {
+    console.log(id)
     setLoading(true)
     getChordContent(id)
     API.getTerkait(id, (data)=>{
@@ -76,37 +77,40 @@ export default function ViewSong({ navigation, route }) {
 
   const getChordContent = (id) => {
     STORAGE.getSavedSong(id, (item) => {
-      if (item && item.id == id) {
+      if (item && item.id == id){
+        setFavourited(true)
+      }
+      API.getSongContent(id, (data)=>{
         let chordData = {
-          judul : item.judul,
-          nama_band : item.nama_band,
-          created_by : item.created_by
+          judul : data.judul,
+          nama_band : data.nama_band,
+          created_by : data.created_by
         }
         setData(chordData)
-        setFavourited(true)
-        setContent(decode(item.isi))
-        getStreamsBySearch(item.judul+' '+item.nama_band, (streamsList) => {
+        setContent(decode(data.isi))
+        getStreamsBySearch(data.judul+' '+data.nama_band, (streamsList) => {
           setStreamsList(streamsList)
         })
         setLoading(false)
-      } else {
-        API.getSongContent(id, (data)=>{
+      },()=>{
+        if (item && item.id == id) {
           let chordData = {
-            judul : data.judul,
-            nama_band : data.nama_band,
-            created_by : data.created_by
+            judul : item.judul,
+            nama_band : item.nama_band,
+            created_by : item.created_by
           }
           setData(chordData)
-          setContent(decode(data.isi))
-          getStreamsBySearch(data.judul+' '+data.nama_band, (streamsList) => {
+          setFavourited(true)
+          setContent(decode(item.isi))
+          getStreamsBySearch(item.judul+' '+item.nama_band, (streamsList) => {
             setStreamsList(streamsList)
           })
           setLoading(false)
-        },()=>{
+        }else{
           setLoading(false)
           navigation.pop()
-        })
-      }
+        }
+      })
     })
     
   }
@@ -190,8 +194,14 @@ export default function ViewSong({ navigation, route }) {
   const _delete = () => {
     setLoading(true)
     API.deleteChord(id, ()=> {
+      STORAGE.deleteSaved(id, ()=>{
+        setLoading(false)
+        showToast("Berhasil Dihapus")
+        navigation.pop();
+      })
+    }, ()=>{
       setLoading(false)
-      showToast("Berhasil Dihapus")
+      showToast("Gagal Dihapus")
       navigation.pop();
     })
   }
@@ -205,21 +215,35 @@ export default function ViewSong({ navigation, route }) {
     setShowStream(false)
   }
 
-  const onClickDownload = () => {
+  const onClickLike = () => {
+    const props = {
+      id_chord : id,
+      id_user : user
+    }
     setLoading(true)
     if (favourited) {
-      STORAGE.deleteSaved(id, () => {
-        setFavourited(false)
+      API.unLike(props, ()=>{
+        STORAGE.deleteSaved(id, () => {
+          setFavourited(false)
+          setLoading(false)
+          showToast("Berhasil Dihapus dari Favorit")
+        })
+      }, ()=>{
         setLoading(false)
-        showToast("Berhasil Dihapus dari Favorit")
+        showToast("Gagal Dihapus dari Favorit, periksa koneksi internet")
       })
     } else {
-      API.getSongContent(id, (data) => {
-        STORAGE.saveSong(data, () => {
-          setFavourited(true)
-          setLoading(false)
-          showToast("Berhasil Disimpan di Favorit")
+      API.like(props, ()=>{
+        API.getSongContent(id, (data) => {
+          STORAGE.saveSong(data, () => {
+            setFavourited(true)
+            setLoading(false)
+            showToast("Berhasil Disimpan di Favorit")
+          })
         })
+      }, ()=>{
+        setLoading(false)
+        showToast("Gagal Disimpan di Favorit")
       })
     }
   }
@@ -231,19 +255,6 @@ export default function ViewSong({ navigation, route }) {
       setSelectedChord(chord)
       setShowChord(true)
     }
-  }
-
-  const listTerkait = () => {
-    return(
-      chordTerkait.forEach((item) => {
-        <TouchableOpacity style={styles.item} onPress={() => getChordContent(item.id)}>
-          <View style={{flex:4}}>
-            <Text style={{color:colors.text}}>{item.judul}</Text>
-            <Text style={{color:colors.primary}} numberOfLines={1}>{item.nama_band }</Text>
-          </View>
-        </TouchableOpacity>
-      })
-    )
   }
 
   const drawerHandler = () => {
@@ -264,15 +275,18 @@ export default function ViewSong({ navigation, route }) {
     return (
       <View style={{...styles.bottomSheetContainer, backgroundColor:colors.background}}>
         <View style={styles.scroll}>
-          {
-            scrollActive ?
-              <Ionicons color={colors.primary} size={25} name="pause" onPress={stop} /> :
-              <Ionicons color={colors.primary} size={25} name="play" onPress={start} />
-          }
+          <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}} onPress={scrollActive ? stop : start} >
+            <Text style={{fontSize:20, color:colors.primary, marginRight:'3%'}}>Scroll</Text>
+            {
+              scrollActive ?
+                <Ionicons color={colors.primary} size={25} name="pause" /> :
+                <Ionicons color={colors.primary} size={25} name="play" />
+            }
+          </TouchableOpacity>
           <Slider
             thumbTintColor={colors.notification}
             minimumTrackTintColor={colors.notification}
-            style={{ flex: 1, marginHorizontal: 20}}
+            style={{ flex: 1}}
             value={sliderValue}
             onValueChange={(sliderValue) => handelSliderChange(sliderValue)}
             minimumValue={0}
@@ -293,13 +307,13 @@ export default function ViewSong({ navigation, route }) {
           {
             user == data.created_by ?
               <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'space-between' }}>
-                <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickDownload} />
+                <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickLike} />
                 <Ionicons name="create" style={{ fontSize: 30, color: colors.primary }} onPress={() => navigation.navigate('EditSong', { path: id })} />
                 <Ionicons name="trash" style={{ fontSize: 30, color: colors.primary, justifyContent: 'flex-end' }} onPress={onDeleteSong} />
               </View>
               :
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 2 }}>
-                <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickDownload} />
+                <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickLike} />
               </View>
           }
         </View>
@@ -347,6 +361,7 @@ export default function ViewSong({ navigation, route }) {
                 body {
                   color:${colors.text};
                   font-size: ${fontSize}px;
+                  font-family: monospace;
                 }
                 .chord {
                   color:${colors.notification};
@@ -358,7 +373,7 @@ export default function ViewSong({ navigation, route }) {
           onMessage = {(event)=> handleMessage(event.nativeEvent.data)}
           javaScriptEnabled = {true}
           style={{margin:0, padding:0, backgroundColor:colors.background}}
-          scalesPageToFit={true}
+          scalesPageToFit={false}
         />
       </View>
       <BottomSheet

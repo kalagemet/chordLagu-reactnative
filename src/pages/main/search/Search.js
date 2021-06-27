@@ -38,33 +38,30 @@ export default function Search({ navigation }) {
         if (query != '') {
             setInitialLoad(true)
             setLoading(true)
-            let l = [];
             //SEARCH ARTIST/BAND
             searchArtist(query, (data) => {
                 setSongs(data)
-                l = data;
-            }, () => {
-                setInitialLoad(false)
-                setRefreshing(false)
-            })
-            //SEARCH LAGU
-            searchLagu(query, (data) => {
-                const songs = data.row;
-                songs.forEach(song => {
-                    l.push(song)
-                });
-                let i = 1;
-                l.forEach(list => {
-                    list.key = i;
-                    i++;
+                let l = data;
+                //SEARCH LAGU
+                searchLagu(query, (data) => {
+                    const songs = data.row;
+                    songs.forEach(song => {
+                        l.push(song)
+                    });
+                    let i = 1;
+                    l.forEach(list => {
+                        list.key = i;
+                        i++;
+                    })
+                    setList(l)
+                    setInitialLoad(false)
+                    data.currentPage >= data.totalPages && setLoading(false)
+                    setRefreshing(false)
+                }, () => {
+                    setList(songs)
                 })
-                setList(l)
-                setInitialLoad(false)
-                data.currentPage >= data.totalPages && setLoading(false)
-                setRefreshing(false)
             }, () => {
                 setInitialLoad(false)
-                setList(songs)
                 setRefreshing(false)
             })
         }
@@ -80,7 +77,8 @@ export default function Search({ navigation }) {
     const getSongsByArtist = (id, name) => {
         navigation.navigate('SongsByArtistList', {
             id: id,
-            name: name
+            name: name,
+            user: email
         });
     }
 
@@ -92,8 +90,6 @@ export default function Search({ navigation }) {
             });
             setList(songs)
             setCurrentPage(data.currentPage)
-            console.log("currentState : " + currentPage)
-            console.log("current : " + data.currentPage + ", total : " + data.totalPages)
             data.currentPage >= data.totalPages && setLoading(false)
         }, () => {
             setInitialLoad(false)

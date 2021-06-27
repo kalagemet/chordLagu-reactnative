@@ -2,6 +2,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import React, { useState } from 'react';
 import SongList from '../../components/SongList';
 import * as STORAGE from '../../Storage';
+import * as API from '../../api/SongDbApi';
 
 export default function Favourites({ navigation }) {
 
@@ -11,17 +12,36 @@ export default function Favourites({ navigation }) {
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            STORAGE.getUserInfo((data) => {
-                setRefreshing(true)
-                data && setEmail(data.email)
+            setRefreshing(true)
+            getLikesList()
+        });
+        return unsubscribe;
+    }, [navigation])
+
+    const getLikesList = () => {
+        STORAGE.getUserInfo((data) => {
+            if(data){
+                API.syncLocalAndApiLikes(data.email, ()=>console.log('sync success'), ()=>console.log('sync failed'))
+                setEmail(data.email)
+                API.getMyLikes(data.email, (data)=>{
+                    console.log('dari api')
+                    setFlatListItems(data.row)
+                    setRefreshing(false)
+                }, ()=>{
+                    console.log('dari local')
+                    STORAGE.getSavedList((data) => {
+                        setFlatListItems(data)
+                    })
+                    setRefreshing(false)
+                })
+            }else {
                 STORAGE.getSavedList((data) => {
                     setFlatListItems(data)
                 })
                 setRefreshing(false)
-            })
-        });
-        return unsubscribe;
-    }, [navigation])
+            }
+        })
+    }
 
     const toViewSong = (id) => {
         navigation.navigate('ViewSong', {
@@ -32,10 +52,7 @@ export default function Favourites({ navigation }) {
 
     const onRefresh = () => {
         setRefreshing(true)
-        STORAGE.getSavedList((data) => {
-            setFlatListItems(data)
-        })
-        setRefreshing(false)
+        getLikesList()
     }
 
     return (

@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Loader from '../../../components/Loader';
 import SongList from '../../../components/SongList';
 import { getSongsByArtist, loadMoreByArtist } from '../../../api/SongDbApi';
-import * as STORAGE from '../../../Storage';
 
 export default function SongsByArtistList({ navigation, route }) {
 
@@ -11,6 +10,7 @@ export default function SongsByArtistList({ navigation, route }) {
     const [bandSongs, setBandSongs] = useState([])
     const [currentPage, setCurrentPage] = useState(0)
     const artistId = route.params.id
+    const email = route.params.user
     const [refreshing, setRefreshing] = useState(false)
 
     React.useEffect(() => {
@@ -26,7 +26,8 @@ export default function SongsByArtistList({ navigation, route }) {
 
     const toViewSong = (id) => {
         navigation.navigate('ViewSong', {
-            id: id
+            id: id,
+            user: email
         });
     }
 
@@ -39,7 +40,7 @@ export default function SongsByArtistList({ navigation, route }) {
             setBandSongs(songs)
             setCurrentPage(data.currentPage)
             console.log("current : " + data.currentPage + ", total : " + data.totalPages)
-            data.currentPage == data.totalPages && setLoading(false)
+            data.currentPage >= data.totalPages && setLoading(false)
         }, () => {
             setLoading(false)
         })

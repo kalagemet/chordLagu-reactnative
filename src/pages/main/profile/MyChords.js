@@ -36,17 +36,12 @@ export default function MyChords({navigation, route}) {
 
     return (
         <View style={{flex:1}}>
-            {
-                flatListItems.totalItems > 0 ?
-                <SongList
-                    songs={flatListItems}
-                    onPress={(id) => toViewSong(id)}
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                />      
-                :
-                <Text style={{alignSelf:'center', marginTop:'10%'}}>Tidak Ada Chord</Text>
-            }
+            <SongList
+                songs={flatListItems}
+                onPress={(id) => toViewSong(id)}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+            />
         </View>
     );
     

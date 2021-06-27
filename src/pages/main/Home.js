@@ -27,7 +27,10 @@ export default function Home({navigation}) {
     getPopular((songList) => {
       setFlatlistItem(songList),
       setRefreshing(false)
-    }, ()=> setRefreshing(false));
+    }, ()=>{
+      setFlatlistItem([])
+      setRefreshing(false)
+    });
 
     STORAGE.getLoginStatus((value)=>{
       if(!value){
@@ -74,10 +77,10 @@ export default function Home({navigation}) {
         animated={true}
         backgroundColor={colors.card}
         barStyle={colors.text == '#FFF' ? 'light-content' : 'dark-content'}/>
-      <View style={{alignItems:'center', flex:1, padding:'5%'}}>
+      <View style={{alignItems:'center', flex:1, paddingTop:'5%'}}>
         <Text style={{fontSize:20, color:colors.text}}>Populer</Text>
       </View>
-      <View style={{flex:9}}>
+      <View style={{flex:15}}>
         <SongList 
           songs={flatListItem} 
           onPress={(id) => toViewSong(id)}
