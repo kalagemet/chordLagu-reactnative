@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#eee',
       borderBottomLeftRadius: 3,
       borderBottomRightRadius: 3,
+      fontFamily:'monospace'
     },
     sideMenuContainer: {
       backgroundColor: '#eee',

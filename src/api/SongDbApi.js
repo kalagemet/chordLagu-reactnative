@@ -310,6 +310,24 @@ export async function getMyLikes(user_id, onReceived, onError){
     })
 }
 
+export async function loadMoreMyLikes(user_id, currentPage, onReceived, onError) {
+    await axios.get('https://app.desalase.id/disukai', {
+        headers: {
+            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+        },
+        params : {
+            id_user : user_id,
+            page: currentPage + 1
+        }
+    })
+    .then(res => {
+        onReceived(res.data)
+    }, (error) => {
+        onError()
+        toastError()
+    })
+}
+
 export function syncLocalAndApiLikes(user_id, onSuccess, onError){
     let local = []
     let api = []

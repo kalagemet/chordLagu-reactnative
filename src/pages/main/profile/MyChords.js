@@ -9,7 +9,10 @@ export default function MyChords({navigation, route}) {
     const userEmail = route.params.user
 
     React.useEffect(()=>{
-        getListSongs()
+        const unsubscribe = navigation.addListener('focus', () => {
+            getListSongs()
+        });
+        return unsubscribe;
     },[navigation])
 
     const getListSongs = () => {

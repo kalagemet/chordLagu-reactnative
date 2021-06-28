@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import { View, StyleSheet, TextInput, KeyboardAvoidingView, Platform, ScrollView, ToastAndroid } from "react-native";
-import { addSong } from '../api/SongsApi';
 import Loader from '../components/Loader';
 import * as STORAGE from '../Storage';
 import Button from '../components/Button';
@@ -135,5 +134,6 @@ const styles = StyleSheet.create({
       backgroundColor: '#eee',
       borderBottomLeftRadius: 3,
       borderBottomRightRadius: 3,
+      fontFamily: 'monospace'
     }
   })

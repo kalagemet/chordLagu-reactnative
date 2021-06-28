@@ -1,8 +1,9 @@
 import { Chord, Chord2, Chord3, Chord4, Chord5, Chord6 } from './capo';
+import chords from '../assets/chords/guitar.json';
 
 export const decode = (isi) => {
   var data = isi;
-  let chords = [ ...Chord, ...Chord2, ...Chord3, ...Chord4, ...Chord5, ...Chord6 ]
+  //let chords = [ ...Chord, ...Chord2, ...Chord3, ...Chord4, ...Chord5, ...Chord6 ]
 
   data = data.replace(/Gb/g, "F#");
   data = data.replace(/Ab/g, "G#");
@@ -10,10 +11,18 @@ export const decode = (isi) => {
   data = data.replace(/Db/g, "C#");
   data = data.replace(/Eb/g, "D#");
   data = data.replace(/A:s1:([a-z])/g, "a:s1:$1");
-  chords.forEach(chord => {
-    let re = new RegExp(":(" + chord + ")(.*?):","g");
-    data = data.replace(re, `:<span class="chord">$1$2</span>:`)
-  })
+  let string = data.split(":")
+  string = [...new Set(string)]
+  for(var i =0; i < string.length; i++){
+    if(chords[string[i]]){
+      let re = new RegExp(':'+string[i]+':',"g")
+      data = data.replace(re, `:<span class="chord">${string[i]}</span>:`)
+    }
+  }
+  // chords.forEach(chord => {
+  //   let re = new RegExp(":(" + chord + ")(.*?):","g");
+  //   data = data.replace(re, `:<span class="chord">$1$2</span>:`)
+  // })
   //data = data.replace(/:([A-Z])(.*?):/g, `:<span class="chord">$1$2</span>:`);
   data = data.replace(
     /:s10:/g,
