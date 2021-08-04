@@ -332,23 +332,33 @@ export function syncLocalAndApiLikes(user_id, onSuccess, onError){
     let local = []
     let api = []
     STORAGE.getSavedList((data)=>{
-        data.forEach(item =>{
+        data && data.forEach(item =>{
             local = [...local, item.id]
         })
     })
-    getMyLikes(user_id, (data)=>{
-        data.row.forEach(item => {
-            api = [...api, item.id]
-        });
 
-        let b = new Set(local);
-        let difference = [...api].filter(x => !b.has(x));
-        console.log(difference)
-        difference.forEach(item => {
-            getSongContent(item, (data) => {
-                STORAGE.saveSong(data, ()=> console.log(item+' saved'))
-            },()=>console.log(item+' failed to save'))
-        });
-        onSuccess()
-    }, ()=>onError())
+    let current=-1
+    let max=0
+    do {
+        loadMoreMyLikes(user_id,current, (data)=>{
+            data.row.forEach(item => {
+                api = [...api, item.id]
+            })
+            max = data.totalPages
+            current = data.currentPage
+            if(current>=max){
+                let b = new Set(local);
+                let difference = [...api].filter(x => !b.has(x));
+                console.log("diff "+difference)
+                console.log(difference)
+                difference.forEach(item => {
+                    getSongContent(item, (data) => {
+                        STORAGE.saveSong(data, ()=> console.log(item+' saved'))
+                    },()=>console.log(item+' failed to save'))
+                });
+                onSuccess()
+            }
+        },()=>onError())
+        current++
+    } while(current <= max)
 }

@@ -221,19 +221,40 @@ export default function ViewSong({ navigation, route }) {
       id_user : user
     }
     setLoading(true)
-    if (favourited) {
-      API.unLike(props, ()=>{
+    if (user){
+      if (favourited) {
+        API.unLike(props, ()=>{
+          STORAGE.deleteSaved(id, () => {
+            setFavourited(false)
+            setLoading(false)
+            showToast("Berhasil Dihapus dari Favorit")
+          })
+        }, ()=>{
+          setLoading(false)
+          showToast("Gagal Dihapus dari Favorit, periksa koneksi internet")
+        })
+      } else {
+        API.like(props, ()=>{
+          API.getSongContent(id, (data) => {
+            STORAGE.saveSong(data, () => {
+              setFavourited(true)
+              setLoading(false)
+              showToast("Berhasil Disimpan di Favorit")
+            })
+          })
+        }, ()=>{
+          setLoading(false)
+          showToast("Gagal Disimpan di Favorit")
+        })
+      }
+    }else{
+      if (favourited) {
         STORAGE.deleteSaved(id, () => {
           setFavourited(false)
           setLoading(false)
           showToast("Berhasil Dihapus dari Favorit")
         })
-      }, ()=>{
-        setLoading(false)
-        showToast("Gagal Dihapus dari Favorit, periksa koneksi internet")
-      })
-    } else {
-      API.like(props, ()=>{
+      } else {
         API.getSongContent(id, (data) => {
           STORAGE.saveSong(data, () => {
             setFavourited(true)
@@ -241,11 +262,8 @@ export default function ViewSong({ navigation, route }) {
             showToast("Berhasil Disimpan di Favorit")
           })
         })
-      }, ()=>{
-        setLoading(false)
-        showToast("Gagal Disimpan di Favorit")
-      })
-    }
+      }
+    }    
   }
 
   const handleMessage = (selectedChord) => {
