@@ -60,6 +60,20 @@ export async function getPopular(onReceived, onError) {
     })
 }
 
+export async function getTerbaru(onReceived, onError) {
+    await axios.get('https://app.desalase.id/terbaru', {
+        headers: {
+            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+        }
+    })
+    .then(res => {
+        onReceived(res.data)
+    }, (error) => {
+        onError()
+        toastError()
+    })
+}
+
 export async function loadMore(query, currentPage, onReceived, onError) {
     await axios.get('https://app.desalase.id/cari', {
         headers: {

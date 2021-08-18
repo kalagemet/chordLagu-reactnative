@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
-import { StatusBar, Text, View } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import { getPopular } from '../../api/SongDbApi';
+import { getPopular, getTerbaru } from '../../api/SongDbApi';
 import { getAdStatus } from '../../api/AdsApi';
 import SongList from '../../components/SongList';
 import * as STORAGE from '../../Storage';
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 import { useTheme } from '@react-navigation/native';
+import Button from '../../components/Button';
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/2186621936';
 
@@ -16,20 +17,13 @@ export default function Home({navigation}) {
   const [flatListItem, setFlatlistItem] = useState([])
   const [refreshing, setRefreshing] = useState(false)
   const [showAds, setShowAds] = useState(false)
+  const [category, setCategory] = useState('popular')
 
   React.useEffect(()=>{
     setRefreshing(true);
 
     getAdStatus((adStatus) => {
       setShowAds(adStatus.homeBannerAd)
-    });
-
-    getPopular((songList) => {
-      setFlatlistItem(songList),
-      setRefreshing(false)
-    }, ()=>{
-      setFlatlistItem([])
-      setRefreshing(false)
     });
 
     STORAGE.getLoginStatus((value)=>{
@@ -47,7 +41,13 @@ export default function Home({navigation}) {
     })
   }, [navigation])
 
-  const getListSongs = () => {
+  React.useEffect(()=>{
+    category == 'popular' ?
+      getListPopular() :
+      getListNew()
+  }, [category])
+
+  const getListPopular = () => {
     setRefreshing(true)
     getPopular((songList) => {
       setFlatlistItem(songList),
@@ -55,8 +55,18 @@ export default function Home({navigation}) {
     }, ()=> setRefreshing(false));
   }
 
+  const getListNew = () => {
+    setRefreshing(true)
+    getTerbaru((songList) => {
+      setFlatlistItem(songList),
+      setRefreshing(false)
+    }, ()=> setRefreshing(false));
+  }
+
   const onRefresh = () => {
-    getListSongs()
+    category == 'popular' ?
+      getListPopular() :
+      getListNew()
   }
 
   const toViewSong = (id) => {
@@ -77,8 +87,10 @@ export default function Home({navigation}) {
         animated={true}
         backgroundColor={colors.card}
         barStyle={colors.text == '#FFF' ? 'light-content' : 'dark-content'}/>
-      <View style={{alignItems:'center', flex:1, paddingTop:'5%'}}>
-        <Text style={{fontSize:20, color:colors.text}}>Populer</Text>
+      <View style={{alignItems:'center', flex:1, justifyContent:'center', padding:'3%', flexDirection:'row'}}>
+        <Button name='Populer' height='80%' width='25%' onPress={()=>setCategory('popular')} disabled={category == 'popular' ? true : false} />
+        <View style={{width:'5%'}} />
+        <Button name='Baru' height='80%' width='25%' onPress={()=>setCategory('new')} disabled={category == 'new' ? true : false}/>
       </View>
       <View style={{flex:15}}>
         <SongList 
