@@ -138,8 +138,8 @@ export default function EditSong({navigation, route}) {
           </KeyboardAvoidingView>
         </ScrollView>
       </View>
-      <View style={{height:'70%'}}>
-        <Button name='Simpan' onPress={uploadChord} />
+      <View style={{height:'70%', paddingHorizontal:'5%'}}>
+        <Button name='Simpan' onPress={uploadChord} height='8%' />
       </View>
     </>
   )

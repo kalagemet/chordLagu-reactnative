@@ -92,14 +92,14 @@ export default function Login({ navigation }) {
 
                 <View style={{margin:'3%'}}/>
 
-                <Button name='Login' onPress={handleLogin}/>
-                <Button name='Daftar' onPress={toSignup}/>
+                <Button name='Login' onPress={handleLogin} height='11%'/>
+                <Button name='Daftar' onPress={toSignup} height='11%'/>
 
                 <View style={{paddingVertical:10, alignItems:'center'}}>
                     <Text>Atau</Text>
                 </View>
 
-                <Button name='Masuk Dengan Google' icon='logo-google' onPress={_signIn}/>
+                <Button name='Masuk Dengan Google' icon='logo-google' onPress={_signIn} height='11%'/>
 
                 <View style={{paddingVertical:20, alignItems:'center'}}>
                     <Text style={{fontWeight:'bold', color:'grey'}}

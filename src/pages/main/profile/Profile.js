@@ -60,12 +60,12 @@ export default function Profile({navigation}) {
                 {
                     userData.email ?
                     <View style={{flex:1}}>
-                        <Button name='Tulis Chord' onPress={toMakeSong} icon='create-outline'/>
-                        <Button name='Chord Saya' onPress={toMyChords} icon='file-tray-full-outline'/>
+                        <Button name='Tulis Chord' onPress={toMakeSong} icon='create-outline' height='11%' />
+                        <Button name='Chord Saya' onPress={toMyChords} icon='file-tray-full-outline' height='11%'/>
                     </View>
                     :
                     <View style={{flex:1}}>
-                        <Button name='Login' onPress={()=>navigation.navigate("Login")} icon='log-in-outline' />
+                        <Button name='Login' onPress={()=>navigation.navigate("Login")} icon='log-in-outline' height='11%' />
                     </View>
                 }
             </View>
@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
     },
     ListContainer : {
         flex : 6,
+        paddingHorizontal:'5%'
     },
     Button : {
         flexDirection:'row',

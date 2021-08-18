@@ -104,8 +104,8 @@ export default function MakeSong({navigation}) {
           </KeyboardAvoidingView>
         </ScrollView>
       </View>
-      <View style={{height:'70%'}}>
-      <Button name='Unggah' onPress={uploadChord} />
+      <View style={{height:'70%', paddingHorizontal:'5%'}}>
+      <Button name='Unggah' onPress={uploadChord} height='8%'/>
       </View>
     </>
   )

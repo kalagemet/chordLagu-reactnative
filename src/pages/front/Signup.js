@@ -41,8 +41,8 @@ export default function Signup ({navigation}) {
 
             <View style={{margin:'3%'}}/>
 
-            <Button name='Daftar' onPress={handleSignUp}/>
-            <Button name='Sudah Punya Akun? Login' onPress={() => navigation.pop()}/>
+            <Button name='Daftar' onPress={handleSignUp} height='11%'/>
+            <Button name='Sudah Punya Akun? Login' onPress={() => navigation.pop()} height='11%'/>
             
         </View>
       </View>
