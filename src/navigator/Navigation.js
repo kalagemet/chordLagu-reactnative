@@ -20,7 +20,11 @@ function AppContainer() {
 
   React.useEffect(()=>{
     getTheme((value)=>{
-      value == 'dark' ? setIsThemeDark(true) : colorScheme == 'dark' ? setIsThemeDark(true) : setIsThemeDark(false)
+      if(value){
+        value == 'dark' ? setIsThemeDark(true) : setIsThemeDark(false)
+      } else{
+        colorScheme == 'dark' ? setIsThemeDark(true) : setIsThemeDark(false)
+      }
     })
   },[])
 

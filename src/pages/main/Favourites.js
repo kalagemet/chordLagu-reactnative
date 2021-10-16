@@ -85,7 +85,7 @@ export default function Favourites({ navigation }) {
                     onRefresh={onRefresh}
                     loading={loading}
                     handleLoadMore={handleLoadMore}
-                    search
+                    paginate={true}
                 />      
                 :
                 <Text style={{alignSelf:'center', marginTop:'10%'}}>Tidak Ada Chord Favorit</Text>

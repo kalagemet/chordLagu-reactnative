@@ -201,6 +201,24 @@ export async function getMyChords(user_id, onReceived, onError){
     })
 }
 
+export async function loadMoreMyChords(user_id, currentPage, onReceived, onError) {
+    await axios.get('https://app.desalase.id/created', {
+        headers: {
+            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+        },
+        params : {
+            user_id : user_id,
+            page: currentPage + 1
+        }
+    })
+    .then(res => {
+        onReceived(res.data)
+    }, (error) => {
+        onError()
+        toastError()
+    })
+}
+
 export async function deleteChord(id, onSuccess, onError){
     const song = { 
         id : id

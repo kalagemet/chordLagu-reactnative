@@ -107,7 +107,7 @@ export default function Home({navigation}) {
         />
       </View>
       <View style={{alignItems:'center', flex:1, justifyContent:'center', padding:'3%', flexDirection:'row'}}>
-        <Button name='Populer' height='80%' width='25%' onPress={()=>setCategory('popular')} disabled={category == 'popular' ? true : false} />
+        <Button name='Banyak Dilihat' height='80%' width='30%' onPress={()=>setCategory('popular')} disabled={category == 'popular' ? true : false} />
         <View style={{width:'5%'}} />
         <Button name='Baru' height='80%' width='25%' onPress={()=>setCategory('new')} disabled={category == 'new' ? true : false}/>
       </View>

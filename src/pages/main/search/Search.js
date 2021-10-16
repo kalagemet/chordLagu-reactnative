@@ -123,7 +123,7 @@ export default function Search({ navigation, route }) {
                     onArtistPress={(id, name) => getSongsByArtist(id, name)}
                     handleLoadMore={() => handleLoadMore()}
                     loading={loading}
-                    search
+                    paginate={true}
                     refreshing={refreshing}
                     onRefresh={onRefresh}
                 />

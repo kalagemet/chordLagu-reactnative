@@ -65,7 +65,7 @@ export default function SongsByArtistList({ navigation, route }) {
                 <SongList
                     songs={bandSongs}
                     onPress={(id) => toViewSong(id)}
-                    search={true}
+                    paginate={true}
                     handleLoadMore={handleLoadMore}
                     loading={loading}
                     refreshing={refreshing}

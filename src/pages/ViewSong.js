@@ -17,6 +17,7 @@ import chords from '../assets/chords/guitar.json';
 import ChordModal from '../components/ChordModal';
 import { capoDown, capoUp } from '../utils/capo';
 import Loader from '../components/Loader';
+import KeepAwake from 'react-native-keep-awake';
 
 export default function ViewSong({ navigation, route }) {
   const { colors } = useTheme();
@@ -409,6 +410,7 @@ export default function ViewSong({ navigation, route }) {
           borderTopEndRadius:17
         }}
       />
+      <KeepAwake/>
     </View>
   );
 

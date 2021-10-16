@@ -3,7 +3,7 @@ import { FlatList, ActivityIndicator, Text, View, TouchableOpacity, StyleSheet }
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '@react-navigation/native';
 
-export default function SongList({handleLoadMore, songs, search, onPress, loading, onArtistPress, refreshing, onRefresh}) {
+export default function SongList({handleLoadMore, songs, paginate, onPress, loading, onArtistPress, refreshing, onRefresh}) {
     const { colors } = useTheme();
 
     const toTitleCase = (str) => {
@@ -12,7 +12,7 @@ export default function SongList({handleLoadMore, songs, search, onPress, loadin
         });
     }
     const loadMore=()=>{
-        if(search){
+        if(paginate){
             handleLoadMore();
         }
     }
