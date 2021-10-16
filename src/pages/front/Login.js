@@ -37,7 +37,9 @@ export default function Login({ navigation }) {
             // login with credential
             const firebaseUserCredential = await auth().signInWithCredential(credential)
             STORAGE.setLoginStatus('true', () => {
-                navigation.navigate('Home')
+                setTimeout(()=>{
+                    navigation.reset({routes:[{name:'Home'}]})
+                }, 2000)
             })
         } catch (error) {
             setLoading(false)
@@ -64,7 +66,9 @@ export default function Login({ navigation }) {
             .then(() => {
                 setLoading(false)
                 STORAGE.setLoginStatus('true', () => {
-                    navigation.navigate('Home')
+                    setTimeout(()=>{
+                        navigation.reset({routes:[{name:'Home'}]})
+                    }, 2000)
                 })
             })
             .catch(error => {setErrorMessage(error.message), setLoading(false)})

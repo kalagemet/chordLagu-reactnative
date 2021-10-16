@@ -3,7 +3,6 @@ import { Appearance } from 'react-native';
 import BottomNav from './BottomNav';
 import Login from '../pages/front/Login';
 import Signup from '../pages/front/Signup';
-import Loading from '../pages/front/Loading';
 import ViewSong from '../pages/ViewSong';
 import About from '../pages/main/profile/settings/About';
 import EditSong from '../pages/EditSong';
@@ -69,14 +68,13 @@ function AppContainer() {
     <PreferencesContext.Provider value={preferences}>
       <NavigationContainer theme={theme}>
         <Stack.Navigator>
-          <Stack.Screen name="Loading" component={Loading} options={{headerShown: false}} />
+          <Stack.Screen name="Home" component={BottomNav} options={{headerShown: false}}/>
           <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
           <Stack.Screen name="Signup" component={Signup} options={{headerShown: false}}/>
-          <Stack.Screen name="Home" component={BottomNav} options={{headerShown: false}}/>
           <Stack.Screen name="ViewSong" component={ViewSong} options={{headerShown: false}} />
           <Stack.Screen name="About" component={About} options={{headerShown: false}} />
-          <Stack.Screen name="EditSong" component={EditSong} />
-          <Stack.Screen name="MakeSong" component={MakeSong} />
+          <Stack.Screen name="EditSong" component={EditSong} options={{headerShown: false}} />
+          <Stack.Screen name="MakeSong" component={MakeSong} options={{headerShown: false}} />
         </Stack.Navigator>
       </NavigationContainer>
     </PreferencesContext.Provider>

@@ -40,19 +40,23 @@ export default function Setting({navigation}){
             auth()
             .signOut()
             .then(() => {
-                navigation.reset({routes:[{name:'Loading'}]})
+                setTimeout(()=>{
+                    navigation.reset({routes:[{name:'Home'}]})
+                }, 2000)
             })
             .catch(function() {
             // An error happened.
           });
         } catch (error) {
           if (error.code === statusCodes.SIGN_IN_REQUIRED) {
-              auth()
-              .signOut()
-              .then(() => {
-                navigation.reset({routes:[{name:'Loading'}]})
+                auth()
+                .signOut()
+                .then(() => {
+                    setTimeout(()=>{
+                        navigation.reset({routes:[{name:'Home'}]})
+                    }, 2000)
                 })
-              .catch(function() {
+                .catch(function() {
               // An error happened.
             });
           } else {

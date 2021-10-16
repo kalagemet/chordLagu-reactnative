@@ -12,12 +12,12 @@ function Button({name, icon, onPress, width, height, disabled}){
   
   return (
     <TouchableOpacity 
-      style={{...styles.Button, backgroundColor: colors.card, width:width, height:height, opacity: disabled ? 0.3 : 1}} 
+      style={{...styles.Button, backgroundColor: disabled ? colors.text : colors.card, width:width, height:height, elevation: disabled ? 0 : 5 }} 
       onPress={()=>onPress()} 
       disabled={disabled}
     >
         {icon && <Ionicons name={icon} style={{...styles.Icon, color:colors.text}}/>}
-        <Text style={{color:colors.text}}>{name}</Text>
+        <Text style={{color: disabled ? colors.card : colors.text}}>{name}</Text>
     </TouchableOpacity>
   )
 }

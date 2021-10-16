@@ -9,6 +9,8 @@ import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 import { useTheme } from '@react-navigation/native';
 import Button from '../../components/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { GoogleSignin } from 'react-native-google-signin';
+import SplashScreen from 'react-native-splash-screen';
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/2186621936';
 
@@ -20,8 +22,33 @@ export default function Home({navigation}) {
   const [showAds, setShowAds] = useState(false)
   const [category, setCategory] = useState('popular')
   const [query, setQuery] = useState('')
+  const [initializing, setInitializing] = useState(true);
+
+  function onAuthStateChanged(user) {
+    if(user){
+      STORAGE.setLoginStatus('true', ()=>setStatus())
+    }else{
+      STORAGE.setLoginStatus('false', ()=>setStatus())
+    }
+    if (initializing) setInitializing(false);
+  }
 
   React.useEffect(()=>{
+    SplashScreen.hide();
+    GoogleSignin.configure({
+      //It is mandatory to call this method before attempting to call signIn()
+      scopes: [],
+      offlineAccess: true,
+      // Repleace with your webClientId generated from Firebase console
+      webClientId:
+        '116192262171-6ehlf2kdqo4qiq6vn81k1tppdsqls6vi.apps.googleusercontent.com',
+    });
+
+    const unsubscribe = auth().onAuthStateChanged(onAuthStateChanged);
+    return unsubscribe; // unsubscribe on unmount
+  }, [navigation])
+
+  const setStatus = () => {
     setRefreshing(true);
 
     getAdStatus((adStatus) => {
@@ -29,6 +56,7 @@ export default function Home({navigation}) {
     });
 
     STORAGE.getLoginStatus((value)=>{
+      console.log(value)
       if(!value){
         const user = null
         setCurrentUser(user)
@@ -41,7 +69,7 @@ export default function Home({navigation}) {
         }
       }
     })
-  }, [navigation])
+  }
 
   React.useEffect(()=>{
     category == 'popular' ?
@@ -88,6 +116,8 @@ export default function Home({navigation}) {
     })
     setQuery('')
   }
+
+  if (initializing) return null;
   
   return (
     <View style={{flex:1}}>

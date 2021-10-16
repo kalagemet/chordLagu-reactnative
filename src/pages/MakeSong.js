@@ -66,7 +66,7 @@ export default function MakeSong({navigation}) {
           <Loader loading={loading} />
           <KeyboardAvoidingView>
               <TextInput
-              style={{...styles.input, color:colors.text}}
+              style={{...styles.input, color:colors.text, borderBottomColor:colors.primary}}
               placeholderTextColor={colors.text}
               placeholder="Nama Artis"
               autoFocus={false}
@@ -77,7 +77,7 @@ export default function MakeSong({navigation}) {
               />
 
               <TextInput
-              style={{...styles.input, color:colors.text}}
+              style={{...styles.input, color:colors.text, borderBottomColor:colors.primary}}
               placeholderTextColor={colors.text}
               placeholder="Judul Lagu"
               autoFocus={false}
@@ -89,9 +89,9 @@ export default function MakeSong({navigation}) {
 
               <TextInput
               textAlignVertical="top"
-              style={styles.content}
+              style={{...styles.content, color:colors.text, backgroundColor:colors.background}}
               placeholder={contentPlaceholder}
-              placeholderTextColor="#aaa"
+              placeholderTextColor={colors.text}
               multiline = {true}
               numberOfLines={4}
               autoFocus={false}
@@ -119,21 +119,19 @@ const contentPlaceholder =
 
 const styles = StyleSheet.create({
     container: {
-      padding: 10
+      padding: 20
     },
     input: {
       fontSize: 16,
       borderBottomWidth: 1,
-      borderBottomColor: '#eee',
       marginBottom: 5
     },
     content: {
       flex: 1,
       minHeight: 200,
       padding: 10,
-      backgroundColor: '#eee',
       borderBottomLeftRadius: 3,
       borderBottomRightRadius: 3,
-      fontFamily: 'monospace'
+      fontFamily:'monospace'
     }
   })

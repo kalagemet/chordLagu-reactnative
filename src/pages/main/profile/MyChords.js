@@ -24,8 +24,13 @@ export default function MyChords({navigation, route}) {
     }
 
     const onSongsReceived = (songList) => {
-      setFlatListItems(songList.row)
-      setRefreshing(false)
+        if(songList.totalItems > 0){
+            setFlatListItems(songList.row)
+            setRefreshing(false)
+        } else{
+            setRefreshing(false)
+            setLoading(false)
+        }
     }
 
     const handleLoadMore = async () => {
