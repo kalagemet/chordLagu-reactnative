@@ -11,7 +11,7 @@ export default function Tools({navigation}) {
   return (
     <View style={{flex:1, flexDirection:'row', justifyContent:'space-evenly', paddingTop:'30%'}}>
       <TouchableOpacity 
-        style={{height:'20%', width:'40%', borderRadius:20, elevation:10, alignItems:'center', padding:'3%', backgroundColor:colors.background}}
+        style={{height:'20%', width:'40%', borderRadius:20, elevation:10, justifyContent:'center', alignItems:'center', padding:'3%', backgroundColor:colors.background}}
         onPress={()=>navigation.navigate("Tuner")}
       >
         <Ionicons
@@ -22,7 +22,7 @@ export default function Tools({navigation}) {
         <Text style={{color:colors.primary}}>Tuner</Text>
       </TouchableOpacity>
       <TouchableOpacity 
-        style={{height:'20%', width:'40%', borderRadius:20, elevation:10, alignItems:'center', padding:'3%', backgroundColor:colors.background}}
+        style={{height:'20%', width:'40%', borderRadius:20, elevation:10, justifyContent:'center', alignItems:'center', padding:'3%', backgroundColor:colors.background}}
         onPress={()=>navigation.navigate("ChordLibrary")}  
       >
         <Ionicons
