@@ -31,7 +31,7 @@ export default class TunerContainer {
       bufferSize: 2048
     });
     Recording.start();
-    Recording.addRecordingEventListener(data => {
+    this.listener = Recording.addRecordingEventListener(data => {
       const frequency = this.pitchFinder(data);
       if (frequency && this.onNoteDetected) {
         let note = 0;
@@ -62,6 +62,7 @@ export default class TunerContainer {
 
   stop(){
     Recording.stop();
+    this.listener.remove();
   }
 
   /**

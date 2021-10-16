@@ -1,54 +1,51 @@
-import { Container, Content, Form, Picker, Text } from 'native-base';
-import React from 'react';
+import { View } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
+import React, {useState} from 'react';
 import chords from '../../../assets/chords/guitar.json';
 import ChordSwiper from '../../../components/ChordSwiper';
 import Loader from '../../../components/Loader';
+import { useTheme } from '@react-navigation/native';
 
-export default class ChordLibrary extends React.Component {
+export default function ChordLibrary({navigation}) {
+    const { colors } = useTheme();
+    const [chordBase, setChordBase] = useState('A')
+    const [chordQuality, setChordQuality] = useState('')
+    const [chordBass, setChordBass] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [selectedChord, setSelectedChord] = useState(chords["A"])
 
-    state = { chordBase : 'A', chordQuality:'', chordBass:'', loading: false, selectedChord:chords["A"]}
-
-    componentDidMount(){
-        
-    }
-
-    handleChordBase = (base) => {
-        this.setState({ chordBase: base})
-        var selectedChord = base+this.state.chordQuality+this.state.chordBass;
+    const handleChordBase = (base) => {
+        setChordBase(base)
+        var selectedChord = base+chordQuality+chordBass;
         let kords = chords[selectedChord.toString()]
-        this.setState({ selectedChord: kords })
+        setSelectedChord(kords)
     }
 
-    handleChordQuality = (quality) => {
-        this.setState({ chordQuality: quality})
-        var selectedChord = this.state.chordBase+quality+this.state.chordBass;
+    const handleChordQuality = (quality) => {
+        setChordQuality(quality)
+        var selectedChord = chordBase+quality+chordBass;
         let kords = chords[selectedChord.toString()]
-        this.setState({ selectedChord: kords })
-        console.log(selectedChord)
+        setSelectedChord(kords)
     }
 
-    handleChordBass = (bass) => {
-        this.setState({ chordBass: bass})
-        var selectedChord = this.state.chordBase+this.state.chordQuality+bass;
+    const handleChordBass = (bass) => {
+        setChordBass(bass)
+        var selectedChord = chordBase+chordQuality+bass;
         let kords = chords[selectedChord.toString()]
-        this.setState({ selectedChord: kords })
-        console.log(selectedChord)
+        setSelectedChord(kords)
     }
 
-    render() {
-        return (
-        <Container>
+    return (
+        <View style={{flex:1}}>
             <Loader
-            loading={this.state.loading} />
-            <Content contentContainerStyle={{ flex: 1 }}>
-            <Form style={{flexDirection:'row', justifyContent:'center', padding:'1%', alignItems:'center'}}>
-                <Text>Chord : </Text>
+            loading={loading} />
+            <View style={{flexDirection:'row', justifyContent:'space-evenly', alignItems:'center'}}>
                 <Picker
-                        note
-                        mode="dropdown"
-                        style={{ width: 80 }}
-                        selectedValue={this.state.chordBase}
-                        onValueChange={chordBase => this.handleChordBase(chordBase)}
+                    mode='dropdown'
+                    style={{width:'33%', color:colors.text}}
+                    dropdownIconColor={colors.text}
+                    selectedValue={chordBase}
+                    onValueChange={chordBase => handleChordBase(chordBase)}
                 >
                     <Picker.Item label="A" value="A" />
                     <Picker.Item label="A#" value="A#" />
@@ -64,11 +61,11 @@ export default class ChordLibrary extends React.Component {
                     <Picker.Item label="G#" value="G#" />
                 </Picker>
                 <Picker
-                        note
-                        mode="dropdown"
-                        style={{ width: 80 }}
-                        selectedValue={this.state.chordQuality}
-                        onValueChange={chordQuality => this.handleChordQuality(chordQuality)}
+                    mode='dropdown'
+                    style={{width:'33%', color:colors.text}}
+                    dropdownIconColor={colors.text}
+                    selectedValue={chordQuality}
+                    onValueChange={chordQuality => handleChordQuality(chordQuality)}
                 >
                     <Picker.Item label="major" value="" />
                     <Picker.Item label="minor" value="m" />
@@ -90,11 +87,11 @@ export default class ChordLibrary extends React.Component {
                     <Picker.Item label="5" value="5" />
                 </Picker>
                 <Picker
-                        note
-                        mode="dropdown"
-                        style={{ width: 80 }}
-                        selectedValue={this.state.chordBass}
-                        onValueChange={chordBass => this.handleChordBass(chordBass)}
+                    mode='dropdown'
+                    style={{width:'33%', color:colors.text}}
+                    dropdownIconColor={colors.text}
+                    selectedValue={chordBass}
+                    onValueChange={chordBass => handleChordBass(chordBass)}
                 >
                     <Picker.Item label="" value="" />
                     <Picker.Item label="/A" value="/A" />
@@ -110,10 +107,9 @@ export default class ChordLibrary extends React.Component {
                     <Picker.Item label="/G" value="/G" />
                     <Picker.Item label="/G#" value="/G#" />
                 </Picker>
-            </Form>
-            <ChordSwiper selectedChord={this.state.selectedChord} name={this.state.chordBase+this.state.chordQuality+this.state.chordBass}/>
-            </Content>
-        </Container>
-        );
-    }
+            </View>
+            <ChordSwiper selectedChord={selectedChord} name={chordBase+chordQuality+chordBass}/>
+        </View>
+    );
+    
 }

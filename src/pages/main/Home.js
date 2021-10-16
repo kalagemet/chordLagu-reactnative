@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StatusBar, View } from 'react-native';
+import { StatusBar, View, TextInput } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { getPopular, getTerbaru } from '../../api/SongDbApi';
 import { getAdStatus } from '../../api/AdsApi';
@@ -8,6 +8,7 @@ import * as STORAGE from '../../Storage';
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 import { useTheme } from '@react-navigation/native';
 import Button from '../../components/Button';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/2186621936';
 
@@ -18,6 +19,7 @@ export default function Home({navigation}) {
   const [refreshing, setRefreshing] = useState(false)
   const [showAds, setShowAds] = useState(false)
   const [category, setCategory] = useState('popular')
+  const [query, setQuery] = useState('')
 
   React.useEffect(()=>{
     setRefreshing(true);
@@ -80,6 +82,12 @@ export default function Home({navigation}) {
     navigation.navigate("MakeSong")
   }
 
+  const searchSong = () => {
+    query && navigation.navigate('Search', {
+      query : query
+    })
+    setQuery('')
+  }
   
   return (
     <View style={{flex:1}}>
@@ -87,13 +95,24 @@ export default function Home({navigation}) {
         animated={true}
         backgroundColor={colors.card}
         barStyle={colors.text == '#FFF' ? 'light-content' : 'dark-content'}/>
+      <View style={{ flex: 1, flexDirection: 'row', elevation: 20, marginHorizontal: '5%', marginTop:'3%', backgroundColor:colors.card, alignItems: 'center', borderRadius: 30 }}>
+        <Ionicons name='search' color={colors.text} style={{ marginHorizontal: '5%', fontSize: 27 }} />
+        <TextInput
+          placeholderTextColor={colors.text}
+          onEndEditing={searchSong}
+          onChangeText={(text) => setQuery(text)}
+          value={query}
+          placeholder='Cari Chord'
+          style={{ width: '75%', color:colors.text }}
+        />
+      </View>
       <View style={{alignItems:'center', flex:1, justifyContent:'center', padding:'3%', flexDirection:'row'}}>
         <Button name='Populer' height='80%' width='25%' onPress={()=>setCategory('popular')} disabled={category == 'popular' ? true : false} />
         <View style={{width:'5%'}} />
         <Button name='Baru' height='80%' width='25%' onPress={()=>setCategory('new')} disabled={category == 'new' ? true : false}/>
       </View>
       <View style={{flex:15}}>
-        <SongList 
+        <SongList
           songs={flatListItem} 
           onPress={(id) => toViewSong(id)}
           refreshing={refreshing}

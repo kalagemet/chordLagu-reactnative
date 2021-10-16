@@ -5,6 +5,7 @@ import Login from '../pages/front/Login';
 import Signup from '../pages/front/Signup';
 import Loading from '../pages/front/Loading';
 import ViewSong from '../pages/ViewSong';
+import About from '../pages/main/profile/settings/About';
 import EditSong from '../pages/EditSong';
 import MakeSong from '../pages/MakeSong';
 import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
@@ -69,6 +70,7 @@ function AppContainer() {
           <Stack.Screen name="Signup" component={Signup} options={{headerShown: false}}/>
           <Stack.Screen name="Home" component={BottomNav} options={{headerShown: false}}/>
           <Stack.Screen name="ViewSong" component={ViewSong} options={{headerShown: false}} />
+          <Stack.Screen name="About" component={About} options={{headerShown: false}} />
           <Stack.Screen name="EditSong" component={EditSong} />
           <Stack.Screen name="MakeSong" component={MakeSong} />
         </Stack.Navigator>

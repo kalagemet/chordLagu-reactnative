@@ -11,11 +11,11 @@ import { useTheme } from '@react-navigation/native';
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/8408167938';
 
-export default function Search({ navigation }) {
+export default function Search({ navigation, route }) {
     const { colors } = useTheme();
     const [initialLoad, setInitialLoad] = useState(false)
     const [songs, setSongs] = useState(null)
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState(route.params.query)
     const [loading, setLoading] = useState(false)
     const [list, setList] = useState(null)
     const [showAds, setShowAds] = useState(false)
@@ -30,6 +30,7 @@ export default function Search({ navigation }) {
         getAdStatus((adStatus) => {
             setShowAds(adStatus.searchBannerAd)
         })
+        searchSong()
     }, [navigation])
 
     const searchSong = () => {
@@ -110,11 +111,12 @@ export default function Search({ navigation }) {
                     placeholderTextColor={colors.text}
                     onEndEditing={searchSong}
                     onChangeText={(text) => setQuery(text)}
+                    value={query}
                     placeholder='Cari Chord'
                     style={{ width: '75%', color:colors.text }}
                 />
             </View>
-            <View style={{ flex: 11 }}>
+            <View style={{ flex: 16 }}>
                 <SongList
                     songs={list}
                     onPress={(id) => toViewSong(id)}

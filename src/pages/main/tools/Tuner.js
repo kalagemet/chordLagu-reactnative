@@ -4,7 +4,7 @@ import KeepAwake from 'react-native-keep-awake';
 import Meter from "../../../components/tuner/meter";
 import Note from "../../../components/tuner/note";
 import TunerContainer from "../../../components/tuner/tunerContainer";
-import { useTheme } from '@react-navigation/native';
+import { useTheme, useFocusEffect } from '@react-navigation/native';
 
 const tuner = new TunerContainer();
 
@@ -17,74 +17,73 @@ export default function Tuner({navigation}){
     frequency: 82.41
   })
 
-  React.useEffect(()=>{
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
 
-  },[note])
-
-  const setStringPos = (note) => {
-    let stringPos = 0;
-    if(note.name[0] == 'E' && note.octave == 2){
-      stringPos = 6
-    }else if(note.name[0] == 'A' && note.octave == 2 && !note.name[1]){
-      stringPos = 5
-    }else if(note.name[0] == 'D' && note.octave == 3 && !note.name[1]){
-      stringPos = 4
-    }else if(note.name[0] == 'G' && note.octave == 3 && !note.name[1]){
-      stringPos = 3
-    }else if(note.name[0] == 'B' && note.octave == 3){
-      stringPos = 2
-    }else if(note.name[0] == 'E' && note.octave == 4 && !note.name[1]){
-      stringPos = 1
-    }else{
-      stringPos = '-'
-    }
-    setPosition(stringPos)
-  }
-
-  const request_audio_permission = async() => {
-    try {
-        const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO ,
-        {
-            'title': 'Izin Perekaman Audio',
-            'message': 'ChordLagu memerlukan akses perekaman audio'
+      const setStringPos = (note) => {
+        let stringPos = 0;
+        if(note.name[0] == 'E' && note.octave == 2){
+          stringPos = 6
+        }else if(note.name[0] == 'A' && note.octave == 2 && !note.name[1]){
+          stringPos = 5
+        }else if(note.name[0] == 'D' && note.octave == 3 && !note.name[1]){
+          stringPos = 4
+        }else if(note.name[0] == 'G' && note.octave == 3 && !note.name[1]){
+          stringPos = 3
+        }else if(note.name[0] == 'B' && note.octave == 3){
+          stringPos = 2
+        }else if(note.name[0] == 'E' && note.octave == 4 && !note.name[1]){
+          stringPos = 1
+        }else{
+          stringPos = '-'
         }
-        )
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        tuner.start();
-        let lastNoteName = 'E';
-        tuner.onNoteDetected = value => {
-            if (lastNoteName === value.name) {
-              setNote(value)
-              setStringPos(value)
-            } else {
-              lastNoteName = value.name
+        setPosition(stringPos)
+      }
+
+      const request_audio_permission = async() => {
+        try {
+            const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.RECORD_AUDIO ,
+              {
+                  'title': 'Izin Perekaman Audio',
+                  'message': 'ChordLagu memerlukan akses perekaman audio'
+              }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+              let lastNoteName = 'E';
+              if (isActive) {
+                tuner.start();
+                tuner.onNoteDetected = value => {
+                  if (isActive) {
+                    if (lastNoteName === value.name) {
+                      setNote(value)
+                      setStringPos(value)
+                    } else {
+                      lastNoteName = value.name
+                    }
+                  }
+                }
+              } else {
+                tuner.stop()
+              }
             }
-        };
+            else {
+              Alert.alert("Akses perekaman audio tidak diizinkan");
+            }
+        } catch (err) {
+            console.log(err)
         }
-        else {
-        Alert.alert("Akses perekaman audio tidak diizinkan");
-        }
-    } catch (err) {
-        console.log(err)
-    }
-  }
-
-  React.useEffect(()=>{
-    const unsubscribe = navigation.addListener('focus', () => {
-      request_audio_permission()
-    })
-
-    return unsubscribe;
-  },[navigation])
-
-  React.useEffect(()=>{
-    const unsubscribe = navigation.addListener('blur', () => {
-      tuner.stop()
-    });
-
-    return unsubscribe;
-  },[navigation])
+      }
+  
+      request_audio_permission();
+  
+      return () => {
+        tuner.stop();
+        isActive = false;
+      };
+    }, [navigation])
+  );
   
   return (
     <View style={style.body}>
