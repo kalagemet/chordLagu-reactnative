@@ -39,7 +39,7 @@ export default function Login({ navigation }) {
             STORAGE.setLoginStatus('true', () => {
                 setTimeout(()=>{
                     navigation.reset({routes:[{name:'Home'}]})
-                }, 2000)
+                }, 1000)
             })
         } catch (error) {
             setLoading(false)
@@ -68,7 +68,7 @@ export default function Login({ navigation }) {
                 STORAGE.setLoginStatus('true', () => {
                     setTimeout(()=>{
                         navigation.reset({routes:[{name:'Home'}]})
-                    }, 2000)
+                    }, 1000)
                 })
             })
             .catch(error => {setErrorMessage(error.message), setLoading(false)})

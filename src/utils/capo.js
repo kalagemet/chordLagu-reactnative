@@ -82,6 +82,20 @@ export const Chord6 = [
   "G5",
   "G#5",
 ];
+export const Chord7 = [
+  "Am7",
+  "A#m7",
+  "Bm7",
+  "Cm7",
+  "C#m7",
+  "Dm7",
+  "D#m7",
+  "Em7",
+  "Fm7",
+  "F#m7",
+  "Gm7",
+  "G#m7",
+];
 
 export const capoUp = (isi) => {
   var data = replace(isi, Chord);
@@ -90,6 +104,7 @@ export const capoUp = (isi) => {
   data = replace(data, Chord4);
   data = replace(data, Chord5);
   data = replace(data, Chord6);
+  data = replace(data, Chord7);
   return data;
 };
 
@@ -100,6 +115,7 @@ export const capoDown = (isi) => {
   data = replaceDown(data, Chord4);
   data = replaceDown(data, Chord5);
   data = replaceDown(data, Chord6);
+  data = replaceDown(data, Chord7);
   return data;
 };
 

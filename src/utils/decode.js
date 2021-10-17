@@ -24,25 +24,26 @@ export const decode = (isi) => {
   //   data = data.replace(re, `:<span class="chord">$1$2</span>:`)
   // })
   //data = data.replace(/:([A-Z])(.*?):/g, `:<span class="chord">$1$2</span>:`);
+  data = data.replace(/:s1:-:s1:/g, "&#32;-&#32;");
   data = data.replace(
     /:s10:/g,
-    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+    "&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;"
   );
   data = data.replace(
     /:s9:/g,
-    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+    "&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;"
   );
   data = data.replace(
     /:s8:/g,
-    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+    "&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;"
   );
-  data = data.replace(/:s7:/g, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-  data = data.replace(/:s6:/g, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-  data = data.replace(/:s5:/g, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-  data = data.replace(/:s4:/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
-  data = data.replace(/:s3:/g, "&nbsp;&nbsp;&nbsp;");
-  data = data.replace(/:s2:/g, "&nbsp;&nbsp;");
-  data = data.replace(/:s1:/g, "&nbsp;");
+  data = data.replace(/:s7:/g, "&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;");
+  data = data.replace(/:s6:/g, "&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;");
+  data = data.replace(/:s5:/g, "&ensp;&ensp;&ensp;&ensp;&ensp;");
+  data = data.replace(/:s4:/g, "&ensp;&ensp;&ensp;&ensp;");
+  data = data.replace(/:s3:/g, "&ensp;&ensp;&ensp;");
+  data = data.replace(/:s2:/g, "&ensp;&ensp;");
+  data = data.replace(/:s1:/g, "&ensp;");
   data = data.replace(/:x5:/g, "<br><br><br><br><br>");
   data = data.replace(/:x4:/g, "<br><br><br><br>");
   data = data.replace(/:x3:/g, "<br><br><br>");

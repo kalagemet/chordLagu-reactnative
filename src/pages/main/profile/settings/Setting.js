@@ -54,7 +54,7 @@ export default function Setting({navigation}){
                 .then(() => {
                     setTimeout(()=>{
                         navigation.reset({routes:[{name:'Home'}]})
-                    }, 2000)
+                    }, 1000)
                 })
                 .catch(function() {
               // An error happened.

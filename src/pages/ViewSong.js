@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { StyleSheet, Alert, ToastAndroid, Text, View, BackHandler, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Alert, ToastAndroid, Text, View, BackHandler, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { getStreamsBySearch } from '../api/StreamsApi';
 import StreamList from '../components/StreamList';
@@ -34,7 +34,7 @@ export default function ViewSong({ navigation, route }) {
   const [chordName, setChordName] = useState('')
   const [showChord, setShowChord] = useState(false)
   const [selectedChord, setSelectedChord] = useState('')
-  const [fontSize, setFontSize] = useState(15)
+  const [fontSize, setFontSize] = useState(100)
   const [data, setData] = useState([])
   const [chordTerkait, setChordTekait] = useState([])
   const id = route.params.id
@@ -294,12 +294,12 @@ export default function ViewSong({ navigation, route }) {
     return (
       <View style={{...styles.bottomSheetContainer, backgroundColor:colors.background}}>
         <View style={styles.scroll}>
-          <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}} onPress={scrollActive ? stop : start} >
+          <TouchableOpacity style={{flexDirection:'row', justifyContent:'center'}} onPress={scrollActive ? stop : start} >
             <Text style={{fontSize:20, color:colors.primary, marginRight:'3%'}}>Scroll</Text>
             {
               scrollActive ?
-                <Ionicons color={colors.primary} size={25} name="pause" /> :
-                <Ionicons color={colors.primary} size={25} name="play" />
+                <Ionicons color={colors.primary} size={25} name="stop" /> :
+                <Ionicons color={colors.primary} size={25} name="caret-down" />
             }
           </TouchableOpacity>
           <Slider
@@ -314,25 +314,36 @@ export default function ViewSong({ navigation, route }) {
           <Text style={{color:colors.primary}}>{sliderValue.toFixed(2)} x</Text>
         </View>
         <View style={styles.tool}>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent:'space-between' }}>
-            <Feather size={30} style={{ padding:'2%', color: colors.card, backgroundColor: colors.primary, borderRadius: 3, marginHorizontal:'5%'}} onPress={()=>setFontSize(fontSize-1)} name="zoom-out" />
-            <Feather size={30} style={{ padding:'2%', color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={()=>setFontSize(fontSize+1)} name="zoom-in" />
+          <View style={{ flex: 2, flexDirection: 'row', justifyContent:'flex-start' }}>
+            <TouchableOpacity 
+              style={{ padding:'2%', backgroundColor: colors.primary, borderRadius: 20, marginHorizontal:'5%'}}
+              disabled={fontSize>10 ? false : true}
+              onPress={()=>{setFontSize(fontSize-10)}} >
+              <Feather color={colors.card} size={35} name="zoom-out" />
+            </TouchableOpacity>
+            <TouchableOpacity style={{ padding:'2%', backgroundColor: colors.primary, borderRadius: 20 }} onPress={()=>setFontSize(fontSize+10)} >
+              <Feather color={colors.card} size={35} name="zoom-in" />
+            </TouchableOpacity>
           </View>
-          <View style={{ flex: 2, flexDirection: 'row', justifyContent:'space-between', paddingHorizontal:'5%' }}>
-            <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={transposeDown} name="remove" />
+          <View style={{ flex: 2, flexDirection: 'row', justifyContent:'center', paddingHorizontal:'5%' }}>
+            <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 20 }} onPress={transposeDown} >
+              <Ionicons color={colors.card} size={35} name="remove" />
+            </TouchableOpacity>
             <Text style={{ fontSize: 11, alignSelf: 'center', marginHorizontal: '3%', color:colors.text }}>Nada: {transpose>0 ? '+'+transpose: transpose}</Text>
-            <Ionicons size={30} style={{ color: colors.card, backgroundColor: colors.primary, borderRadius: 3 }} onPress={transposeUp} name="add" />
+            <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 20 }} onPress={transposeUp} >
+              <Ionicons color={colors.card} size={35} name="add" />
+            </TouchableOpacity>          
           </View>
           {
-            user == data.created_by ?
-              <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'space-between' }}>
-                <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickLike} />
-                <Ionicons name="create" style={{ fontSize: 30, color: colors.primary }} onPress={() => navigation.navigate('EditSong', { path: id })} />
-                <Ionicons name="trash" style={{ fontSize: 30, color: colors.primary, justifyContent: 'flex-end' }} onPress={onDeleteSong} />
+            user == data.created_by || user == 'afm5997@gmail.com' ?
+              <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'flex-end' }}>
+                <Ionicons name="heart" style={{ fontSize: 35, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickLike} />
+                <Ionicons name="create" style={{ fontSize: 35, color: colors.primary, marginHorizontal: '3%' }} onPress={() => navigation.navigate('EditSong', { path: id })} />
+                <Ionicons name="trash" style={{ fontSize: 35, color: colors.primary, justifyContent: 'flex-end' }} onPress={onDeleteSong} />
               </View>
               :
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 2 }}>
-                <Ionicons name="heart" style={{ fontSize: 30, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickLike} />
+                <Ionicons name="heart" style={{ fontSize: 35, color: favourited ? '#F05454' : '#ccc' }} onPress={onClickLike} />
               </View>
           }
         </View>
@@ -379,7 +390,7 @@ export default function ViewSong({ navigation, route }) {
               <style> 
                 body {
                   color:${colors.text};
-                  font-size: ${fontSize}px;
+                  font-size: ${fontSize}%;
                   font-family: monospace;
                 }
                 .chord {
