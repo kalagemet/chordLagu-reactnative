@@ -27,22 +27,25 @@ export default function Favourites({ navigation }) {
                 API.syncLocalAndApiLikes(data.email, ()=>console.log('sync success'), ()=>console.log('sync failed'))
                 setEmail(data.email)
                 API.getMyLikes(data.email, (data)=>{
-                    console.log(data.currentPage)
+                    data.totalItems == 0 && setLoading(false)
                     setCurrentPage(data.currentPage)
                     setFlatListItems(data.row)
                     setRefreshing(false)
                 }, ()=>{
                     console.log('dari local')
                     STORAGE.getSavedList((data) => {
+                        !data && setLoading(false)
                         setFlatListItems(data)
                     })
                     setRefreshing(false)
                 })
             }else {
                 STORAGE.getSavedList((data) => {
+                    !data && setLoading(false)
                     setFlatListItems(data)
                 })
                 setRefreshing(false)
+                setLoading(false)
             }
         })
     }
@@ -76,20 +79,15 @@ export default function Favourites({ navigation }) {
 
     return (
         <View style={styles.Container}>
-            {
-                flatListItems ?
-                <SongList
-                    songs={flatListItems}
-                    onPress={(id) => toViewSong(id)}
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    loading={loading}
-                    handleLoadMore={handleLoadMore}
-                    paginate={true}
-                />      
-                :
-                <Text style={{alignSelf:'center', marginTop:'10%'}}>Tidak Ada Chord Favorit</Text>
-            }
+            <SongList
+                songs={flatListItems}
+                onPress={(id) => toViewSong(id)}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                loading={loading}
+                handleLoadMore={handleLoadMore}
+                paginate={true}
+            />
         </View>
     );
 

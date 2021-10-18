@@ -39,10 +39,10 @@ export default function ChordLibrary({navigation}) {
         <View style={{flex:1}}>
             <Loader
             loading={loading} />
-            <View style={{ marginTop:'5%', flexDirection:'row', justifyContent:'space-evenly', alignItems:'center'}}>
+            <View style={{alignItems:'center', flex:1}}>
                 <Picker
                     mode='dropdown'
-                    style={{width:'25%', color:colors.text}}
+                    style={{width:'70%', color:colors.text}}
                     dropdownIconColor={colors.text}
                     selectedValue={chordBase}
                     onValueChange={chordBase => handleChordBase(chordBase)}
@@ -62,7 +62,7 @@ export default function ChordLibrary({navigation}) {
                 </Picker>
                 <Picker
                     mode='dropdown'
-                    style={{width:'33%', color:colors.text}}
+                    style={{width:'70%', color:colors.text}}
                     dropdownIconColor={colors.text}
                     selectedValue={chordQuality}
                     onValueChange={chordQuality => handleChordQuality(chordQuality)}
@@ -88,7 +88,7 @@ export default function ChordLibrary({navigation}) {
                 </Picker>
                 <Picker
                     mode='dropdown'
-                    style={{width:'25%', color:colors.text}}
+                    style={{width:'70%', color:colors.text}}
                     dropdownIconColor={colors.text}
                     selectedValue={chordBass}
                     onValueChange={chordBass => handleChordBass(chordBass)}
@@ -108,7 +108,9 @@ export default function ChordLibrary({navigation}) {
                     <Picker.Item label="/G#" value="/G#" />
                 </Picker>
             </View>
-            <ChordSwiper selectedChord={selectedChord} name={chordBase+chordQuality+chordBass}/>
+            <View style={{flex:3}}>
+                <ChordSwiper selectedChord={selectedChord} name={chordBase+chordQuality+chordBass}/>
+            </View>
         </View>
     );
     

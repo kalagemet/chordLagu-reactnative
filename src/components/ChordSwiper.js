@@ -23,7 +23,7 @@ const ChordSwiper = props => {
                     <ViewChord 
                         chord={data.positions}
                         width={200}
-                        height={400}
+                        height={350}
                         color={colors.text}
                     />
                 </View>
@@ -32,7 +32,9 @@ const ChordSwiper = props => {
         )
         })
         :
-        <View></View>
+        <View style={{alignItems:'center', justifyContent:'center', flex:1}}>
+          <Text style={{color:colors.text}}>Tidak Ditemukan {name}</Text>
+        </View>
     }
     </Swiper>
   )
