@@ -85,3 +85,16 @@ export const updateSaved = async (data, onUpdated) => {
         })
     })
 }
+
+export const getLocalAppVersion = async(onReceived) => {
+    let localAppVersion= await AsyncStorage.getItem('@version')
+    onReceived(localAppVersion)
+}
+
+export const setLocalAppVersion = async(value, onSaved) => {
+    let string = value.toString()
+    await AsyncStorage.setItem('@version', string)
+    .then(()=>{
+        onSaved()
+    })
+}

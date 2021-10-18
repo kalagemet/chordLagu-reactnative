@@ -20,7 +20,10 @@ export default function MyChords({navigation, route}) {
     const getListSongs = () => {
         setLoading(true)
         setRefreshing(true)
-        API.getMyChords(userEmail, onSongsReceived, ()=>console.log('error'))
+        API.getMyChords(userEmail, onSongsReceived, ()=>{
+            setRefreshing(false)
+            setLoading(false)
+        })
     }
 
     const onSongsReceived = (songList) => {

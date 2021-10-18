@@ -11,6 +11,8 @@ import Button from '../../components/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { GoogleSignin } from 'react-native-google-signin';
 import SplashScreen from 'react-native-splash-screen';
+import DeviceInfo from 'react-native-device-info';
+import { checkForUpdate } from '../../Settings';
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/2186621936';
 
@@ -56,7 +58,6 @@ export default function Home({navigation}) {
     });
 
     STORAGE.getLoginStatus((value)=>{
-      console.log(value)
       if(!value){
         const user = null
         setCurrentUser(user)
@@ -72,6 +73,13 @@ export default function Home({navigation}) {
   }
 
   React.useEffect(()=>{
+    STORAGE.getLocalAppVersion((version)=>{
+      if(version){
+        checkForUpdate(version, ()=>console.log("Newest"))
+      }else{
+        checkForUpdate(DeviceInfo.getVersion(), ()=>console.log("Newest"))
+      }
+    })
     category == 'popular' ?
       getListPopular() :
       getListNew()

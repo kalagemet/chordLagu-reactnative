@@ -1,157 +1,177 @@
 import axios from 'axios';
 import {ToastAndroid} from 'react-native';
 import * as STORAGE from '../Storage';
+import {getSettings} from '../Settings';
 
 const toastError = () => {
     ToastAndroid.showWithGravityAndOffset(
-        "Koneksi Bermasalah",
-        ToastAndroid.LONG,
+        "Terjadi Kesalahan, tidak dapat mengambil data",
+        ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
         25,
         50
     )
 }
 
-export async function searchArtist(query, onReceived, onError) {
-    await axios.get('https://app.desalase.id/band', {
-        headers: {
+export function searchArtist(query, onReceived, onError) {
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'band', {
+            headers: {
+                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+            },
+            params : {
+                string : query
+            }
+        })
+        .then(res => {
+            onReceived(res.data.row)
+        }, (error) => {
+            onError()
+            toastError()
+        })
+    })
+}
+
+export function searchLagu(query, onReceived, onError) {
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'cari', {
+            headers: {
+                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+            },
+            params : {
+                string : query
+            }
+        })
+        .then(res => {
+            console.log(res.data)
+            onReceived(res.data)
+        }, (error) => {
+            onError()
+            toastError()
+        })
+    })
+}
+
+export function getPopular(onReceived, onError) {
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'populer', {
+            headers: {
+                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+            }
+        })
+        .then(res => {
+            onReceived(res.data)
+        }, (error) => {
+            onError()
+            toastError()
+        })
+    })
+}
+
+export function getTerbaru(onReceived, onError) {
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'terbaru', {
+            headers: {
+                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+            }
+        })
+        .then(res => {
+            onReceived(res.data)
+        }, (error) => {
+            onError()
+            toastError()
+        })
+    })
+}
+
+export function loadMore(query, currentPage, onReceived, onError) {
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'cari', {
+            headers: {
+                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+            },
+            params : {
+                string : query,
+                page: currentPage + 1
+            }
+        })
+        .then(res => {
+            onReceived(res.data)
+        }, (error) => {
+            onError()
+            toastError()
+        })
+    })
+}
+
+export function getSongsByArtist(id, currentPage, onReceived, onError){
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'lagu', {
+            headers: {
+                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+            },
+            params : {
+                band : id,
+                page: currentPage
+            }
+        })
+        .then(res => {
+            onReceived(res.data)
+        }, (error) => {
+            onError()
+            toastError()
+        })
+    })
+}
+
+export function loadMoreByArtist(id, currentPage, onReceived, onError) {
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'lagu', {
+            headers: {
+                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+            },
+            params : {
+                band : id,
+                page: currentPage + 1
+            }
+        })
+        .then(res => {
+            onReceived(res.data)
+        }, (error) => {
+            onError()
+            toastError()
+        })
+    })
+}
+
+export function getSongContent(songPath, onReceived, onError){
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'chord/' + songPath, {
+            headers: {
             apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        },
-        params : {
-            string : query
-        }
-    })
-    .then(res => {
-        onReceived(res.data.row)
-    }, (error) => {
-        onError()
-        toastError()
+            }
+        })
+        .then(res => {
+            onReceived(res.data)
+        }, (error) => {
+            onError()
+        })
     })
 }
 
-export async function searchLagu(query, onReceived, onError) {
-    await axios.get('https://app.desalase.id/cari', {
-        headers: {
+export function getTerkait(songPath, onReceived, onError){
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'terkait/' + songPath, {
+            headers: {
             apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        },
-        params : {
-            string : query
-        }
-    })
-    .then(res => {
-        onReceived(res.data)
-    }, (error) => {
-        onError()
-        toastError()
-    })
-}
-
-export async function getPopular(onReceived, onError) {
-    await axios.get('https://app.desalase.id/populer', {
-        headers: {
-            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        }
-    })
-    .then(res => {
-        onReceived(res.data)
-    }, (error) => {
-        onError()
-        toastError()
-    })
-}
-
-export async function getTerbaru(onReceived, onError) {
-    await axios.get('https://app.desalase.id/terbaru', {
-        headers: {
-            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        }
-    })
-    .then(res => {
-        onReceived(res.data)
-    }, (error) => {
-        onError()
-        toastError()
-    })
-}
-
-export async function loadMore(query, currentPage, onReceived, onError) {
-    await axios.get('https://app.desalase.id/cari', {
-        headers: {
-            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        },
-        params : {
-            string : query,
-            page: currentPage + 1
-        }
-    })
-    .then(res => {
-        onReceived(res.data)
-    }, (error) => {
-        onError()
-        toastError()
-    })
-}
-
-export async function getSongsByArtist(id, currentPage, onReceived, onError){
-    axios.get('https://app.desalase.id/lagu', {
-        headers: {
-            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        },
-        params : {
-            band : id,
-            page: currentPage
-        }
-    })
-    .then(res => {
-        onReceived(res.data)
-    }, (error) => {
-        onError()
-        toastError()
-    })
-}
-
-export async function loadMoreByArtist(id, currentPage, onReceived, onError) {
-    await axios.get('https://app.desalase.id/lagu', {
-        headers: {
-            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        },
-        params : {
-            band : id,
-            page: currentPage + 1
-        }
-    })
-    .then(res => {
-        onReceived(res.data)
-    }, (error) => {
-        onError()
-        toastError()
-    })
-}
-
-export async function getSongContent(songPath, onReceived, onError){
-    axios.get('https://app.desalase.id/chord/' + songPath, {
-        headers: {
-        apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        }
-    })
-    .then(res => {
-        onReceived(res.data)
-    }, (error) => {
-        onError()
-    })
-}
-
-export async function getTerkait(songPath, onReceived, onError){
-    axios.get('https://app.desalase.id/terkait/' + songPath, {
-        headers: {
-        apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        }
-    })
-    .then(res => {
-        onReceived(res.data)
-    }, (error) => {
-        onError()
-        toastError()
+            }
+        })
+        .then(res => {
+            onReceived(res.data)
+        }, (error) => {
+            onError()
+            toastError()
+        })
     })
 }
 
@@ -161,7 +181,7 @@ function getQueryString(data = {}) {
       .join('&');
 }
 
-export async function postSong(data, onSuccess, onError){
+export function postSong(data, onSuccess, onError){
     const song = { 
         judul : data.title,
         nama_band : data.artist,
@@ -173,53 +193,59 @@ export async function postSong(data, onSuccess, onError){
         apa: "79fa2fcaecf5c83c299cd96e2ba44710",
         'Content-Type': "application/x-www-form-urlencoded"
     };
-    axios.post('https://app.desalase.id/post', getQueryString(song), { headers })
-    .then(res => {
-        if (res.data.error){
-            toastError(res.data.msg)
+    getSettings(async(setting)=>{
+        await axios.post(setting.host+'post', getQueryString(song), { headers })
+        .then(res => {
+            if (res.data.error){
+                toastError(res.data.msg)
+                onError()
+            } else {
+                onSuccess(res.data)
+            }
+        })
+    })
+}
+
+export function getMyChords(user_id, onReceived, onError){
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'created', {
+            headers: {
+                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+            },
+            params : {
+                user_id : user_id
+            }
+        })
+        .then(res => {
+            onReceived(res.data)
+        }, (error) => {
             onError()
-        } else {
-            onSuccess(res.data)
-        }
+            toastError()
+        })
     })
 }
 
-export async function getMyChords(user_id, onReceived, onError){
-    axios.get('https://app.desalase.id/created', {
-        headers: {
-            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        },
-        params : {
-            user_id : user_id
-        }
-    })
-    .then(res => {
-        onReceived(res.data)
-    }, (error) => {
-        onError()
-        toastError()
-    })
-}
-
-export async function loadMoreMyChords(user_id, currentPage, onReceived, onError) {
-    await axios.get('https://app.desalase.id/created', {
-        headers: {
-            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        },
-        params : {
-            user_id : user_id,
-            page: currentPage + 1
-        }
-    })
-    .then(res => {
-        onReceived(res.data)
-    }, (error) => {
-        onError()
-        toastError()
+export function loadMoreMyChords(user_id, currentPage, onReceived, onError) {
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'created', {
+            headers: {
+                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+            },
+            params : {
+                user_id : user_id,
+                page: currentPage + 1
+            }
+        })
+        .then(res => {
+            onReceived(res.data)
+        }, (error) => {
+            onError()
+            toastError()
+        })
     })
 }
 
-export async function deleteChord(id, onSuccess, onError){
+export function deleteChord(id, onSuccess, onError){
     const song = { 
         id : id
     };
@@ -227,27 +253,29 @@ export async function deleteChord(id, onSuccess, onError){
         apa: "79fa2fcaecf5c83c299cd96e2ba44710",
         'Content-Type': "application/x-www-form-urlencoded"
     };
-    axios.delete('https://app.desalase.id/destroy', {data:getQueryString(song), headers:headers})
-    .then(res => {
-        if (res.data.error){
-            ToastAndroid.showWithGravityAndOffset(
-                res.data.msg,
-                ToastAndroid.LONG,
-                ToastAndroid.BOTTOM,
-                25,
-                50
-            )
+    getSettings(async(setting)=>{
+        await axios.delete(setting.host+'destroy', {data:getQueryString(song), headers:headers})
+        .then(res => {
+            if (res.data.error){
+                ToastAndroid.showWithGravityAndOffset(
+                    res.data.msg,
+                    ToastAndroid.LONG,
+                    ToastAndroid.BOTTOM,
+                    25,
+                    50
+                )
+                onError()
+            } else {
+                onSuccess(res.data)
+            }
+        }).catch((e)=>{
+            console.log(e)
             onError()
-        } else {
-            onSuccess(res.data)
-        }
-    }).catch((e)=>{
-        console.log(e)
-        onError()
+        })
     })
 }
 
-export async function updateChord(data, onSuccess, onError){
+export function updateChord(data, onSuccess, onError){
     const song = { 
         id : data.id,
         nama_band : data.nama_band,
@@ -259,16 +287,18 @@ export async function updateChord(data, onSuccess, onError){
         apa: "79fa2fcaecf5c83c299cd96e2ba44710",
         'Content-Type': "application/x-www-form-urlencoded"
     };
-    axios.put('https://app.desalase.id/update', getQueryString(song), { headers })
-    .then(res => {
-        onSuccess()
-    }, (error) => {
-        onError()
-        toastError()
+    getSettings(async(setting)=>{
+        await axios.put(setting.host+'update', getQueryString(song), { headers })
+        .then(res => {
+            onSuccess()
+        }, (error) => {
+            onError()
+            toastError()
+        })
     })
 }
 
-export async function like(data, onSuccess, onError){
+export function like(data, onSuccess, onError){
     const prop = {
         id_chord : data.id_chord,
         id_user : data.id_user
@@ -277,26 +307,28 @@ export async function like(data, onSuccess, onError){
         apa: "79fa2fcaecf5c83c299cd96e2ba44710",
         'Content-Type': "application/x-www-form-urlencoded"
     };
-    axios.post('https://app.desalase.id/sukai', getQueryString(prop), { headers })
-    .then(res => {
-        if (res.data.error){
-            ToastAndroid.showWithGravityAndOffset(
-                res.data.msg,
-                ToastAndroid.LONG,
-                ToastAndroid.BOTTOM,
-                25,
-                50
-            )
+    getSettings(async(setting)=>{
+        await axios.post(setting.host+'sukai', getQueryString(prop), { headers })
+        .then(res => {
+            if (res.data.error){
+                ToastAndroid.showWithGravityAndOffset(
+                    res.data.msg,
+                    ToastAndroid.LONG,
+                    ToastAndroid.BOTTOM,
+                    25,
+                    50
+                )
+                onError()
+            } else {
+                onSuccess(res.data)
+            }
+        }, (error) => {
             onError()
-        } else {
-            onSuccess(res.data)
-        }
-    }, (error) => {
-        onError()
+        })
     })
 }
 
-export async function unLike(data, onSuccess, onError){
+export function unLike(data, onSuccess, onError){
     const prop = { 
         id_chord : data.id_chord,
         id_user : data.id_user
@@ -305,58 +337,64 @@ export async function unLike(data, onSuccess, onError){
         apa: "79fa2fcaecf5c83c299cd96e2ba44710",
         'Content-Type': "application/x-www-form-urlencoded"
     };
-    axios.post('https://app.desalase.id/batalsuka', getQueryString(prop), { headers })
-    .then(res => {
-        if (res.data.error){
-            ToastAndroid.showWithGravityAndOffset(
-                res.data.msg,
-                ToastAndroid.LONG,
-                ToastAndroid.BOTTOM,
-                25,
-                50
-            )
+    getSettings(async(setting)=>{
+        await axios.post(setting.host+'batalsuka', getQueryString(prop), { headers })
+        .then(res => {
+            if (res.data.error){
+                ToastAndroid.showWithGravityAndOffset(
+                    res.data.msg,
+                    ToastAndroid.LONG,
+                    ToastAndroid.BOTTOM,
+                    25,
+                    50
+                )
+                onError()
+            } else {
+                onSuccess(res.data)
+            }
+        }, (error) => {
             onError()
-        } else {
-            onSuccess(res.data)
-        }
-    }, (error) => {
-        onError()
+        })
     })
 }
 
-export async function getMyLikes(user_id, onReceived, onError){
+export function getMyLikes(user_id, onReceived, onError){
     console.log(user_id)
-    axios.get('https://app.desalase.id/disukai', {
-        headers: {
-            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        },
-        params : {
-            id_user : user_id
-        }
-    })
-    .then(res => {
-        onReceived(res.data)
-    }, (error) => {
-        onError()
-        toastError()
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'disukai', {
+            headers: {
+                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+            },
+            params : {
+                id_user : user_id
+            }
+        })
+        .then(res => {
+            onReceived(res.data)
+        }, (error) => {
+            onError()
+            toastError()
+        })
     })
 }
 
-export async function loadMoreMyLikes(user_id, currentPage, onReceived, onError) {
-    await axios.get('https://app.desalase.id/disukai', {
-        headers: {
-            apa: "79fa2fcaecf5c83c299cd96e2ba44710",
-        },
-        params : {
-            id_user : user_id,
-            page: currentPage + 1
-        }
-    })
-    .then(res => {
-        onReceived(res.data)
-    }, (error) => {
-        onError()
-        toastError()
+export function loadMoreMyLikes(user_id, currentPage, onReceived, onError) {
+    getSettings(async(setting)=>{
+        await axios.get(setting.host+'disukai', {
+            headers: {
+                apa: "79fa2fcaecf5c83c299cd96e2ba44710",
+            },
+            params : {
+                id_user : user_id,
+                page: currentPage + 1
+            }
+        })
+        .then(res => {
+            onReceived(res.data)
+        }, (error) => {
+            onError()
+            toastError()
+        })
     })
 }
 

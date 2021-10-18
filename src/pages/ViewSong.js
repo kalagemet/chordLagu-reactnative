@@ -316,21 +316,22 @@ export default function ViewSong({ navigation, route }) {
         <View style={styles.tool}>
           <View style={{ flex: 2, flexDirection: 'row', justifyContent:'flex-start' }}>
             <TouchableOpacity 
-              style={{ padding:'2%', backgroundColor: colors.primary, borderRadius: 20, marginHorizontal:'5%'}}
+              style={{ padding:'2%', backgroundColor: colors.primary, borderRadius: 20, marginHorizontal:'5%', alignItems:'center', justifyContent:'center'}}
               disabled={fontSize>10 ? false : true}
               onPress={()=>{setFontSize(fontSize-10)}} >
               <Feather color={colors.card} size={35} name="zoom-out" />
             </TouchableOpacity>
-            <TouchableOpacity style={{ padding:'2%', backgroundColor: colors.primary, borderRadius: 20 }} onPress={()=>setFontSize(fontSize+10)} >
+            <TouchableOpacity style={{ padding:'2%', backgroundColor: colors.primary, borderRadius: 20, alignItems:'center', justifyContent:'center' }} 
+              onPress={()=>setFontSize(fontSize+10)} >
               <Feather color={colors.card} size={35} name="zoom-in" />
             </TouchableOpacity>
           </View>
           <View style={{ flex: 2, flexDirection: 'row', justifyContent:'center', paddingHorizontal:'5%' }}>
-            <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 20 }} onPress={transposeDown} >
+            <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 20, alignItems:'center', justifyContent:'center' }} onPress={transposeDown} >
               <Ionicons color={colors.card} size={35} name="remove" />
             </TouchableOpacity>
             <Text style={{ fontSize: 11, alignSelf: 'center', marginHorizontal: '3%', color:colors.text }}>Nada: {transpose>0 ? '+'+transpose: transpose}</Text>
-            <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 20 }} onPress={transposeUp} >
+            <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 20, alignItems:'center', justifyContent:'center' }} onPress={transposeUp} >
               <Ionicons color={colors.card} size={35} name="add" />
             </TouchableOpacity>          
           </View>
