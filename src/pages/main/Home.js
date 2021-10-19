@@ -26,6 +26,16 @@ export default function Home({navigation}) {
   const [query, setQuery] = useState('')
   const [initializing, setInitializing] = useState(true);
 
+  React.useEffect(()=>{
+    STORAGE.getLocalAppVersion((version)=>{
+      if(version){
+        checkForUpdate(version, ()=>console.log("Newest"))
+      }else{
+        checkForUpdate(DeviceInfo.getVersion(), ()=>console.log("Newest"))
+      }
+    })
+  },[])
+
   function onAuthStateChanged(user) {
     if(user){
       STORAGE.setLoginStatus('true', ()=>setStatus())
@@ -73,13 +83,6 @@ export default function Home({navigation}) {
   }
 
   React.useEffect(()=>{
-    STORAGE.getLocalAppVersion((version)=>{
-      if(version){
-        checkForUpdate(version, ()=>console.log("Newest"))
-      }else{
-        checkForUpdate(DeviceInfo.getVersion(), ()=>console.log("Newest"))
-      }
-    })
     category == 'popular' ?
       getListPopular() :
       getListNew()
