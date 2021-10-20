@@ -7,12 +7,12 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '@react-navigation/native';
 
-function Button({name, icon, onPress, width, height, disabled}){
+function Button({name, icon, onPress, minWidth, width, height, disabled}){
   const { colors } = useTheme();
   
   return (
     <TouchableOpacity 
-      style={{...styles.Button, backgroundColor: disabled ? colors.text : colors.card, width:width, height:height, elevation: disabled ? 0 : 5 }} 
+      style={{...styles.Button, minWidth:minWidth, backgroundColor: disabled ? colors.text : colors.card, width:width, height:height, elevation: disabled ? 0 : 5 }} 
       onPress={()=>onPress()} 
       disabled={disabled}
     >

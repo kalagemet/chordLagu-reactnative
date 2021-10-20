@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {ToastAndroid} from 'react-native';
 import * as STORAGE from '../Storage';
-import {getSettings} from '../Settings';
+import {getSettings} from './AdsApi';
 
 const toastError = () => {
     ToastAndroid.showWithGravityAndOffset(

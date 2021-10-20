@@ -10,3 +10,12 @@ export async function getAdStatus(statusRetreived) {
   
     statusRetreived(snapshot.data());
 }
+
+export async function getSettings(statusRetreived) {
+  var snapshot = await firestore()
+    .collection('ads')
+    .doc('settings')
+    .get()
+
+  statusRetreived(snapshot.data());
+}

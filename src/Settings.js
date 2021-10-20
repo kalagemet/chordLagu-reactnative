@@ -1,17 +1,8 @@
 import React from 'react';
 import { Alert, Linking } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import firestore from '@react-native-firebase/firestore';
+import { getSettings } from './api/AdsApi';
 import {setLocalAppVersion} from './Storage';
-
-export async function getSettings(statusRetreived) {
-    var snapshot = await firestore()
-      .collection('ads')
-      .doc('settings')
-      .get()
-  
-    statusRetreived(snapshot.data());
-}
 
 export function checkForUpdate(currentVersion, isNewest) {
   getSettings((settings)=>{

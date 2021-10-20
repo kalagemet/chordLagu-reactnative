@@ -12,6 +12,8 @@ export default function MyChords({navigation, route}) {
 
     React.useEffect(()=>{
         const unsubscribe = navigation.addListener('focus', () => {
+            setLoading(true)
+            setRefreshing(true)
             getListSongs()
         });
         return unsubscribe;

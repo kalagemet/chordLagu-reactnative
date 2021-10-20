@@ -3,16 +3,17 @@ import { StatusBar, View, TextInput } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { getPopular, getTerbaru } from '../../api/SongDbApi';
 import { getAdStatus } from '../../api/AdsApi';
+import { getCategory, getCategories } from '../../api/CategoryApi';
 import SongList from '../../components/SongList';
 import * as STORAGE from '../../Storage';
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 import { useTheme } from '@react-navigation/native';
-import Button from '../../components/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { GoogleSignin } from 'react-native-google-signin';
 import SplashScreen from 'react-native-splash-screen';
 import DeviceInfo from 'react-native-device-info';
 import { checkForUpdate } from '../../Settings';
+import CategoryList from '../../components/CategoryList';
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1690523413615203/2186621936';
 
@@ -22,11 +23,16 @@ export default function Home({navigation}) {
   const [flatListItem, setFlatlistItem] = useState([])
   const [refreshing, setRefreshing] = useState(false)
   const [showAds, setShowAds] = useState(false)
-  const [category, setCategory] = useState('popular')
+  const [categories, setCategories] = useState([])
+  const [category, setCategory] = useState('Top Global')
   const [query, setQuery] = useState('')
   const [initializing, setInitializing] = useState(true);
 
   React.useEffect(()=>{
+    getCategories((data)=>{
+      setCategories(data.categories)
+      setCategory(data.categories[0])
+    })
     STORAGE.getLocalAppVersion((version)=>{
       if(version){
         checkForUpdate(version, ()=>console.log("Newest"))
@@ -61,8 +67,6 @@ export default function Home({navigation}) {
   }, [navigation])
 
   const setStatus = () => {
-    setRefreshing(true);
-
     getAdStatus((adStatus) => {
       setShowAds(adStatus.homeBannerAd)
     });
@@ -83,10 +87,18 @@ export default function Home({navigation}) {
   }
 
   React.useEffect(()=>{
-    category == 'popular' ?
-      getListPopular() :
-      getListNew()
+    category == 'Banyak Dilihat' ? getListPopular() :
+    category == 'Baru' ? getListNew() :
+    getListDynamicCategory()
   }, [category])
+
+  const getListDynamicCategory = () => {
+    setRefreshing(true)
+    getCategory(category,(data)=>{
+      setFlatlistItem(data)
+    })
+    setRefreshing(false)
+  }
 
   const getListPopular = () => {
     setRefreshing(true)
@@ -105,9 +117,9 @@ export default function Home({navigation}) {
   }
 
   const onRefresh = () => {
-    category == 'popular' ?
-      getListPopular() :
-      getListNew()
+    category == 'Banyak Dilihat' ? getListPopular() :
+    category == 'Baru' ? getListNew() :
+    getListDynamicCategory()
   }
 
   const toViewSong = (id) => {
@@ -141,10 +153,8 @@ export default function Home({navigation}) {
           style={{ width: '75%', color:colors.text }}
         />
       </View>
-      <View style={{alignItems:'center', flex:1, justifyContent:'center', padding:'3%', flexDirection:'row'}}>
-        <Button name='Banyak Dilihat' height='80%' onPress={()=>setCategory('popular')} disabled={category == 'popular' ? true : false} />
-        <View style={{width:'5%'}} />
-        <Button name='Baru' height='80%' width='25%' onPress={()=>setCategory('new')} disabled={category == 'new' ? true : false}/>
+      <View style={{alignItems:'center', flex:1, justifyContent:'center', padding:'3%'}}>
+        <CategoryList data={categories} onPress={(data)=>setCategory(data)} current={category} />
       </View>
       <View style={{flex:15}}>
         <SongList
