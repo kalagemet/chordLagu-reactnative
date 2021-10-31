@@ -6,20 +6,20 @@ export async function getStreamsBySearch(search, streamsRetreived) {
 
     let songList;
     let limit = await firestore()
-      .collection('stream')
-      .doc('list')
+      .collection('settings')
+      .doc('setting')
       .get()
 
     let clientId = await firestore()
-      .collection('stream')
-      .doc('clientId')
+      .collection('settings')
+      .doc('setting')
       .get()
 
     axios.get('https://api-v2.soundcloud.com/search/tracks', {
         params : {
             q : search,
-            client_id : clientId.data().value,
-            limit : limit.data().limit
+            client_id : clientId.data().clientId,
+            limit : limit.data().soundcloudListLimit
         }
     })
     .then(res => {

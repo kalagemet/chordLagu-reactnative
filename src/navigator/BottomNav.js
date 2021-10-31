@@ -49,16 +49,7 @@ function FavouritesStackScreen() {
   const { isThemeDark } = React.useContext(PreferencesContext);
   return (
     <FavouritesStack.Navigator screenOptions={{
-      headerTitle:'Favorit',
-      headerRightContainerStyle:{flex:1, paddingHorizontal:'5%', width:'50%'},
-      headerRight: () => (
-        <Ionicons
-          size={30}
-          name="information-circle-outline"
-          onPress={() => Alert.alert('Favorit',  'Chord favorit dapat diakses secara offline')}
-          color={isThemeDark ? '#FFF' : '#000'}
-        />
-      ),
+      headerTitle:'Favorit'
     }}>
       <FavouritesStack.Screen
         name="Favourites"

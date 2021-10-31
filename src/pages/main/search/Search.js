@@ -22,12 +22,14 @@ export default function Search({ navigation, route }) {
     const [currentPage, setCurrentPage] = useState(0)
     const [email, setEmail] = useState('')
     const [refreshing, setRefreshing] = useState(false)
+    const [contentFlex, setcontentFlex] = useState(15);
 
     React.useEffect(async () => {
         STORAGE.getUserInfo((data) => {
             data && setEmail(data.email)
         })
         getAdStatus((adStatus) => {
+            adStatus ? setcontentFlex(13) : setcontentFlex(15)
             setShowAds(adStatus.searchBannerAd)
         })
         searchSong()
@@ -116,7 +118,7 @@ export default function Search({ navigation, route }) {
                     style={{ width: '75%', color:colors.text }}
                 />
             </View>
-            <View style={{ flex: 16 }}>
+            <View style={{ flex: contentFlex }}>
                 <SongList
                     songs={list}
                     onPress={(id) => toViewSong(id)}
@@ -130,7 +132,7 @@ export default function Search({ navigation, route }) {
             </View>
             {
                 showAds ?
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1.5 }}>
                         <BannerAd
                             unitId={adUnitId}
                             size={BannerAdSize.FULL_BANNER}

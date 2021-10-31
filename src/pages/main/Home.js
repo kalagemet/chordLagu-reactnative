@@ -27,6 +27,7 @@ export default function Home({navigation}) {
   const [category, setCategory] = useState('Top Global')
   const [query, setQuery] = useState('')
   const [initializing, setInitializing] = useState(true);
+  const [contentFlex, setcontentFlex] = useState(15);
 
   React.useEffect(()=>{
     getCategories((data)=>{
@@ -68,6 +69,7 @@ export default function Home({navigation}) {
 
   const setStatus = () => {
     getAdStatus((adStatus) => {
+      adStatus ? setcontentFlex(13) : setcontentFlex(15)
       setShowAds(adStatus.homeBannerAd)
     });
 
@@ -156,7 +158,7 @@ export default function Home({navigation}) {
       <View style={{alignItems:'center', flex:1, justifyContent:'center', padding:'3%'}}>
         <CategoryList data={categories} onPress={(data)=>setCategory(data)} current={category} />
       </View>
-      <View style={{flex:15}}>
+      <View style={{flex:contentFlex}}>
         <SongList
           songs={flatListItem} 
           onPress={(id) => toViewSong(id)}
@@ -166,7 +168,7 @@ export default function Home({navigation}) {
       </View>
       {
         showAds ?
-        <View style={{flex:1}}>
+        <View style={{flex:1.5}}>
           <BannerAd
             unitId={adUnitId}
             size={BannerAdSize.FULL_BANNER}

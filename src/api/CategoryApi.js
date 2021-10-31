@@ -16,7 +16,7 @@ export async function getCategory(category, songsRetreived) {
   var songList = [];
 
   await firestore()
-    .collection("category").doc("charts").collection(category).get()
+    .collection("category").doc("charts").collection(category).orderBy('pos').get()
     .then(querySnapshot => {
       querySnapshot.forEach((doc) => {
         const songItem = doc.data();

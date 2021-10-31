@@ -3,8 +3,8 @@ import firestore from '@react-native-firebase/firestore';
 export async function getAdStatus(statusRetreived) {
   
     var snapshot = await firestore()
-      .collection('ads')
-      .doc('ad')
+      .collection('settings')
+      .doc('setting')
       .get()
 
   
@@ -13,8 +13,8 @@ export async function getAdStatus(statusRetreived) {
 
 export async function getSettings(statusRetreived) {
   var snapshot = await firestore()
-    .collection('ads')
-    .doc('settings')
+    .collection('settings')
+    .doc('setting')
     .get()
 
   statusRetreived(snapshot.data());

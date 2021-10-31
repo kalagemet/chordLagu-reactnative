@@ -14,7 +14,6 @@ export default function Favourites({ navigation }) {
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             setLoading(true)
-            setRefreshing(true)
             getLikesList()
         });
         return unsubscribe;
@@ -24,13 +23,21 @@ export default function Favourites({ navigation }) {
         setLoading(true)
         STORAGE.getUserInfo((data) => {
             if(data){
-                API.syncLocalAndApiLikes(data.email, ()=>console.log('sync success'), ()=>console.log('sync failed'))
-                setEmail(data.email)
-                API.getMyLikes(data.email, (data)=>{
-                    data.totalItems == 0 && setLoading(false)
-                    setCurrentPage(data.currentPage)
-                    setFlatListItems(data.row)
-                    setRefreshing(false)
+                API.syncLocalAndApiLikes(data.email, ()=>{
+                    setEmail(data.email)
+                    API.getMyLikes(data.email, (data)=>{
+                        data.totalItems == 0 && setLoading(false)
+                        setCurrentPage(data.currentPage)
+                        setFlatListItems(data.row)
+                        setRefreshing(false)
+                    }, ()=>{
+                        console.log('dari local')
+                        STORAGE.getSavedList((data) => {
+                            !data && setLoading(false)
+                            setFlatListItems(data)
+                        })
+                        setRefreshing(false)
+                    })
                 }, ()=>{
                     console.log('dari local')
                     STORAGE.getSavedList((data) => {
