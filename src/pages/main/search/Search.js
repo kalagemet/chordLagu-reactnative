@@ -3,6 +3,7 @@ import { StyleSheet, View, TextInput } from 'react-native';
 import Loader from '../../../components/Loader';
 import SongList from '../../../components/SongList';
 import { getAdStatus } from '../../../api/AdsApi';
+import { addSearchList } from '../../../api/SongsApi';
 import * as STORAGE from '../../../Storage';
 import { searchArtist, searchLagu, loadMore } from '../../../api/SongDbApi';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -47,6 +48,14 @@ export default function Search({ navigation, route }) {
                 let l = data;
                 //SEARCH LAGU
                 searchLagu(query, (data) => {
+                    if(data.totalItems == 0) {
+                        let search = {
+                            'query': query,
+                            'date': new Date().toLocaleString(),
+                            'user': email
+                        }
+                        addSearchList(search, ()=>console.log('ditambahkan ke search firestore'))
+                    }
                     const songs = data.row;
                     songs.forEach(song => {
                         l.push(song)

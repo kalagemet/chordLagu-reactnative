@@ -221,3 +221,14 @@ export async function getFavourited(user, songsRetreived) {
 
   songsRetreived(songList);
 }
+
+export function addSearchList(search, addComplete) {
+
+  firestore()
+    .collection('search')
+    .add(search)
+    .then((snapshot) => {
+      snapshot.set(search);
+    }).then(() => addComplete())
+    .catch((error) => console.log(error));
+}

@@ -43,7 +43,6 @@ export function searchLagu(query, onReceived, onError) {
             }
         })
         .then(res => {
-            console.log(res.data)
             onReceived(res.data)
         }, (error) => {
             onError()
