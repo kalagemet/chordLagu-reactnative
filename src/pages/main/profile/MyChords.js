@@ -13,7 +13,6 @@ export default function MyChords({navigation, route}) {
     React.useEffect(()=>{
         const unsubscribe = navigation.addListener('focus', () => {
             setLoading(true)
-            setRefreshing(true)
             getListSongs()
         });
         return unsubscribe;
@@ -21,7 +20,6 @@ export default function MyChords({navigation, route}) {
 
     const getListSongs = () => {
         setLoading(true)
-        setRefreshing(true)
         API.getMyChords(userEmail, onSongsReceived, ()=>{
             setRefreshing(false)
             setLoading(false)

@@ -24,7 +24,7 @@ export default function Home({navigation}) {
   const [refreshing, setRefreshing] = useState(false)
   const [showAds, setShowAds] = useState(false)
   const [categories, setCategories] = useState([])
-  const [category, setCategory] = useState('Top Global')
+  const [category, setCategory] = useState('')
   const [query, setQuery] = useState('')
   const [initializing, setInitializing] = useState(true);
   const [contentFlex, setcontentFlex] = useState(15);
@@ -89,9 +89,11 @@ export default function Home({navigation}) {
   }
 
   React.useEffect(()=>{
-    category == 'Banyak Dilihat' ? getListPopular() :
-    category == 'Baru' ? getListNew() :
-    getListDynamicCategory()
+    if (category != ''){
+      category == 'Banyak Dilihat' ? getListPopular() :
+      category == 'Baru' ? getListNew() :
+      getListDynamicCategory()
+    }
   }, [category])
 
   const getListDynamicCategory = () => {

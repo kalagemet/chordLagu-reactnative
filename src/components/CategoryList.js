@@ -17,8 +17,8 @@ export default function CategoryList({ data, onPress, current }) {
                             onPress={()=>onPress(item)}
                             style={{
                                 borderRadius: 20, 
-                                backgroundColor: selecetd ? colors.text : colors.background,
-                                paddingVertical: 7,
+                                backgroundColor: selecetd ? colors.text : colors.card,
+                                paddingVertical: 5,
                                 paddingHorizontal: 10,
                                 elevation:3,
                                 height:'100%'

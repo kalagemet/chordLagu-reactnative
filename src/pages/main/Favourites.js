@@ -47,6 +47,7 @@ export default function Favourites({ navigation }) {
                     setRefreshing(false)
                 })
             }else {
+                console.log('dari local')
                 STORAGE.getSavedList((data) => {
                     !data && setLoading(false)
                     setFlatListItems(data)
