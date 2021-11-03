@@ -44,7 +44,7 @@ export default function ViewSong({ navigation, route }) {
   const webViewRef = useRef();
   
   React.useEffect(() => {
-    console.log(id)
+    console.log("id: "+id)
     setLoading(true)
     getChordContent(id)
     API.getTerkait(id, (data)=>{
