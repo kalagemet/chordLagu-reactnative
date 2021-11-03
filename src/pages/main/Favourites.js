@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import SongList from '../../components/SongList';
 import * as STORAGE from '../../Storage';
 import * as API from '../../api/SongDbApi';
+import { useTheme } from '@react-navigation/native';
 
 export default function Favourites({ navigation }) {
+    const { colors } = useTheme();
     const [loading, setLoading] = useState(false)
     const [flatListItems, setFlatListItems] = useState(null)
     const [email, setEmail] = useState('')
@@ -22,15 +24,15 @@ export default function Favourites({ navigation }) {
     const getLikesList = () => {
         setLoading(true)
         STORAGE.getUserInfo((data) => {
-            if(data){
-                API.syncLocalAndApiLikes(data.email, ()=>{
+            if (data) {
+                API.syncLocalAndApiLikes(data.email, () => {
                     setEmail(data.email)
-                    API.getMyLikes(data.email, (data)=>{
+                    API.getMyLikes(data.email, (data) => {
                         data.totalItems == 0 && setLoading(false)
                         setCurrentPage(data.currentPage)
                         setFlatListItems(data.row)
                         setRefreshing(false)
-                    }, ()=>{
+                    }, () => {
                         console.log('dari local')
                         STORAGE.getSavedList((data) => {
                             !data && setLoading(false)
@@ -38,7 +40,7 @@ export default function Favourites({ navigation }) {
                         })
                         setRefreshing(false)
                     })
-                }, ()=>{
+                }, () => {
                     console.log('dari local')
                     STORAGE.getSavedList((data) => {
                         !data && setLoading(false)
@@ -46,7 +48,7 @@ export default function Favourites({ navigation }) {
                     })
                     setRefreshing(false)
                 })
-            }else {
+            } else {
                 console.log('dari local')
                 STORAGE.getSavedList((data) => {
                     !data && setLoading(false)
@@ -85,6 +87,15 @@ export default function Favourites({ navigation }) {
         })
     }
 
+    const emptyList = () => {
+        return (
+            !loading &&
+            <View style={{ padding: '5%', alignItems: 'center' }}>
+                <Text style={{ color: colors.text }}>Tidak ada chord favorit</Text>
+            </View>
+        )
+    }
+
     return (
         <View style={styles.Container}>
             <SongList
@@ -95,6 +106,7 @@ export default function Favourites({ navigation }) {
                 loading={loading}
                 handleLoadMore={handleLoadMore}
                 paginate={true}
+                renderEmptyComponent={emptyList}
             />
         </View>
     );

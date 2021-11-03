@@ -1,36 +1,38 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 import SongList from '../../../components/SongList';
 import * as API from '../../../api/SongDbApi';
+import { useTheme } from '@react-navigation/native';
 
-export default function MyChords({navigation, route}) {
+export default function MyChords({ navigation, route }) {
+    const { colors } = useTheme();
     const [flatListItems, setFlatListItems] = useState([])
     const [refreshing, setRefreshing] = useState(false)
     const userEmail = route.params.user
     const [currentPage, setCurrentPage] = useState(0)
     const [loading, setLoading] = useState(false)
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             setLoading(true)
             getListSongs()
         });
         return unsubscribe;
-    },[navigation])
+    }, [navigation])
 
     const getListSongs = () => {
         setLoading(true)
-        API.getMyChords(userEmail, onSongsReceived, ()=>{
+        API.getMyChords(userEmail, onSongsReceived, () => {
             setRefreshing(false)
             setLoading(false)
         })
     }
 
     const onSongsReceived = (songList) => {
-        if(songList.totalItems > 0){
+        if (songList.totalItems > 0) {
             setFlatListItems(songList.row)
             setRefreshing(false)
-        } else{
+        } else {
             setRefreshing(false)
             setLoading(false)
         }
@@ -54,7 +56,7 @@ export default function MyChords({navigation, route}) {
     const toViewSong = (id) => {
         navigation.navigate('ViewSong', {
             id: id,
-            user : userEmail
+            user: userEmail
         });
     }
 
@@ -63,8 +65,17 @@ export default function MyChords({navigation, route}) {
         getListSongs()
     }
 
+    const emptyList = () => {
+        return (
+            !loading &&
+            <View style={{ padding: '5%', alignItems: 'center' }}>
+                <Text style={{ color: colors.text }}>Tidak ada chord saya</Text>
+            </View>
+        )
+    }
+
     return (
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
             <SongList
                 songs={flatListItems}
                 onPress={(id) => toViewSong(id)}
@@ -73,8 +84,9 @@ export default function MyChords({navigation, route}) {
                 handleLoadMore={handleLoadMore}
                 loading={loading}
                 paginate={true}
+                renderEmptyComponent={emptyList}
             />
         </View>
     );
-    
+
 }

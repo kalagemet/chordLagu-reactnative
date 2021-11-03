@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import Loader from '../../../components/Loader';
 import SongList from '../../../components/SongList';
 import { getSongsByArtist, loadMoreByArtist } from '../../../api/SongDbApi';
+import { useTheme } from '@react-navigation/native';
 
 export default function SongsByArtistList({ navigation, route }) {
-
+    const { colors } = useTheme();
     const [loading, setLoading] = useState(false)
     const [bandSongs, setBandSongs] = useState([])
     const [currentPage, setCurrentPage] = useState(0)
@@ -57,6 +58,15 @@ export default function SongsByArtistList({ navigation, route }) {
         })
     }
 
+    const emptyList = () => {
+        return (
+            !loading &&
+            <View style={{ padding: '5%', alignItems: 'center' }}>
+                <Text style={{ color: colors.text }}>Kosong</Text>
+            </View>
+        )
+    }
+
     return (
         <View style={{ flex: 1}}>
             <Loader
@@ -70,6 +80,7 @@ export default function SongsByArtistList({ navigation, route }) {
                     loading={loading}
                     refreshing={refreshing}
                     onRefresh={onRefresh}
+                    renderEmptyComponent={emptyList}
                 />
             </View>
         </View>

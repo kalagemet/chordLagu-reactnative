@@ -3,7 +3,7 @@ import { FlatList, ActivityIndicator, Text, View, TouchableOpacity, StyleSheet }
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '@react-navigation/native';
 
-export default function SongList({handleLoadMore, songs, paginate, onPress, loading, onArtistPress, refreshing, onRefresh}) {
+export default function SongList({handleLoadMore, songs, paginate, onPress, loading, onArtistPress, refreshing, onRefresh, renderEmptyComponent}) {
     const { colors } = useTheme();
 
     const toTitleCase = (str) => {
@@ -60,14 +60,7 @@ export default function SongList({handleLoadMore, songs, paginate, onPress, load
                     
                 )
             }}
-            ListEmptyComponent={()=>{
-                return(
-                    !loading &&
-                    <View style={{padding:'5%', alignItems:'center'}}>
-                        <Text style={{color:colors.text}}>Kosong</Text>
-                    </View>
-                )
-            }}
+            ListEmptyComponent={()=> renderEmptyComponent()}
             keyExtractor={songs => songs.id.toString()}
             ListFooterComponent={renderFooter}
             onEndReachedThreshold={0.4}

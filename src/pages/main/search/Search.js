@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
+import { StyleSheet, View, TextInput, Text } from 'react-native';
 import Loader from '../../../components/Loader';
 import SongList from '../../../components/SongList';
 import { getAdStatus } from '../../../api/AdsApi';
@@ -48,13 +48,13 @@ export default function Search({ navigation, route }) {
                 let l = data;
                 //SEARCH LAGU
                 searchLagu(query, (data) => {
-                    if(data.totalItems == 0) {
+                    if (data.totalItems == 0) {
                         let search = {
                             'query': query,
-                            'date': new Date().toLocaleString(),
+                            'date': new Date(),
                             'user': email
                         }
-                        addSearchList(search, ()=>console.log('ditambahkan ke search firestore'))
+                        addSearchList(search, () => console.log('ditambahkan ke search firestore'))
                     }
                     const songs = data.row;
                     songs.forEach(song => {
@@ -113,10 +113,20 @@ export default function Search({ navigation, route }) {
         searchSong()
     }
 
+    const emptyList = () => {
+        return (
+            !loading &&
+            <View style={{ padding: '5%', alignItems: 'center' }}>
+                <Text style={{ fontSize: 16, color: colors.text }}>Pencarian tidak ditemukan</Text>
+                <Text siz style={{ fontSize: 11, color: colors.text }}>data akan segera diperbaharui</Text>
+            </View>
+        )
+    }
+
     return (
         <View style={{ flex: 1 }}>
             <Loader loading={initialLoad} />
-            <View style={{ flex: 1, flexDirection: 'row', elevation: 20, margin: '5%', backgroundColor:colors.card, alignItems: 'center', borderRadius: 30 }}>
+            <View style={{ flex: 1, flexDirection: 'row', elevation: 20, margin: '5%', backgroundColor: colors.card, alignItems: 'center', borderRadius: 30 }}>
                 <Ionicons name='search' color={colors.text} style={{ marginHorizontal: '5%', fontSize: 27 }} />
                 <TextInput
                     placeholderTextColor={colors.text}
@@ -124,7 +134,7 @@ export default function Search({ navigation, route }) {
                     onChangeText={(text) => setQuery(text)}
                     value={query}
                     placeholder='Cari Chord'
-                    style={{ width: '75%', color:colors.text }}
+                    style={{ width: '75%', color: colors.text }}
                 />
             </View>
             <View style={{ flex: contentFlex }}>
@@ -137,6 +147,7 @@ export default function Search({ navigation, route }) {
                     paginate={true}
                     refreshing={refreshing}
                     onRefresh={onRefresh}
+                    renderEmptyComponent={emptyList}
                 />
             </View>
             {
