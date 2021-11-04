@@ -134,8 +134,8 @@ android {
         applicationId "com.chordlagu"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9
-        versionName "2.1.4"
+        versionCode 10
+        versionName "2.1.5"
     }
     splits {
         abi {
@@ -188,6 +188,10 @@ android {
             }
 
         }
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 }
 

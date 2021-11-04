@@ -18,8 +18,8 @@ export default function CategoryList({ data, onPress, current }) {
                             style={{
                                 borderRadius: 20, 
                                 backgroundColor: selecetd ? colors.text : colors.card,
-                                paddingVertical: 5,
-                                paddingHorizontal: 10,
+                                paddingVertical: 7,
+                                paddingHorizontal: 20,
                                 elevation:3,
                                 height:'100%'
                             }}>
