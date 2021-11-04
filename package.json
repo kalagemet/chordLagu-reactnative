@@ -26,9 +26,6 @@
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.4",
     "axios": "^0.19.0",
-    "chordjs": "^1.1.1",
-    "chordsheetjs": "^2.9.1",
-    "native-base": "^2.15.2",
     "pitchfinder": "2.0.9",
     "react": "17.0.1",
     "react-native": "0.64.0",
@@ -40,13 +37,11 @@
     "react-native-recording": "^0.5.1",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.1.1",
-    "react-native-sound": "^0.11.0",
     "react-native-splash-screen": "^3.2.0",
     "react-native-svg": "^9.13.6",
     "react-native-swiper": "^1.6.0-nightly.5",
     "react-native-vector-icons": "^8.1.0",
-    "react-native-webview": "11.4.3",
-    "reanimated-bottom-sheet": "^1.0.0-alpha.22"
+    "react-native-webview": "11.4.3"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",
