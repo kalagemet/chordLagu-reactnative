@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import React, { useState } from 'react';
 import Loader from '../../../components/Loader';
 import SongList from '../../../components/SongList';
@@ -68,7 +68,7 @@ export default function SongsByArtistList({ navigation, route }) {
     }
 
     return (
-        <View style={{ flex: 1}}>
+        <View style={{ flex: 1 }}>
             <Loader
                 loading={bandSongs != null ? false : true} />
             <View>

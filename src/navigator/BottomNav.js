@@ -40,6 +40,7 @@ function HomeStackScreen() {
       <HomeStack.Screen
         name="SongsByArtistList"
         component={SongsByArtistList}
+        options={({ route }) => ({ title: route.params.name, headerShown: true })}
       />
     </HomeStack.Navigator>
   );
