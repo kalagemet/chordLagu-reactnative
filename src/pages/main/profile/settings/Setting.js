@@ -43,8 +43,8 @@ export default function Setting({navigation}){
             .signOut()
             .then(() => {
                 setTimeout(()=>{
-                    navigation.reset({routes:[{name:'Home'}]})
-                }, 2000)
+                    navigation.reset({routes:[{name:'Main'}]})
+                }, 1000)
             })
             .catch(function() {
             // An error happened.
@@ -55,7 +55,7 @@ export default function Setting({navigation}){
                 .signOut()
                 .then(() => {
                     setTimeout(()=>{
-                        navigation.reset({routes:[{name:'Home'}]})
+                        navigation.reset({routes:[{name:'Main'}]})
                     }, 1000)
                 })
                 .catch(function() {

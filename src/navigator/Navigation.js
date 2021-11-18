@@ -68,7 +68,7 @@ function AppContainer() {
     <PreferencesContext.Provider value={preferences}>
       <NavigationContainer theme={theme}>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={BottomNav} options={{headerShown: false}}/>
+          <Stack.Screen name="Main" component={BottomNav} options={{headerShown: false}}/>
           <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
           <Stack.Screen name="Signup" component={Signup} options={{headerShown: false}}/>
           <Stack.Screen name="ViewSong" component={ViewSong} options={{headerShown: false}} />

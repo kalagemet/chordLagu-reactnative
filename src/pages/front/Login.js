@@ -17,7 +17,7 @@ export default function Login({ navigation }) {
 
     const skipLogin = async () => {
         STORAGE.setLoginStatus('false', () => {
-            navigation.navigate('Home')
+            navigation.navigate('Main')
         })
         STORAGE.setUserInfo(null, ()=>{
             console.log('skip pressed')
@@ -38,7 +38,7 @@ export default function Login({ navigation }) {
             const firebaseUserCredential = await auth().signInWithCredential(credential)
             STORAGE.setLoginStatus('true', () => {
                 setTimeout(()=>{
-                    navigation.reset({routes:[{name:'Home'}]})
+                    navigation.reset({routes:[{name:'Main'}]})
                 }, 1000)
             })
         } catch (error) {
@@ -67,7 +67,7 @@ export default function Login({ navigation }) {
                 setLoading(false)
                 STORAGE.setLoginStatus('true', () => {
                     setTimeout(()=>{
-                        navigation.reset({routes:[{name:'Home'}]})
+                        navigation.reset({routes:[{name:'Main'}]})
                     }, 1000)
                 })
             })

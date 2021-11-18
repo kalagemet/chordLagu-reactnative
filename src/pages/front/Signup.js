@@ -21,7 +21,7 @@ export default function Signup ({navigation}) {
     }else{
         auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(() => navigation.navigate('Home'))
+        .then(() => navigation.navigate('Main'))
         .catch(error => setErrorMessage(error.message))
     }
   }

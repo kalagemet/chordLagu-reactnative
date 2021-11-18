@@ -25,7 +25,7 @@ export default function Search({ navigation, route }) {
     const [refreshing, setRefreshing] = useState(false)
     const [contentFlex, setcontentFlex] = useState(15);
 
-    React.useEffect(async () => {
+    React.useEffect(() => {
         STORAGE.getUserInfo((data) => {
             data && setEmail(data.email)
         })
@@ -126,7 +126,7 @@ export default function Search({ navigation, route }) {
     return (
         <View style={{ flex: 1 }}>
             <Loader loading={initialLoad} />
-            <View style={{ flex: 1, flexDirection: 'row', elevation: 20, margin: '5%', backgroundColor: colors.card, alignItems: 'center', borderRadius: 30 }}>
+            <View style={{ flex: 1, flexDirection: 'row', elevation: 10, margin: '5%', backgroundColor: colors.card, alignItems: 'center', borderRadius: 30 }}>
                 <Ionicons name='search' color={colors.text} style={{ marginHorizontal: '5%', fontSize: 27 }} />
                 <TextInput
                     placeholderTextColor={colors.text}

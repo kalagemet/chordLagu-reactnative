@@ -156,7 +156,7 @@ export default function Home({ navigation }) {
     <View style={{ flex: 1 }}>
       <StatusBar
         animated={true}
-        backgroundColor={colors.card}
+        backgroundColor={colors.background}
         barStyle={colors.text == '#FFF' ? 'light-content' : 'dark-content'} />
       <View style={{ flex: 1, flexDirection: 'row', elevation: 10, marginHorizontal: '5%', marginTop: '3%', backgroundColor: colors.card, alignItems: 'center', borderRadius: 30 }}>
         <Ionicons name='search' color={colors.text} style={{ marginHorizontal: '5%', fontSize: 27 }} />

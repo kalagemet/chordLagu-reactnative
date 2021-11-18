@@ -50,7 +50,11 @@ function FavouritesStackScreen() {
   const { isThemeDark } = React.useContext(PreferencesContext);
   return (
     <FavouritesStack.Navigator screenOptions={{
-      headerTitle:'Favorit'
+      headerTitle:'Favorit',
+      headerStyle: {
+        backgroundColor: isThemeDark ? '#212121' : '#FFF',
+        shadowColor: 'transparent'
+      }
     }}>
       <FavouritesStack.Screen
         name="Favourites"
@@ -61,9 +65,14 @@ function FavouritesStackScreen() {
 }
 
 function ToolsStackScreen() {
+  const { isThemeDark } = React.useContext(PreferencesContext);
   return (
     <ToolsStack.Navigator screenOptions={{
       headerTitle:'Alat',
+      headerStyle: {
+        backgroundColor: isThemeDark ? '#212121' : '#FFF',
+        shadowColor: 'transparent'
+      }
     }}>
       <ToolsStack.Screen
         name="Tools"
@@ -96,6 +105,10 @@ function ProfileStackScreen() {
           color={isThemeDark ? '#FFF' : '#000'}
         />
       ),
+      headerStyle: {
+        backgroundColor: isThemeDark ? '#212121' : '#FFF',
+        shadowColor: 'transparent'
+      }
     })}>
       <ProfileStack.Screen
         name="Profile"
@@ -117,28 +130,32 @@ export default function BottomNav(){
   const { isThemeDark } = React.useContext(PreferencesContext);
   return(
     <Tab.Navigator
-      tabBarOptions={{
-        keyboardHidesTabBar:true, 
-        activeTintColor:'#000', 
-        showLabel:false
-      }}
       screenOptions={({route}) => ({
+        headerShown: false,
+        tabBarHideOnKeyboard: true,
+        tabBarActiveTintColor:'#000',
+        tabBarInactiveBackgroundColor: isThemeDark ? '#212121' : '#FFF',
+        tabBarActiveBackgroundColor: isThemeDark ? '#212121' : '#FFF',
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          borderTopWidth: 0
+        },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if(route.name == "Home") {
+          if(route.name == "HomeStack") {
             iconName = focused
             ? 'home'
             : 'home-outline'
-          } else if (route.name == "Favourites") {
+          } else if (route.name == "FavouritesStack") {
             iconName = focused
             ? 'heart'
             : 'heart-outline'
-          } else if (route.name == "Tools") {
+          } else if (route.name == "ToolsStack") {
             iconName = focused
             ? 'build'
             : 'build-outline'
-          }else if (route.name == "Profile") {
+          }else if (route.name == "ProfileStack") {
             iconName = focused
             ? 'person'
             : 'person-outline'
@@ -148,10 +165,10 @@ export default function BottomNav(){
         }
       })}
     >
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="Favourites" component={FavouritesStackScreen} />
-        <Tab.Screen name="Tools" component={ToolsStackScreen}/>
-        <Tab.Screen name="Profile" component={ProfileStackScreen} />
+        <Tab.Screen name="HomeStack" component={HomeStackScreen} />
+        <Tab.Screen name="FavouritesStack" component={FavouritesStackScreen} />
+        <Tab.Screen name="ToolsStack" component={ToolsStackScreen}/>
+        <Tab.Screen name="ProfileStack" component={ProfileStackScreen} />
     </Tab.Navigator>
   )
 }

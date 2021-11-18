@@ -35,11 +35,11 @@ function Loading({ navigation }) {
   if(!initializing){
     if(user){
       STORAGE.setLoginStatus('true', () => {
-        navigation.reset({routes:[{name:'Home'}]})
+        navigation.reset({routes:[{name:'Main'}]})
       })
     }else{
       STORAGE.setLoginStatus('false', () => {
-        navigation.reset({routes:[{name:'Home'}]})
+        navigation.reset({routes:[{name:'Main'}]})
       })
     }
   }
