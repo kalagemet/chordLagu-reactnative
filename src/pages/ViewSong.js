@@ -40,7 +40,7 @@ export default function ViewSong({ navigation, route }) {
   const id = route.params.id
   const user = route.params.user
   const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ['5%', '35%'], []);
+  const snapPoints = useMemo(() => ['10%', '40%'], []);
   const webViewRef = useRef();
   
   React.useEffect(() => {
@@ -315,25 +315,13 @@ export default function ViewSong({ navigation, route }) {
         </View>
         <View style={styles.tool}>
           <View style={{ flex: 2, flexDirection: 'row', justifyContent:'flex-start' }}>
-            <TouchableOpacity 
-              style={{ padding:'2%', backgroundColor: colors.primary, borderRadius: 20, marginHorizontal:'5%', alignItems:'center', justifyContent:'center'}}
-              disabled={fontSize>10 ? false : true}
-              onPress={()=>{setFontSize(fontSize-10)}} >
-              <Feather color={colors.card} size={35} name="zoom-out" />
-            </TouchableOpacity>
-            <TouchableOpacity style={{ padding:'2%', backgroundColor: colors.primary, borderRadius: 20, alignItems:'center', justifyContent:'center' }} 
-              onPress={()=>setFontSize(fontSize+10)} >
-              <Feather color={colors.card} size={35} name="zoom-in" />
-            </TouchableOpacity>
+            <Feather color={colors.text} size={35} name="zoom-out" onPress={()=>{ fontSize>10 && setFontSize(fontSize-10)}} />
+            <Feather color={colors.text} size={35} name="zoom-in" onPress={()=>setFontSize(fontSize+10)} />
           </View>
           <View style={{ flex: 2, flexDirection: 'row', justifyContent:'center', paddingHorizontal:'5%' }}>
-            <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 20, alignItems:'center', justifyContent:'center' }} onPress={transposeDown} >
-              <Ionicons color={colors.card} size={35} name="remove" />
-            </TouchableOpacity>
-            <Text style={{ fontSize: 11, alignSelf: 'center', marginHorizontal: '3%', color:colors.text }}>Nada: {transpose>0 ? '+'+transpose: transpose}</Text>
-            <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 20, alignItems:'center', justifyContent:'center' }} onPress={transposeUp} >
-              <Ionicons color={colors.card} size={35} name="add" />
-            </TouchableOpacity>          
+            <Ionicons color={colors.text} size={35} name="remove" onPress={transposeDown}/>
+            <Text style={{ fontSize: 11, alignSelf: 'center', marginHorizontal: '3%', color:colors.text }}>Transpose: {transpose>0 ? '+'+transpose: transpose}</Text>
+            <Ionicons color={colors.text} size={35} name="add" onPress={transposeUp} /> 
           </View>
           {
             user == data.created_by || user == 'afm5997@gmail.com' ?

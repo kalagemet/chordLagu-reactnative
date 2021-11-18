@@ -48,7 +48,7 @@ export default function Search({ navigation, route }) {
                 let l = data;
                 //SEARCH LAGU
                 searchLagu(query, (data) => {
-                    if (data.totalItems == 0) {
+                    if (data.totalItems == 0 && l.length == 0) {
                         let search = {
                             'query': query,
                             'date': new Date(),
