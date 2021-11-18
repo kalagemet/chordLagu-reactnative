@@ -3,9 +3,10 @@ import { StyleSheet, Text, View } from 'react-native'
 import auth from '@react-native-firebase/auth';
 import Button from '../../components/Button';
 import InputText from '../../components/InputText';
+import { useTheme } from '@react-navigation/native';
 
 export default function Signup ({navigation}) {
-
+  const { colors } = useTheme();
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
@@ -28,11 +29,11 @@ export default function Signup ({navigation}) {
   return (
       <View style={{flex:1}}>
         <View style={styles.HeaderContainer}>
-          <Text style={styles.TextA}>Daftar</Text>
+          <Text style={{...styles.TextA, color: colors.text}}>Daftar</Text>
         </View>
         <View style={styles.FormContainer}>
           {errorMessage &&
-            <Text style={{ color: 'red', textAlign:'center', padding:10}}>
+            <Text style={{ color: colors.notification, textAlign:'center', padding:10}}>
               {errorMessage}
             </Text>}
             <InputText name='Email' onChangeText={(text) => setEmail(text)}/>

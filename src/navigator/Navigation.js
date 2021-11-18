@@ -42,10 +42,10 @@ function AppContainer() {
     ...DarkTheme,
     colors: {
       primary: '#DDDDDD',
-      background: '#393E46',
-      card: '#222831',
+      background: '#212121',
+      card: '#303030',
       text: '#FFF',
-      notification: '#F05454'
+      notification: '#FF3F80'
     },
   };
 

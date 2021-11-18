@@ -5,18 +5,19 @@ import {
   Modal,
   ActivityIndicator
 } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 
 function Loader({loading}){
-
+  const { colors } = useTheme();
   return (
     <Modal
       transparent={true}
       animationType={'none'}
       visible={loading}>
         <View style={styles.modalBackground}>
-          <View style={styles.activityIndicatorWrapper}>
+          <View style={{...styles.activityIndicatorWrapper, backgroundColor: colors.card}}>
             <ActivityIndicator
-              color='#000'
+              color={colors.primary}
               size='large'
               animating={true} />
           </View>
@@ -34,7 +35,6 @@ const styles = StyleSheet.create({
       backgroundColor: '#00000040',
     },
     activityIndicatorWrapper: {
-      backgroundColor: '#FFFFFF',
       height: '18%',
       width: '30%',
       borderRadius: 10,

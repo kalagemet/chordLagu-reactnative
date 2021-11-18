@@ -27,7 +27,7 @@ export default function About({navigation}) {
             </View>
             <View style={{flex:2, alignItems:'center', flexDirection:'row', padding:'5%'}}>
                 <TouchableOpacity 
-                    style={{ width:'50%', width:'40%', padding:'3%', borderRadius:20, alignItems:'center', justifyContent:'center', elevation:10, backgroundColor:colors.background}}
+                    style={{ width:'50%', width:'40%', padding:'3%', borderRadius:20, alignItems:'center', justifyContent:'center', elevation:5, backgroundColor:colors.background}}
                     onPress={()=>Linking.openURL('https://www.instagram.com/chordlaguofficial/')}
                 >
                     <Ionicons size={40} name="logo-instagram" color={colors.text} />

@@ -88,7 +88,7 @@ export default function Login({ navigation }) {
             </View>
             <View style={styles.FormContainer}>
                 {errorMessage &&
-                <Text style={{ color: 'red', textAlign:'center', padding:10}}>
+                <Text style={{ color: colors.notification, textAlign:'center', padding:10}}>
                 {errorMessage}
                 </Text>}
                 <InputText name='Email' onChangeText={(text) => setEmail(text)}/>
@@ -100,7 +100,7 @@ export default function Login({ navigation }) {
                 <Button name='Daftar' onPress={toSignup} height='11%'/>
 
                 <View style={{paddingVertical:10, alignItems:'center'}}>
-                    <Text>Atau</Text>
+                    <Text style={{color: colors.text}}>Atau</Text>
                 </View>
 
                 <Button name='Masuk Dengan Google' icon='logo-google' onPress={_signIn} height='11%'/>
