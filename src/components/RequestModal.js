@@ -15,6 +15,7 @@ import InputText from "./InputText";
 import Button from "./Button";
 import messaging from "@react-native-firebase/messaging";
 import { addRequestList } from "../api/SongsApi";
+import { sendNotificationRequestToAdmin } from "../api/NotificationApi";
 
 export default function RequestModal({ show, closeModal, email }) {
   const { colors } = useTheme();
@@ -23,12 +24,10 @@ export default function RequestModal({ show, closeModal, email }) {
 
   const postRequest = async () => {
     if (judul == "" || namaBand == "") {
-      ToastAndroid.showWithGravityAndOffset(
+      ToastAndroid.showWithGravity(
         "Judul dan artist tidak boleh kosong",
         ToastAndroid.SHORT,
-        ToastAndroid.TOP,
-        25,
-        50
+        ToastAndroid.TOP
       );
     } else {
       const fcmToken = await messaging().getToken();
@@ -41,13 +40,23 @@ export default function RequestModal({ show, closeModal, email }) {
         done: false,
       };
       addRequestList(request, () => {
-        ToastAndroid.showWithGravityAndOffset(
-          "Berhasil, Request akan segera diproses",
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM,
-          25,
-          50
-        );
+        sendNotificationRequestToAdmin(namaBand+" - "+judul, ()=>{
+          ToastAndroid.showWithGravityAndOffset(
+            "Berhasil, Request akan segera diproses",
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+            25,
+            50
+          );
+        }, () => {
+          ToastAndroid.showWithGravityAndOffset(
+            "Terjadi kesalahan, request gagal",
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+            25,
+            50
+          );
+        })
       });
       closeModal();
     }

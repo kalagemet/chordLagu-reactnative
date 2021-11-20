@@ -41,7 +41,7 @@ export default function SongList({handleLoadMore, songs, paginate, onPress, load
                             <TouchableOpacity style={styles.item} onPress={() => onPress(item.id)}>
                                 <View style={{flex:4}}>
                                     <Text style={{color:colors.text}}>{item.title ? toTitleCase(item.title) : item.judul}</Text>
-                                    <Text style={{color:colors.primary}} numberOfLines={1}>{item.artist ? toTitleCase(item.artist) : item.nama_band }</Text>
+                                    <Text style={{color:colors.text}} numberOfLines={1}>{item.artist ? toTitleCase(item.artist) : item.nama_band }</Text>
                                 </View>
                             </TouchableOpacity>
                             : //list band

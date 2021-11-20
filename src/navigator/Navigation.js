@@ -43,7 +43,7 @@ function AppContainer() {
   const MyDarkTheme = {
     ...DarkTheme,
     colors: {
-      primary: '#DDDDDD',
+      primary: '#455A64',
       background: '#212121',
       card: '#303030',
       text: '#FFF',

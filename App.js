@@ -24,7 +24,7 @@ const App: () => Node = () => {
         "Notification caused app to open from background state:",
         remoteMessage.notification
       );
-      RootNavigation.navigate("Main", {screen: 'ProfileStack', params: {screen: 'Notifications'}});
+      RootNavigation.navigate("Main", { screen: "ProfileStack" });
     });
 
     // Check whether an initial notification is available
@@ -36,7 +36,7 @@ const App: () => Node = () => {
             "Notification caused app to open from quit state:",
             remoteMessage.notification
           );
-          RootNavigation.navigate("Main", {screen: 'ProfileStack'});; // e.g. "Settings"
+          RootNavigation.navigate("Main", { screen: "ProfileStack" }); // e.g. "Settings"
         }
       });
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {

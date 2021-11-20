@@ -43,7 +43,7 @@ function Notifications({ navigation }) {
     return (
       <TouchableOpacity
         style={{
-          backgroundColor: notif.read ? colors.card : colors.notification,
+          backgroundColor: notif.read ? colors.card : colors.primary,
           flex: 1,
           padding: "5%",
           borderBottomColor: "#ccc",
