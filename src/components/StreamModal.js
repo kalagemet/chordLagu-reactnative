@@ -44,7 +44,7 @@ export default function StreamModal({ id, closeModalStream }) {
         onLoadEnd={onLoadEnd}
       />
       <TouchableOpacity style={styles.close} onPress={closeModalStream}>
-        <Ionicons size={35} name="close" />
+        <Ionicons color="black" size={35} name="close" />
       </TouchableOpacity>
     </View>
   );

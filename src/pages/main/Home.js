@@ -135,7 +135,8 @@ export default function Home({ navigation }) {
 
   const searchSong = () => {
     query && navigation.navigate('Search', {
-      query: query
+      query: query,
+      user: currentUser ? currentUser.email : ''
     })
     setQuery('')
   }
@@ -158,7 +159,7 @@ export default function Home({ navigation }) {
         animated={true}
         backgroundColor={colors.background}
         barStyle={colors.text == '#FFF' ? 'light-content' : 'dark-content'} />
-      <View style={{ flex: 1, flexDirection: 'row', elevation: 10, marginHorizontal: '5%', marginTop: '3%', backgroundColor: colors.card, alignItems: 'center', borderRadius: 30 }}>
+      <View style={{ flex: 1, flexDirection: 'row', elevation: 10, marginHorizontal: '5%', marginTop: '3%', backgroundColor: colors.border, alignItems: 'center', borderRadius: 30 }}>
         <Ionicons name='search' color={colors.text} style={{ marginHorizontal: '5%', fontSize: 27 }} />
         <TextInput
           placeholderTextColor={colors.text}

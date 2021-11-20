@@ -12,6 +12,7 @@ import Tuner from '../pages/main/tools/Tuner';
 import ChordLibrary from '../pages/main/tools/ChordLibrary';
 import SongsByArtistList from '../pages/main/search/SongsByArtistList';
 import Setting from '../pages/main/profile/settings/Setting';
+import Notifications from '../pages/main/profile/Notifications';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { PreferencesContext } from '../Settings';
 
@@ -121,6 +122,10 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="Setting"
         component={Setting}
+      />
+      <ProfileStack.Screen
+        name="Notifications"
+        component={Notifications}
       />
     </ProfileStack.Navigator>
   );

@@ -17,9 +17,9 @@ export default function Tools({navigation}) {
         <Ionicons
           size={50}
           name="speedometer-outline"
-          color={colors.primary}
+          color={colors.text}
         />
-        <Text style={{color:colors.primary}}>Tuner</Text>
+        <Text style={{color:colors.text}}>Tuner</Text>
       </TouchableOpacity>
       <TouchableOpacity 
         style={{height:'20%', width:'40%', borderRadius:20, elevation:7, justifyContent:'center', alignItems:'center', padding:'3%', backgroundColor:colors.background}}
@@ -28,9 +28,9 @@ export default function Tools({navigation}) {
         <Ionicons
           size={50}
           name="library-outline"
-          color={colors.primary}
+          color={colors.text}
         />
-        <Text style={{color:colors.primary}}>Daftar Kunci</Text>
+        <Text style={{color:colors.text}}>Daftar Kunci</Text>
       </TouchableOpacity>
     </View>
   );

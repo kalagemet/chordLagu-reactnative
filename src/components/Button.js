@@ -12,7 +12,7 @@ function Button({name, icon, onPress, minWidth, width, height, disabled}){
   
   return (
     <TouchableOpacity 
-      style={{...styles.Button, minWidth:minWidth, backgroundColor: disabled ? colors.text : colors.card, width:width, height:height, elevation: disabled ? 0 : 5 }} 
+      style={{...styles.Button, minWidth:minWidth, backgroundColor: disabled ? colors.text : colors.border, width:width, height:height, elevation: disabled ? 0 : 5 }} 
       onPress={()=>onPress()} 
       disabled={disabled}
     >

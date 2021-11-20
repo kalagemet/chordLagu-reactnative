@@ -24,19 +24,19 @@ export default function ChordModal({show, name, selectedChord, closeModal}) {
         </TouchableWithoutFeedback>
           <View style={{...styles.activityIndicatorWrapper, backgroundColor: colors.background}}>
             <View style={{flex:1, alignItems:'center'}} >
-              <Text style={{marginTop:7, color:colors.primary}}>{name}</Text>
+              <Text style={{marginTop:7, color:colors.text}}>{name}</Text>
               <View style={{marginRight:10}}>
                 <ViewChord
                     chord={selectedChord}
                     width={100}
                     height={120}
-                    color={colors.primary}
+                    color={colors.text}
                 />
               </View>
             </View>
           </View>
           <TouchableOpacity style={{...styles.close, backgroundColor:colors.background}} onPress={closeModal}>
-                <Ionicons name="close-outline" size={30} color={colors.primary} />
+                <Ionicons name="close-outline" size={30} color={colors.text} />
             </TouchableOpacity>
         </View>
     </Modal>

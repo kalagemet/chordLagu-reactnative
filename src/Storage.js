@@ -98,3 +98,51 @@ export const setLocalAppVersion = async(value, onSaved) => {
         onSaved()
     })
 }
+
+export const setRequestNotifications = async(data) => {
+    let saved = await AsyncStorage.getItem("@requestNotifications")
+    let isi = [
+        {
+            item : data.item,
+            item_id : data.item_id,
+            message: data.message,
+            timestamp : data.timestamp,
+            read : data.read
+        },
+    ]
+    if(saved != null){
+        saved = JSON.parse(saved)
+        isi = isi.concat([...saved])
+    }
+    await AsyncStorage.setItem("@requestNotifications", JSON.stringify(isi))
+    .then(
+        console.log("notif added")
+    )
+    .catch((err) => console.error(err))
+}
+
+export const updateRequestNotification = async (data) => {
+    await AsyncStorage.setItem("@requestNotifications", JSON.stringify(data))
+    .then(
+        console.log('updated')
+    )
+    .catch((err) => console.error(err))
+}
+
+export const getRequestNotifications = async(onReceived) => {
+    let saved = await AsyncStorage.getItem("@requestNotifications")
+    saved = JSON.parse(saved)
+    onReceived(saved)
+}
+
+export const getNumberOfUnreadNotification = async(onReceived) => {
+    let notifications = await AsyncStorage.getItem("@requestNotifications")
+    notifications = JSON.parse(notifications)
+    let num = 0;
+    notifications && notifications.forEach( notification => {
+        if(!notification.read){
+            num ++;
+        }
+    });
+    onReceived(num);
+}

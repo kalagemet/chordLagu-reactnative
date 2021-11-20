@@ -10,6 +10,7 @@ import MakeSong from '../pages/MakeSong';
 import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { PreferencesContext, getTheme, setTheme } from '../Settings';
+import { navigationRef } from './RootNavigation';
 
 const Stack = createStackNavigator();
 const colorScheme = Appearance.getColorScheme();
@@ -30,11 +31,12 @@ function AppContainer() {
   const MyDefaultTheme = {
     ...DefaultTheme,
     colors: {
-      primary: '#30475E',
+      primary: '#90A4AE',
       background: '#FFF',
-      card: '#FFF',
+      card: '#E0E0E0',
       text: '#000',
-      notification: 'blue'
+      notification: '#3E50B4',
+      border: '#FFFFFF'
     },
   };
 
@@ -45,7 +47,8 @@ function AppContainer() {
       background: '#212121',
       card: '#303030',
       text: '#FFF',
-      notification: '#FF3F80'
+      notification: '#FF3F80',
+      border: "#303030"
     },
   };
 
@@ -66,7 +69,7 @@ function AppContainer() {
 
   return (
     <PreferencesContext.Provider value={preferences}>
-      <NavigationContainer theme={theme}>
+      <NavigationContainer theme={theme} ref={navigationRef}>
         <Stack.Navigator>
           <Stack.Screen name="Main" component={BottomNav} options={{headerShown: false}}/>
           <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>

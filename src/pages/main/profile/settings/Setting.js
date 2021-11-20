@@ -111,9 +111,9 @@ export default function Setting({navigation}){
             <View style={{flex:3, justifyContent:'flex-end', padding:'5%'}}>
                 {
                     login ?
-                    <Button name='Logout' onPress={alert_} icon='log-out-outline' height='11%' />
+                    <Button name='Logout' onPress={alert_} icon='log-out-outline' height='8%' />
                     :
-                    <Button name='Login' onPress={()=>navigation.navigate("Login")} icon='log-in-outline' height='11%' />                    
+                    <Button name='Login' onPress={()=>navigation.navigate("Login")} icon='log-in-outline' height='8%' />                    
                 }
             </View>
         </View>

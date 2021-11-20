@@ -333,7 +333,7 @@ export default function ViewSong({ navigation, route }) {
       </View>
     );
   };
-  
+
   const emptyList = () => {
     return (
       !loading && (
@@ -360,16 +360,16 @@ export default function ViewSong({ navigation, route }) {
             <Text
               style={{
                 fontSize: 20,
-                color: colors.primary,
+                color: colors.text,
                 marginRight: "3%",
               }}
             >
               Scroll
             </Text>
             {scrollActive ? (
-              <Ionicons color={colors.primary} size={25} name="stop" />
+              <Ionicons color={colors.text} size={25} name="stop" />
             ) : (
-              <Ionicons color={colors.primary} size={25} name="caret-down" />
+              <Ionicons color={colors.text} size={25} name="caret-down" />
             )}
           </TouchableOpacity>
           <Slider
@@ -381,12 +381,16 @@ export default function ViewSong({ navigation, route }) {
             minimumValue={0}
             maximumValue={1}
           />
-          <Text style={{ color: colors.primary }}>
+          <Text style={{ color: colors.text }}>
             {sliderValue.toFixed(2)} x
           </Text>
         </View>
-        <Swiper loop={false}>
-          <View style={{ justifyContent: "space-between" }}>
+        <Swiper
+          loop={false}
+          activeDotColor={colors.notification}
+          dotColor={colors.primary}
+        >
+          <View style={{ justifyContent: "space-around", height: "100%" }}>
             <View style={styles.tool}>
               <View
                 style={{
@@ -432,7 +436,7 @@ export default function ViewSong({ navigation, route }) {
                     color: colors.text,
                   }}
                 >
-                  Nada: {transpose > 0 ? "+" + transpose : transpose}
+                  Transpose: {transpose > 0 ? "+" + transpose : transpose}
                 </Text>
                 <Ionicons
                   color={colors.text}
@@ -461,7 +465,7 @@ export default function ViewSong({ navigation, route }) {
                     name="create"
                     style={{
                       fontSize: 35,
-                      color: colors.primary,
+                      color: colors.text,
                       marginHorizontal: "3%",
                     }}
                     onPress={() =>
@@ -472,7 +476,7 @@ export default function ViewSong({ navigation, route }) {
                     name="trash"
                     style={{
                       fontSize: 35,
-                      color: colors.primary,
+                      color: colors.text,
                       justifyContent: "flex-end",
                     }}
                     onPress={onDeleteSong}
@@ -515,12 +519,12 @@ export default function ViewSong({ navigation, route }) {
                 marginVertical: "2%",
                 color: colors.text,
                 alignSelf: "center",
-                height: "10%"
+                height: "10%",
               }}
             >
               Chord Terkait
             </Text>
-            <View style={{height:'80%'}}>
+            <View style={{ height: "80%" }}>
               <SongList
                 songs={chordTerkait}
                 onPress={(id) => setId(id)}
@@ -543,7 +547,7 @@ export default function ViewSong({ navigation, route }) {
         selectedChord={selectedChord}
         closeModal={() => setShowChord(false)}
       />
-      <View style={{ height: "91%" }}>
+      <View style={{ height: "90%" }}>
         <WebView
           ref={webViewRef}
           source={{

@@ -17,7 +17,7 @@ function Loader({loading}){
         <View style={styles.modalBackground}>
           <View style={{...styles.activityIndicatorWrapper, backgroundColor: colors.card}}>
             <ActivityIndicator
-              color={colors.primary}
+              color={colors.text}
               size='large'
               animating={true} />
           </View>

@@ -66,7 +66,7 @@ export default function MakeSong({navigation}) {
           <Loader loading={loading} />
           <KeyboardAvoidingView>
               <TextInput
-              style={{...styles.input, color:colors.text, borderBottomColor:colors.primary}}
+              style={{...styles.input, color:colors.text, borderBottomColor:colors.text}}
               placeholderTextColor={colors.text}
               placeholder="Nama Artis"
               autoFocus={false}
@@ -77,7 +77,7 @@ export default function MakeSong({navigation}) {
               />
 
               <TextInput
-              style={{...styles.input, color:colors.text, borderBottomColor:colors.primary}}
+              style={{...styles.input, color:colors.text, borderBottomColor:colors.text}}
               placeholderTextColor={colors.text}
               placeholder="Judul Lagu"
               autoFocus={false}
