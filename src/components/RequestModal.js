@@ -3,13 +3,9 @@ import {
   StyleSheet,
   View,
   Modal,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
   Text,
   ToastAndroid,
 } from "react-native";
-import ViewChord from "./ViewChord";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTheme } from "@react-navigation/native";
 import InputText from "./InputText";
 import Button from "./Button";

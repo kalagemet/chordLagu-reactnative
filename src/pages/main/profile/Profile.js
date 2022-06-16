@@ -11,7 +11,7 @@ import RequestModal from "../../../components/RequestModal";
 
 const adUnitId = __DEV__
   ? TestIds.BANNER
-  : "ca-app-pub-1690523413615203/3882846984";
+  : "ca-app-pub-4929484467095898/3662488155";
 export default function Profile({ navigation }) {
   const { colors } = useTheme();
   const [loading, setLoading] = useState(false);
@@ -68,9 +68,7 @@ export default function Profile({ navigation }) {
             ...styles.badgeIconView,
             padding: numNotification > 0 ? 5 : 0,
           }}
-          onPress={() =>
-            navigation.navigate("Notifications")
-          }
+          onPress={() => navigation.navigate("Notifications")}
         >
           {numNotification > 0 && (
             <Text
@@ -179,16 +177,14 @@ export default function Profile({ navigation }) {
         )}
       </View>
       {showAds ? (
-        <View style={{ flex: 1 }}>
-          <BannerAd
-            unitId={adUnitId}
-            size={BannerAdSize.FULL_BANNER}
-            requestOptions={{
-              requestNonPersonalizedAdsOnly: true,
-            }}
-            onAdFailedToLoad={(error) => console.log(error)}
-          />
-        </View>
+        <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.FULL_BANNER}
+          requestOptions={{
+            requestNonPersonalizedAdsOnly: true,
+          }}
+          onAdFailedToLoad={(error) => console.log(error)}
+        />
       ) : (
         <View />
       )}

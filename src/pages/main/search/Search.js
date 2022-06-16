@@ -20,7 +20,7 @@ import Button from "../../../components/Button";
 
 const adUnitId = __DEV__
   ? TestIds.BANNER
-  : "ca-app-pub-1690523413615203/8408167938";
+  : "ca-app-pub-4929484467095898/3662488155";
 
 export default function Search({ navigation, route }) {
   const { colors } = useTheme();
@@ -156,7 +156,11 @@ export default function Search({ navigation, route }) {
           <Text siz style={{ fontSize: 11, color: colors.text }}>
             atau
           </Text>
-          <Button onPress={requestModalChange} name="Request Chord" height='35%'/>
+          <Button
+            onPress={requestModalChange}
+            name="Request Chord"
+            height="35%"
+          />
         </View>
       )
     );
@@ -209,16 +213,14 @@ export default function Search({ navigation, route }) {
         />
       </View>
       {showAds ? (
-        <View style={{ flex: 1.5 }}>
-          <BannerAd
-            unitId={adUnitId}
-            size={BannerAdSize.FULL_BANNER}
-            requestOptions={{
-              requestNonPersonalizedAdsOnly: true,
-            }}
-            onAdFailedToLoad={(error) => console.log(error)}
-          />
-        </View>
+        <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.FULL_BANNER}
+          requestOptions={{
+            requestNonPersonalizedAdsOnly: true,
+          }}
+          onAdFailedToLoad={(error) => console.log(error)}
+        />
       ) : (
         <View />
       )}
