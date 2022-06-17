@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import Loader from "../../../components/Loader";
 import { getAdStatus } from "../../../api/AdsApi";
 import * as STORAGE from "../../../Storage";
 import { BannerAd, BannerAdSize, TestIds } from "@react-native-firebase/admob";
@@ -14,7 +13,6 @@ const adUnitId = __DEV__
   : "ca-app-pub-7469495811267533/5655188103";
 export default function Profile({ navigation }) {
   const { colors } = useTheme();
-  const [loading, setLoading] = useState(false);
   const [showAds, setShowAds] = useState(false);
   const [userData, setUserData] = useState([]);
   const [showRequest, setShowRequest] = useState(false);
@@ -51,7 +49,6 @@ export default function Profile({ navigation }) {
 
   return (
     <View style={{ flex: 1, overflow: "hidden" }}>
-      <Loader loading={loading} />
       <RequestModal
         show={showRequest}
         closeModal={requestModalChange}

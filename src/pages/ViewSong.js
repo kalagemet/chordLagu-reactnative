@@ -7,6 +7,7 @@ import {
   View,
   BackHandler,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import { getStreamsBySearch } from "../api/StreamsApi";
@@ -34,6 +35,7 @@ import { getAdStatus } from "../api/AdsApi";
 const adUnitId = __DEV__
   ? TestIds.BANNER
   : "ca-app-pub-7469495811267533/5655188103";
+const windowHeight = Dimensions.get("window").height;
 
 export default function ViewSong({ navigation, route }) {
   const { colors } = useTheme();
@@ -56,9 +58,10 @@ export default function ViewSong({ navigation, route }) {
   const [id, setId] = useState(route.params.id);
   const user = route.params.user;
   const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ["10%", "40%"], []);
+  const snapPoints = useMemo(() => [80, 320], []);
   const webViewRef = useRef();
   const [showAds, setShowAds] = useState(false);
+  const [bannerHeight, setBannerHeight] = useState(0);
 
   React.useEffect(() => {
     console.log("id: " + id);
@@ -74,9 +77,16 @@ export default function ViewSong({ navigation, route }) {
       }
     );
     getAdStatus((adStatus) => {
-      setTimeout(() => {
-        setShowAds(adStatus.homeBannerAd);
-      }, 3000);
+      setShowAds(adStatus.homeBannerAd);
+      let margin;
+      if (windowHeight <= 400) {
+        margin = 37;
+      } else if (windowHeight >= 400 && windowHeight < 720) {
+        margin = 55;
+      } else if (windowHeight >= 720) {
+        margin = 95;
+      }
+      setBannerHeight(adStatus.homeBannerAd ? margin : 0);
     });
   }, [navigation, id]);
 
@@ -560,14 +570,14 @@ export default function ViewSong({ navigation, route }) {
       {showAds && (
         <BannerAd
           unitId={adUnitId}
-          size={BannerAdSize.FULL_BANNER}
+          size={BannerAdSize.SMART_BANNER}
           requestOptions={{
             requestNonPersonalizedAdsOnly: true,
           }}
           onAdFailedToLoad={(error) => console.log(error)}
         />
       )}
-      <View style={{ height: "90%" }}>
+      <View style={{ height: windowHeight - snapPoints[0] - bannerHeight }}>
         <WebView
           ref={webViewRef}
           source={{
