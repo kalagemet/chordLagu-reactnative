@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import { StatusBar, View, TextInput, ActivityIndicator } from "react-native";
 import auth from "@react-native-firebase/auth";
 import { getPopular, getTerbaru } from "../../api/SongDbApi";
-import { getAdStatus } from "../../api/AdsApi";
 import { getCategory, getCategories } from "../../api/CategoryApi";
 import SongList from "../../components/SongList";
 import * as STORAGE from "../../Storage";
-import { BannerAd, BannerAdSize, TestIds } from "@react-native-firebase/admob";
 import { useTheme } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { GoogleSignin } from "react-native-google-signin";
@@ -15,21 +13,15 @@ import DeviceInfo from "react-native-device-info";
 import { checkForUpdate } from "../../Settings";
 import CategoryList from "../../components/CategoryList";
 
-const adUnitId = __DEV__
-  ? TestIds.BANNER
-  : "ca-app-pub-4929484467095898/3662488155";
-
 export default function Home({ navigation }) {
   const { colors } = useTheme();
   const [currentUser, setCurrentUser] = useState(null);
   const [flatListItem, setFlatlistItem] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [showAds, setShowAds] = useState(false);
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState("");
   const [query, setQuery] = useState("");
   const [initializing, setInitializing] = useState(true);
-  const [contentFlex, setcontentFlex] = useState(15);
 
   React.useEffect(() => {
     getCategories((data) => {
@@ -70,11 +62,6 @@ export default function Home({ navigation }) {
   }, [navigation]);
 
   const setStatus = () => {
-    getAdStatus((adStatus) => {
-      adStatus ? setcontentFlex(13) : setcontentFlex(15);
-      setShowAds(adStatus.homeBannerAd);
-    });
-
     STORAGE.getLoginStatus((value) => {
       if (!value) {
         const user = null;
@@ -115,7 +102,7 @@ export default function Home({ navigation }) {
         setFlatlistItem(res.data);
         setRefreshing(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setRefreshing(false);
       });
   };
@@ -127,7 +114,7 @@ export default function Home({ navigation }) {
         setFlatlistItem(res.data);
         setRefreshing(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setRefreshing(false);
       });
   };
@@ -217,7 +204,7 @@ export default function Home({ navigation }) {
           current={category}
         />
       </View>
-      <View style={{ flex: contentFlex }}>
+      <View style={{ flex: 15 }}>
         <SongList
           songs={flatListItem}
           onPress={(id) => toViewSong(id)}
@@ -226,18 +213,6 @@ export default function Home({ navigation }) {
           renderEmptyComponent={emptyList}
         />
       </View>
-      {showAds ? (
-        <BannerAd
-          unitId={adUnitId}
-          size={BannerAdSize.FULL_BANNER}
-          requestOptions={{
-            requestNonPersonalizedAdsOnly: true,
-          }}
-          onAdFailedToLoad={(error) => console.log(error)}
-        />
-      ) : (
-        <View />
-      )}
     </View>
   );
 }

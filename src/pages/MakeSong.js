@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { View, StyleSheet, TextInput, KeyboardAvoidingView, Platform, ScrollView, ToastAndroid } from "react-native";
+import { View, StyleSheet, TextInput, KeyboardAvoidingView, ScrollView, ToastAndroid } from "react-native";
 import Loader from '../components/Loader';
 import * as STORAGE from '../Storage';
 import Button from '../components/Button';

@@ -11,7 +11,7 @@ import RequestModal from "../../../components/RequestModal";
 
 const adUnitId = __DEV__
   ? TestIds.BANNER
-  : "ca-app-pub-4929484467095898/3662488155";
+  : "ca-app-pub-7469495811267533/5655188103";
 export default function Profile({ navigation }) {
   const { colors } = useTheme();
   const [loading, setLoading] = useState(false);

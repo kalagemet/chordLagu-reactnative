@@ -28,6 +28,12 @@ import Loader from "../components/Loader";
 import KeepAwake from "react-native-keep-awake";
 import Swiper from "react-native-swiper";
 import SongList from "../components/SongList";
+import { BannerAd, BannerAdSize, TestIds } from "@react-native-firebase/admob";
+import { getAdStatus } from "../api/AdsApi";
+
+const adUnitId = __DEV__
+  ? TestIds.BANNER
+  : "ca-app-pub-7469495811267533/5655188103";
 
 export default function ViewSong({ navigation, route }) {
   const { colors } = useTheme();
@@ -52,6 +58,7 @@ export default function ViewSong({ navigation, route }) {
   const bottomSheetRef = useRef(null);
   const snapPoints = useMemo(() => ["10%", "40%"], []);
   const webViewRef = useRef();
+  const [showAds, setShowAds] = useState(false);
 
   React.useEffect(() => {
     console.log("id: " + id);
@@ -66,6 +73,11 @@ export default function ViewSong({ navigation, route }) {
         console.log("gagal mendapatkan chord terkait");
       }
     );
+    getAdStatus((adStatus) => {
+      setTimeout(() => {
+        setShowAds(adStatus.homeBannerAd);
+      }, 3000);
+    });
   }, [navigation, id]);
 
   React.useEffect(() => {
@@ -381,9 +393,7 @@ export default function ViewSong({ navigation, route }) {
             minimumValue={0}
             maximumValue={1}
           />
-          <Text style={{ color: colors.text }}>
-            {sliderValue.toFixed(2)} x
-          </Text>
+          <Text style={{ color: colors.text }}>{sliderValue.toFixed(2)} x</Text>
         </View>
         <Swiper
           loop={false}
@@ -547,6 +557,16 @@ export default function ViewSong({ navigation, route }) {
         selectedChord={selectedChord}
         closeModal={() => setShowChord(false)}
       />
+      {showAds && (
+        <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.FULL_BANNER}
+          requestOptions={{
+            requestNonPersonalizedAdsOnly: true,
+          }}
+          onAdFailedToLoad={(error) => console.log(error)}
+        />
+      )}
       <View style={{ height: "90%" }}>
         <WebView
           ref={webViewRef}
@@ -584,7 +604,6 @@ export default function ViewSong({ navigation, route }) {
         index={0}
         snapPoints={snapPoints}
         enableContentPanningGesture={false}
-        children={renderDrawer}
         handleComponent={drawerHandler}
         style={{
           elevation: 50,
@@ -593,7 +612,9 @@ export default function ViewSong({ navigation, route }) {
           borderTopStartRadius: 17,
           borderTopEndRadius: 17,
         }}
-      />
+      >
+        {renderDrawer}
+      </BottomSheet>
       <KeepAwake />
     </View>
   );

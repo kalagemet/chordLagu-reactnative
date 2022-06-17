@@ -7,15 +7,14 @@
  */
 
 import React from "react";
-import type { Node } from "react";
-import { StyleSheet, Alert } from "react-native";
+import { Alert } from "react-native";
 import AppContainer from "./src/navigator/Navigation";
 import SplashScreen from "react-native-splash-screen";
 import messaging from "@react-native-firebase/messaging";
 import * as STORAGE from "./src/Storage";
 import * as RootNavigation from "./src/navigator/RootNavigation";
 
-const App: () => Node = () => {
+const App = () => {
   React.useEffect(() => {
     SplashScreen.hide();
     requestUserPermission();
@@ -57,7 +56,7 @@ const App: () => Node = () => {
     });
     // Unmount FCM if done
     return unsubscribe;
-  });
+  }, []);
 
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
@@ -81,24 +80,5 @@ const App: () => Node = () => {
 
   return <AppContainer />;
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "600",
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: "400",
-  },
-  highlight: {
-    fontWeight: "700",
-  },
-});
 
 export default App;
