@@ -126,7 +126,7 @@ const replace = (isi, array) => {
   for (let i = kunci.length - 1; i >= 0; i--) {
     //1
     let testVar = `<span class="chord">` + kunci[i] + "</span>";
-    const reg = RegExp(`${testVar}`, "g");
+    let reg = RegExp(`${testVar}`, "g");
     data = data.replace(reg, `<span class="chord">` + i + "</span>");
     //2
     testVar = `<span class="chord">` + kunci[i] + "/";
@@ -143,7 +143,7 @@ const replace = (isi, array) => {
   for (let i = kunci.length - 1; i >= 0; i--) {
     //1
     let testVar = `<span class="chord">` + i + "</span>";
-    const reg = RegExp(`${testVar}`, "g");
+    let reg = RegExp(`${testVar}`, "g");
     data = data.replace(reg, `<span class="chord">` + kunci[i] + "</span>");
     //2
     testVar = `<span class="chord">` + i + "/";

@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  FlatList,
-  View,
-  Dimensions,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { FlatList, View, Text, TouchableOpacity } from "react-native";
 import { useTheme } from "@react-navigation/native";
 
 export default function CategoryList({ data, onPress, current }) {

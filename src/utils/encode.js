@@ -1,14 +1,14 @@
 export const encode = (isi) => {
   var data = isi;
-  data = data.replace(/          /g, ":s10:");
-  data = data.replace(/         /g, ":s9:");
-  data = data.replace(/        /g, ":s8:");
-  data = data.replace(/       /g, ":s7:");
-  data = data.replace(/      /g, ":s6:");
-  data = data.replace(/     /g, ":s5:");
-  data = data.replace(/    /g, ":s4:");
-  data = data.replace(/   /g, ":s3:");
-  data = data.replace(/  /g, ":s2:");
+  data = data.replace(/ {10}/g, ":s10:");
+  data = data.replace(/ {9}/g, ":s9:");
+  data = data.replace(/ {8}/g, ":s8:");
+  data = data.replace(/ {7}/g, ":s7:");
+  data = data.replace(/ {6}/g, ":s6:");
+  data = data.replace(/ {5}/g, ":s5:");
+  data = data.replace(/ {4}/g, ":s4:");
+  data = data.replace(/ {3}/g, ":s3:");
+  data = data.replace(/ {2}/g, ":s2:");
   data = data.replace(/ /g, ":s1:");
   data = data.replace(/\n\n\n\n\n/g, ":x5:");
   data = data.replace(/\n\n\n\n/g, ":x4:");

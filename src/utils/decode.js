@@ -1,5 +1,4 @@
-import { Chord, Chord2, Chord3, Chord4, Chord5, Chord6 } from './capo';
-import chords from '../assets/chords/guitar.json';
+import chords from "../assets/chords/guitar.json";
 
 export const decode = (isi) => {
   var data = isi;
@@ -11,12 +10,12 @@ export const decode = (isi) => {
   data = data.replace(/Db/g, "C#");
   data = data.replace(/Eb/g, "D#");
   data = data.replace(/A:s1:([a-z])/g, "a:s1:$1");
-  let string = data.split(":")
-  string = [...new Set(string)]
-  for(var i =0; i < string.length; i++){
-    if(chords[string[i]]){
-      let re = new RegExp(':'+string[i]+':',"g")
-      data = data.replace(re, `:<span class="chord">${string[i]}</span>:`)
+  let string = data.split(":");
+  string = [...new Set(string)];
+  for (var i = 0; i < string.length; i++) {
+    if (chords[string[i]]) {
+      let re = new RegExp(":" + string[i] + ":", "g");
+      data = data.replace(re, `:<span class="chord">${string[i]}</span>:`);
     }
   }
   // chords.forEach(chord => {
@@ -55,7 +54,7 @@ export const decode = (isi) => {
 export const decodeToPlainText = (isi) => {
   var data = isi;
 
-  data = data.replace(/:s10:/g,"          ");
+  data = data.replace(/:s10:/g, "          ");
   data = data.replace(/:s9:/g, "         ");
   data = data.replace(/:s8:/g, "        ");
   data = data.replace(/:s7:/g, "       ");

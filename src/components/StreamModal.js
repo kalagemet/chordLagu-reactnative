@@ -4,7 +4,6 @@ import {
   View,
   TouchableOpacity,
   Linking,
-  Text,
   ActivityIndicator,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";

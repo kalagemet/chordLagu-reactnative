@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { View, TextInput, Text } from "react-native";
 import Loader from "../../../components/Loader";
 import SongList from "../../../components/SongList";
 import { getAdStatus } from "../../../api/AdsApi";
@@ -227,9 +221,3 @@ export default function Search({ navigation, route }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  content: {
-    padding: 10,
-  },
-});

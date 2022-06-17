@@ -5,9 +5,7 @@ import {
   View,
   Text,
   FlatList,
-  StatusBar,
   TouchableOpacity,
-  Pressable,
 } from "react-native";
 import * as STORAGE from "../../../Storage";
 import moment from "moment";
@@ -18,7 +16,7 @@ function Notifications({ navigation }) {
   const [requestNotifications, setRequestNotifications] = useState([]);
   const isFocused = useIsFocused();
   const { colors } = useTheme();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
 
   React.useEffect(() => {
     STORAGE.getRequestNotifications((data) => {
@@ -51,9 +49,7 @@ function Notifications({ navigation }) {
         }}
         onPress={() => onListItemPressed(notif.item_id, index)}
       >
-        <Text style={{ fontSize: 15, color: colors.text }}>
-          {notif.item}
-        </Text>
+        <Text style={{ fontSize: 15, color: colors.text }}>{notif.item}</Text>
         <Text style={{ fontSize: 13, color: colors.text }}>
           {notif.message}
         </Text>
@@ -72,9 +68,7 @@ function Notifications({ navigation }) {
 
   return (
     <>
-      <SafeAreaView
-        style={{ flex: 1, backgroundColor: colors.background }}
-      >
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
         <View style={{ flex: 1, justifyContent: "center" }}>
           <Text
             style={{
@@ -86,16 +80,17 @@ function Notifications({ navigation }) {
             Notifikasi
           </Text>
         </View>
-        <View style={{...styles.sectionContainer, backgroundColor: colors.card}}>
+        <View
+          style={{ ...styles.sectionContainer, backgroundColor: colors.card }}
+        >
           <View
             style={{
               flexDirection: "row",
               padding: "3%",
               paddingHorizontal: "20%",
             }}
-          >
-          </View>
-          { requestNotifications ? (
+          ></View>
+          {requestNotifications ? (
             <FlatList
               data={requestNotifications}
               renderItem={({ item, index }) => renderItem(item, index)}
@@ -103,9 +98,7 @@ function Notifications({ navigation }) {
             />
           ) : (
             <View style={{ alignItems: "center" }}>
-              <Text style={{ color: colors.text }}>
-                Tidak Ada Notifikasi
-              </Text>
+              <Text style={{ color: colors.text }}>Tidak Ada Notifikasi</Text>
             </View>
           )}
         </View>

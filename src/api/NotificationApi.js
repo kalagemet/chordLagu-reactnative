@@ -28,7 +28,7 @@ export async function sendNotificationRequestToAdmin(
           onSuccess(res.data);
         }
       },
-      (error) => {
+      () => {
         onError();
       }
     );

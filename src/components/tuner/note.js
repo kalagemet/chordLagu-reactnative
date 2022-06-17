@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
 import { useTheme } from '@react-navigation/native';
 

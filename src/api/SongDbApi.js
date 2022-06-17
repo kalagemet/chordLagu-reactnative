@@ -199,7 +199,7 @@ export function updateChord(data, onSuccess, onError) {
   };
   api
     .put("update", getQueryString(song), { headers })
-    .then(() => onSuccess)
+    .then(() => onSuccess())
     .catch(() => {
       onError();
       toastError();
@@ -318,9 +318,6 @@ export function syncLocalAndApiLikes(user_id, onSuccess, onError) {
         local.push(item.id);
       });
 
-    let current = -1;
-    let max = 0;
-
     api
       .get("allLikes", {
         params: {
@@ -347,7 +344,7 @@ export function syncLocalAndApiLikes(user_id, onSuccess, onError) {
           });
           onSuccess();
         },
-        (error) => {
+        () => {
           onError();
           toastError();
         }

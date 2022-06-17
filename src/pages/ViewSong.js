@@ -665,9 +665,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: "5%",
     marginTop: "5%",
   },
-  item: {
-    flexDirection: "row",
-    paddingHorizontal: "5%",
-    paddingVertical: "3%",
-  },
 });

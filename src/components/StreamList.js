@@ -2,7 +2,6 @@ import React from "react";
 import { TouchableOpacity, Image } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useTheme } from "@react-navigation/native";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View } from "react-native";
 
 export default function StreamList({ streams, onPress }) {

@@ -137,8 +137,8 @@ export function deleteSong(songId, deleteComplete) {
 }
 
 export function addToFavourite(favourite, favouriteComplete) {
-  var likes = [];
-  var song = getSong(favourite.songId, (data) => {
+  let likes = [];
+  getSong(favourite.songId, (data) => {
     store(data);
   });
   const increment = firestore.FieldValue.increment(1);
@@ -161,25 +161,19 @@ export function addToFavourite(favourite, favouriteComplete) {
 }
 
 export async function isFavourited(songId, user, isSongFavourited) {
-  var snapshot = await firestore().collection("songs").doc(songId).get();
+  let snapshot = await firestore().collection("songs").doc(songId).get();
 
-  var fav = false;
+  let fav = false;
   if (snapshot.data().likes) {
     fav = snapshot.data().likes.includes(user);
   }
-
-  // snapshot.forEach((doc) => {
-  //   if(doc.id == songId){
-  //     fav = true;
-  //   }
-  // });
 
   isSongFavourited(fav);
 }
 
 export function removeFavourite(userId, songId, favRemoveComplete) {
-  var likes = [];
-  var song = getSong(songId, (data) => {
+  let likes = [];
+  getSong(songId, (data) => {
     store(data);
   });
   const decrement = firestore.FieldValue.increment(-1);

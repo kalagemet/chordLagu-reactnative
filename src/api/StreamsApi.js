@@ -4,7 +4,6 @@ import firestore from "@react-native-firebase/firestore";
 import api from "./api";
 
 export async function getStreamsBySearch(search, streamsRetreived) {
-  let songList;
   let limit = await firestore().collection("settings").doc("setting").get();
 
   let clientId = await firestore().collection("settings").doc("setting").get();
@@ -19,7 +18,6 @@ export async function getStreamsBySearch(search, streamsRetreived) {
     })
     .then((res) => {
       streamsRetreived(res.data);
-      songList = res.data;
     })
     .catch((error) => {
       ToastAndroid.showWithGravityAndOffset(

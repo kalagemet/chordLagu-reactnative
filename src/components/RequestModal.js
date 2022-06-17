@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Modal,
-  Text,
-  ToastAndroid,
-} from "react-native";
+import { StyleSheet, View, Modal, Text, ToastAndroid } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import InputText from "./InputText";
 import Button from "./Button";
@@ -36,23 +30,27 @@ export default function RequestModal({ show, closeModal, email }) {
         done: false,
       };
       addRequestList(request, () => {
-        sendNotificationRequestToAdmin(namaBand+" - "+judul, ()=>{
-          ToastAndroid.showWithGravityAndOffset(
-            "Berhasil, Request akan segera diproses",
-            ToastAndroid.SHORT,
-            ToastAndroid.BOTTOM,
-            25,
-            50
-          );
-        }, () => {
-          ToastAndroid.showWithGravityAndOffset(
-            "Terjadi kesalahan, request gagal",
-            ToastAndroid.SHORT,
-            ToastAndroid.BOTTOM,
-            25,
-            50
-          );
-        })
+        sendNotificationRequestToAdmin(
+          namaBand + " - " + judul,
+          () => {
+            ToastAndroid.showWithGravityAndOffset(
+              "Berhasil, Request akan segera diproses",
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM,
+              25,
+              50
+            );
+          },
+          () => {
+            ToastAndroid.showWithGravityAndOffset(
+              "Terjadi kesalahan, request gagal",
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM,
+              25,
+              50
+            );
+          }
+        );
       });
       closeModal();
     }
