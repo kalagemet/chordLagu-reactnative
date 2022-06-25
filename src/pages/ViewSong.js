@@ -64,7 +64,6 @@ export default function ViewSong({ navigation, route }) {
   const [bannerHeight, setBannerHeight] = useState(0);
 
   React.useEffect(() => {
-    console.log("id: " + id);
     setLoading(true);
     getChordContent(id);
     API.getTerkait(
@@ -577,7 +576,7 @@ export default function ViewSong({ navigation, route }) {
           onAdFailedToLoad={(error) => console.log(error)}
         />
       )}
-      <View style={{ height: windowHeight - snapPoints[0] - bannerHeight }}>
+      <View style={{ height: windowHeight - 110 - bannerHeight }}>
         <WebView
           ref={webViewRef}
           source={{

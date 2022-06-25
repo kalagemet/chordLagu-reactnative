@@ -1,7 +1,8 @@
 import { useTheme } from "@react-navigation/native";
 import React, { useState } from "react";
-import { View, Image, Text } from "react-native";
+import { View, Image, Text, TouchableOpacity, Linking } from "react-native";
 import DeviceInfo from "react-native-device-info";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function About({ navigation }) {
   const { colors } = useTheme();
@@ -45,6 +46,32 @@ export default function About({ navigation }) {
         <Text style={{ color: colors.text }}>
           Versi Aplikasi : {DeviceInfo.getVersion()}
         </Text>
+      </View>
+      <View
+        style={{
+          flex: 2,
+          alignItems: "center",
+          flexDirection: "row",
+          padding: "5%",
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            width: "40%",
+            padding: "3%",
+            borderRadius: 20,
+            alignItems: "center",
+            justifyContent: "center",
+            elevation: 5,
+            backgroundColor: colors.background,
+          }}
+          onPress={() =>
+            Linking.openURL("https://www.instagram.com/chrdlg/")
+          }
+        >
+          <Ionicons size={40} name="logo-instagram" color={colors.text} />
+          <Text style={{ color: colors.text }}>@chrdlg</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

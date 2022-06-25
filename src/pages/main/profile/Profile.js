@@ -10,7 +10,7 @@ import RequestModal from "../../../components/RequestModal";
 
 const adUnitId = __DEV__
   ? TestIds.BANNER
-  : "ca-app-pub-7469495811267533/5655188103";
+  : "ca-app-pub-7469495811267533/3071883640";
 export default function Profile({ navigation }) {
   const { colors } = useTheme();
   const [showAds, setShowAds] = useState(false);
@@ -176,7 +176,7 @@ export default function Profile({ navigation }) {
       {showAds ? (
         <BannerAd
           unitId={adUnitId}
-          size={BannerAdSize.FULL_BANNER}
+          size={BannerAdSize.SMART_BANNER}
           requestOptions={{
             requestNonPersonalizedAdsOnly: true,
           }}

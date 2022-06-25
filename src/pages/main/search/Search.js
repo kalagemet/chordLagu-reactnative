@@ -14,7 +14,7 @@ import Button from "../../../components/Button";
 
 const adUnitId = __DEV__
   ? TestIds.BANNER
-  : "ca-app-pub-7469495811267533/5655188103";
+  : "ca-app-pub-7469495811267533/8131541150";
 
 export default function Search({ navigation, route }) {
   const { colors } = useTheme();
@@ -209,7 +209,7 @@ export default function Search({ navigation, route }) {
       {showAds ? (
         <BannerAd
           unitId={adUnitId}
-          size={BannerAdSize.FULL_BANNER}
+          size={BannerAdSize.SMART_BANNER}
           requestOptions={{
             requestNonPersonalizedAdsOnly: true,
           }}
